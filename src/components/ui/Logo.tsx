@@ -15,7 +15,7 @@ export function Logo({ className }: LogoProps) {
         <TreePine className="text-primary h-6 w-6" />
         <TreePalm className="text-primary h-6 w-6 absolute -bottom-1 -right-1" />
       </div>
-      <span className="text-2xl font-light tracking-tight text-primary">Jungle Properties</span>
+      <span className="text-xl font-light tracking-tight text-primary">Jungle Properties</span>
     </Link>
   );
 }
