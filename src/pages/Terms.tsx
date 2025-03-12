@@ -1,14 +1,10 @@
-
 import React from 'react';
-import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
 export default function Terms() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-1 pt-24 pb-16">
+      <main className="flex-1 pt-8 pb-16">
         <section className="container max-w-6xl mx-auto px-4 mb-16">
           <div className="text-center mb-10">
             <h1 className="heading-lg mb-4">Terms of Service</h1>

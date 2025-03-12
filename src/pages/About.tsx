@@ -1,6 +1,4 @@
-
 import React from 'react';
-import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -8,9 +6,7 @@ import { Link } from 'react-router-dom';
 export default function About() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-1 pt-24 pb-16">
+      <main className="flex-1 pt-8 pb-16">
         <section className="container max-w-6xl mx-auto px-4 mb-16">
           <div className="text-center mb-12">
             <h1 className="heading-lg mb-4">Our Story</h1>

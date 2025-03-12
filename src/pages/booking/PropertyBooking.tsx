@@ -1,7 +1,5 @@
-
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { BookingForm, BookingItem } from '@/components/booking/BookingForm';
 import { Button } from '@/components/ui/button';
@@ -37,8 +35,7 @@ export default function PropertyBooking() {
   if (!property) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1 pt-24 pb-16 px-4">
+        <main className="flex-1 pt-8 pb-16 px-4">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="heading-lg mb-4">{t('booking.propertyNotFound')}</h1>
             <p className="paragraph-lg mb-8">{t('booking.propertyNotFoundDesc')}</p>
@@ -54,9 +51,7 @@ export default function PropertyBooking() {
   
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-1 pt-24 pb-16">
+      <main className="flex-1 pt-8 pb-16">
         <section className="container max-w-6xl mx-auto px-4 mb-16">
           <Button 
             variant="ghost" 

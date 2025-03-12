@@ -1,7 +1,5 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { PropertyCard } from '@/components/ui/PropertyCard';
@@ -87,8 +85,6 @@ const reviews = [
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
       <main className="flex-1">
         <Hero 
           title="Luxury Retreats in Paradise"

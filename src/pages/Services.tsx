@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { useSearchParams } from 'react-router-dom';
@@ -60,9 +59,7 @@ const Services = () => {
   
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-1 pt-16">
+      <main className="flex-1">
         <Hero 
           title="Bespoke Services"
           subtitle="Enhance your stay with curated local experiences, artisan products, and knowledgeable guides."
