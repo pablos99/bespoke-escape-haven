@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -160,12 +161,13 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation - Now with solid background */}
+      {/* Mobile Navigation - Fixed with solid background */}
       <div
         className={cn(
           'fixed inset-0 bg-background z-40 flex flex-col items-center justify-center space-y-8 md:hidden transform transition-transform duration-300 ease-in-out',
           isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
+        style={{ backgroundColor: 'var(--background)' }} /* Ensure solid background */
       >
         {navigation.map((item) => {
           if (item.submenu) {
