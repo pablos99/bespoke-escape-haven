@@ -5,10 +5,12 @@
     "properties": "Propiedades",
     "services": "Servicios",
     "cities": "Destinos",
+    "locations": "Ubicaciones",
     "bali": "Bali",
     "tulum": "Tulum", 
     "booking": "Reservas",
-    "about": "Sobre Nosotros"
+    "about": "Sobre Nosotros",
+    "artisanProducts": "Productos Artesanales"
   },
   "footer": {
     "quickLinks": "Enlaces Rápidos",
