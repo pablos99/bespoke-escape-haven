@@ -5,7 +5,7 @@ import { AnimatedImage } from './AnimatedImage';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
-interface ServiceCardProps {
+export interface ServiceCardProps {
   id: string;
   title: string;
   description: string;

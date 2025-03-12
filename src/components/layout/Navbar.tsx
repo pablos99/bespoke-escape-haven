@@ -14,22 +14,8 @@ const navigation = [
 ];
 
 export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     setIsOpen(false);
@@ -37,12 +23,7 @@ export function Navbar() {
 
   return (
     <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 md:px-8 lg:px-12',
-        isScrolled 
-          ? 'py-3 bg-background/80 backdrop-blur-lg shadow-sm'
-          : 'py-6 bg-transparent'
-      )}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 md:px-8 lg:px-12 py-4 bg-background/95 backdrop-blur-sm shadow-sm"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">
