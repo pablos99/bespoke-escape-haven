@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -159,7 +160,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation - Changed to have solid background instead of backdrop blur */}
+      {/* Mobile Navigation - Now with solid background */}
       <div
         className={cn(
           'fixed inset-0 bg-background z-40 flex flex-col items-center justify-center space-y-8 md:hidden transform transition-transform duration-300 ease-in-out',
