@@ -15,6 +15,17 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   const location = useLocation();
   const { t } = useApp();
   
+  // Quick links directly from footer
+  const quickLinks = [
+    { name: 'nav.home', href: '/' },
+    { name: 'nav.properties', href: '/properties' },
+    { name: 'nav.cities', href: '/cities' },
+    { name: 'nav.services', href: '/services' },
+    { name: 'nav.booking', href: '/booking' },
+    { name: 'nav.about', href: '/about' },
+    { name: 'nav.artisanProducts', href: '/artisan-products' },
+  ];
+  
   return (
     <div
       className={cn(
@@ -64,6 +75,28 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
             </Link>
           );
         })}
+        
+        {/* Quick Links Section */}
+        <div className="pt-6 border-t border-border">
+          <h3 className="text-lg font-medium text-primary mb-4">{t('footer.quickLinks')}</h3>
+          <div className="flex flex-col space-y-3">
+            {quickLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.href}
+                className={cn(
+                  'text-base transition-all duration-200 hover:text-primary',
+                  location.pathname === link.href
+                    ? 'text-primary font-medium'
+                    : 'text-muted-foreground'
+                )}
+              >
+                {t(link.name)}
+              </Link>
+            ))}
+          </div>
+        </div>
+        
         <div className="pt-6 border-t border-border">
           <Button asChild className="w-full">
             <Link to="/booking">{t('button.bookNow')}</Link>
