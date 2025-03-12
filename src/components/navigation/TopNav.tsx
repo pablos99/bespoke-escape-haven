@@ -16,7 +16,9 @@ export function TopNav() {
     <header className="fixed top-0 left-0 right-0 z-40 px-6 py-4 bg-background/95 backdrop-blur-md shadow-sm hidden md:block">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-10">
-          <Logo />
+          <div className="hidden sm:block">
+            <Logo />
+          </div>
           
           {/* Desktop Navigation */}
           <nav className="flex space-x-8">
@@ -35,6 +37,11 @@ export function TopNav() {
               </Link>
             ))}
           </nav>
+        </div>
+        
+        {/* Center Logo for large screens */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
+          <Logo className="scale-110" />
         </div>
         
         <div className="flex items-center space-x-4">

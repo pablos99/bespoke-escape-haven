@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
@@ -10,10 +11,32 @@ import { Menu, X } from 'lucide-react';
 
 export function SideNav() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
   const { t } = useApp();
   
   const toggleMenu = () => setIsOpen(!isOpen);
+  
+  // Handle scroll events to show/hide the navigation button
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show the button when scrolling all the way to the top
+      // or when scrolling up more than 50px
+      if (currentScrollY === 0) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(currentScrollY < lastScrollY || currentScrollY < 50);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
   
   // Close menu when route changes
   React.useEffect(() => {
@@ -25,7 +48,10 @@ export function SideNav() {
       {/* Mobile Menu Trigger Button */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 right-4 z-50 md:hidden bg-primary text-primary-foreground rounded-full p-2 shadow-lg"
+        className={cn(
+          "fixed top-4 right-4 z-50 md:hidden bg-primary text-primary-foreground rounded-full p-2 shadow-lg transition-all duration-300",
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-[-100px] opacity-0"
+        )}
         aria-label="Toggle navigation menu"
       >
         {isOpen ? <X size={20} /> : <Menu size={20} />}
