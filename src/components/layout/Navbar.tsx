@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -11,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useApp } from '@/contexts/AppContext';
+import { Logo } from '@/components/ui/Logo';
 
 const navigation = [
   { name: 'nav.home', href: '/' },
@@ -47,9 +47,9 @@ export function Navbar() {
       id="navbar"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="relative z-50">
-          <span className="text-2xl font-light tracking-tight text-primary">Serene Stays</span>
-        </Link>
+        <div className="relative z-50">
+          <Logo />
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-10">
