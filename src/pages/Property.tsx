@@ -1,344 +1,258 @@
 
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { Button } from '@/components/ui/button';
 import { AnimatedImage } from '@/components/ui/AnimatedImage';
-import { ReviewCard } from '@/components/ui/ReviewCard';
-import { ServiceCard } from '@/components/ui/ServiceCard';
-import { MapPin, Calendar, Wifi, Utensils, Bath, Car, Coffee, Award } from 'lucide-react';
+import { ServiceCard, ServiceCardProps } from '@/components/ui/ServiceCard';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from 'react-router-dom';
 
-// Temporary mock data - in a real app would come from API/backend
-const properties = {
-  'bali-villa': {
-    id: 'bali-villa',
-    title: 'Beachfront Villa',
-    location: 'Canggu, Bali',
-    description: 'A stunning beachfront villa with panoramic ocean views, infinity pool, and lush tropical gardens. Perfect for a luxury getaway in paradise.',
-    longDescription: `Experience the ultimate Bali getaway in this exquisite beachfront villa. Located in the sought-after area of Canggu, this property offers direct access to the beach and panoramic ocean views that will take your breath away.
-
-The villa features four spacious bedrooms, each with an ensuite bathroom and ocean or garden views. The master suite includes a private terrace, perfect for watching Bali's famous sunsets.
-
-The open-plan living area seamlessly blends indoor and outdoor living, with floor-to-ceiling glass doors that open onto the expansive terrace and infinity pool. The fully equipped gourmet kitchen is perfect for preparing meals or having our private chef create a memorable dining experience.
-
-Outside, the lush tropical garden provides privacy and tranquility, while the infinity pool appears to merge with the ocean beyond. A separate pool pavilion offers a shaded relaxation area.`,
-    mainImage: 'https://images.unsplash.com/photo-1570737209810-87a8e7245f88?q=80&w=2532&auto=format&fit=crop',
-    galleryImages: [
-      'https://images.unsplash.com/photo-1615880484562-a1c5f5450b3b?q=80&w=2574&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1602343168117-bb8a12b7b9fa?q=80&w=2425&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=2670&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1575403071235-5dcd06cbf169?q=80&w=2670&auto=format&fit=crop'
-    ],
-    amenities: [
-      { name: 'Free WiFi', icon: Wifi },
-      { name: 'Gourmet Kitchen', icon: Utensils },
-      { name: 'Infinity Pool', icon: Bath },
-      { name: 'Private Parking', icon: Car },
-      { name: 'Daily Breakfast', icon: Coffee },
-      { name: 'Concierge Service', icon: Award }
-    ],
-    bedrooms: 4,
-    bathrooms: 4,
-    maxGuests: 8,
-    rating: 4.9,
-    price: 350,
-    reviews: [
-      {
-        name: 'Sophie Williams',
-        location: 'London, UK',
-        date: 'March 2023',
-        rating: 5,
-        content: 'Our stay at the Bali villa was absolutely magical. The staff were attentive, the property stunning, and the bespoke experiences arranged for us made this trip unforgettable.'
-      },
-      {
-        name: 'Michael Johnson',
-        location: 'Toronto, Canada',
-        date: 'February 2023',
-        rating: 5,
-        content: 'This villa exceeded all our expectations. The location is perfect - private yet close to everything. The pool and garden are beautiful, and the staff went above and beyond.'
-      }
-    ]
-  },
-  'tulum-retreat': {
-    id: 'tulum-retreat',
-    title: 'Jungle Retreat',
-    location: 'Tulum, Mexico',
-    description: 'Nestled in the lush jungle just minutes from Tulum\'s pristine beaches. Features a private cenote, open-air living, and sustainable design.',
-    longDescription: `Immerse yourself in the magic of Tulum at this exclusive jungle retreat. Thoughtfully designed to balance luxury with sustainability, this property offers a unique experience that connects you with the natural beauty of the Yucatán Peninsula.
-
-Located just a short bike ride from Tulum's famous white sand beaches, this retreat offers the best of both worlds - peaceful seclusion and easy access to the vibrant beach scene.
-
-The property features three beautifully appointed bedrooms with sustainable luxury at their core. Each room has been designed with locally sourced materials and features artisanal furnishings made by Mexican craftspeople.
-
-The heart of the home is the open-air living area, where soaring ceilings and retractable glass walls create a seamless indoor-outdoor experience. The fully equipped kitchen features high-end appliances alongside traditional Mexican cooking tools.
-
-Perhaps the most extraordinary feature is the private cenote - a natural limestone swimming hole fed by the underground river system. This sacred Mayan water source is yours to enjoy in complete privacy.`,
-    mainImage: 'https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=2670&auto=format&fit=crop',
-    galleryImages: [
-      'https://images.unsplash.com/photo-1647878081446-1e111af6ba34?q=80&w=2574&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1572241280520-a6a069004901?q=80&w=2574&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?q=80&w=2476&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1551927336-09d50efd69cd?q=80&w=2569&auto=format&fit=crop'
-    ],
-    amenities: [
-      { name: 'Free WiFi', icon: Wifi },
-      { name: 'Chef\'s Kitchen', icon: Utensils },
-      { name: 'Private Cenote', icon: Bath },
-      { name: 'Bicycles Included', icon: Car },
-      { name: 'Organic Breakfast', icon: Coffee },
-      { name: 'Concierge Service', icon: Award }
-    ],
-    bedrooms: 3,
-    bathrooms: 3,
-    maxGuests: 6,
-    rating: 4.8,
-    price: 295,
-    reviews: [
-      {
-        name: 'James Rodriguez',
-        location: 'New York, USA',
-        date: 'January 2023',
-        rating: 5,
-        content: 'The Tulum retreat exceeded all expectations. The jungle setting was serene yet we were just minutes from the beach. The local guide recommended to us was incredibly knowledgeable.'
-      },
-      {
-        name: 'Elise Martin',
-        location: 'Paris, France',
-        date: 'April 2023',
-        rating: 4,
-        content: 'A beautiful property that truly embraces the Tulum spirit. The private cenote was magical. The only thing to note is that it gets quite warm during the day, but the evenings are perfectly cool.'
-      }
-    ]
+// Mock property data - in a real app would be fetched from API
+const property = {
+  id: "bali-villa",
+  name: "Tropical Balinese Villa",
+  location: "Ubud, Bali",
+  price: 245,
+  rating: 4.97,
+  reviewCount: 128,
+  description: "Nestled in the lush rice terraces of Ubud, this traditional Balinese villa offers tranquility and authentic cultural experiences. The open-air design connects you with nature while modern amenities ensure a comfortable stay.",
+  longDescription: "Experience the serene beauty of Bali in this authentic villa that embodies the island's rich architectural heritage. The villa features hand-carved wooden details, a private infinity pool overlooking the jungle, and a meditation pavilion.\n\nThe spacious indoor-outdoor living area is perfect for relaxing to the sounds of nature, while the fully equipped kitchen allows you to prepare meals with fresh ingredients from the local market. Each bedroom opens to stunning views, with luxury linens and traditional Balinese textiles.\n\nOur dedicated staff includes a private chef, daily housekeeping, and a personal concierge to arrange any experiences you desire. The villa is just a 15-minute drive from central Ubud, offering both seclusion and convenience.",
+  amenities: [
+    "Private infinity pool",
+    "Open-air living area",
+    "Fully equipped kitchen",
+    "Daily housekeeping",
+    "Personal chef (available upon request)",
+    "Free Wi-Fi",
+    "Air conditioning",
+    "Yoga deck",
+    "Garden shower",
+    "Complimentary breakfast"
+  ],
+  images: [
+    "https://images.unsplash.com/photo-1570211776045-af3a51026f4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1604999333679-b86d54738315?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1540541338287-41700207dee6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+  ],
+  highlights: [
+    {
+      title: "Tranquil Setting",
+      description: "Surrounded by lush jungle and rice paddies, offering complete privacy and peaceful ambiance"
+    },
+    {
+      title: "Cultural Immersion",
+      description: "Traditional Balinese architecture with authentic local arts and crafts throughout"
+    },
+    {
+      title: "Premium Location",
+      description: "Just 15 minutes from central Ubud, with complimentary shuttle service available"
+    }
+  ],
+  host: {
+    name: "Maya",
+    description: "Passionate about Balinese culture and sustainable tourism",
+    image: "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
   }
 };
 
 // Mock related services
-const relatedServices = {
-  'bali-villa': [
-    {
-      id: 'balinese-massage',
-      title: 'Traditional Balinese Massage',
-      description: 'Experience the healing touch of Balinese massage in the comfort of your villa, performed by skilled local therapists.',
-      image: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=2670&auto=format&fit=crop',
-      price: 85,
-      category: 'activities'
-    },
-    {
-      id: 'bali-cooking',
-      title: 'Balinese Cooking Class',
-      description: 'Learn to prepare authentic Balinese dishes with a private chef using fresh local ingredients from the morning market.',
-      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2670&auto=format&fit=crop',
-      price: 120,
-      category: 'activities'
-    },
-    {
-      id: 'balinese-craft',
-      title: 'Handcrafted Balinese Textiles',
-      description: 'Authentic hand-woven textiles made by local Balinese artisans using traditional techniques passed down through generations.',
-      image: 'https://images.unsplash.com/photo-1621812956658-78796291dc2e?q=80&w=2670&auto=format&fit=crop',
-      price: 120,
-      category: 'products'
-    }
-  ],
-  'tulum-retreat': [
-    {
-      id: 'cenote-dive',
-      title: 'Private Cenote Diving Experience',
-      description: 'Exclusive guided diving tour of hidden cenotes near Tulum with a professional diver. Explore crystal clear waters and unique cave formations.',
-      image: 'https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=2670&auto=format&fit=crop',
-      price: 180,
-      category: 'activities'
-    },
-    {
-      id: 'mayan-guide',
-      title: 'Mayan Heritage Tour with Local Guide',
-      description: 'Discover the rich cultural history of Tulum with a knowledgeable local guide of Mayan descent. Visit ancient ruins and sacred sites.',
-      image: 'https://images.unsplash.com/photo-1605217613423-0aea4fb32906?q=80&w=2670&auto=format&fit=crop',
-      price: 150,
-      category: 'guides'
-    },
-    {
-      id: 'tulum-pottery',
-      title: 'Artisanal Mexican Pottery',
-      description: 'Beautiful handmade pottery crafted by local Mexican artisans, featuring traditional designs and techniques.',
-      image: 'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?q=80&w=2669&auto=format&fit=crop',
-      price: 95,
-      category: 'products'
-    }
-  ]
-};
-
-const Property = () => {
-  const { id } = useParams<{ id: string }>();
-  const property = id ? properties[id as keyof typeof properties] : null;
-  const services = id ? relatedServices[id as keyof typeof relatedServices] : [];
-  
-  if (!property) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="heading-lg mb-4">Property Not Found</h1>
-            <p className="paragraph text-muted-foreground mb-6">The property you're looking for doesn't exist or has been removed.</p>
-            <Button asChild>
-              <Link to="/properties">View All Properties</Link>
-            </Button>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
+const relatedServices = [
+  {
+    id: "balinese-massage",
+    title: "Traditional Balinese Massage",
+    description: "Experience the healing touch of Balinese massage in the comfort of your villa, performed by skilled local therapists.",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    price: 85,
+    category: "activities" as const
+  },
+  {
+    id: "balinese-craft",
+    title: "Handcrafted Balinese Textiles",
+    description: "Authentic hand-woven textiles made by local Balinese artisans using traditional techniques passed down through generations.",
+    image: "https://images.unsplash.com/photo-1621812956658-78796291dc2e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    price: 120,
+    category: "products" as const
+  },
+  {
+    id: "bali-temple-guide",
+    title: "Sacred Temples Tour with Balinese Guide",
+    description: "Explore Bali's most significant temples with a local guide who will explain the cultural and spiritual significance of each site.",
+    image: "https://images.unsplash.com/photo-1604922824961-87cefb9dc1ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    price: 130,
+    category: "guides" as const
   }
-  
+];
+
+// Reviews data
+const reviews = [
+  {
+    id: "review1",
+    author: "Sarah & James",
+    location: "New York, USA",
+    date: "July 2023",
+    rating: 5,
+    content: "This villa exceeded all our expectations. The staff was incredibly attentive, the views were breathtaking, and the location was perfect - secluded but still accessible. We particularly enjoyed the private chef who prepared the most amazing local dishes for us. Can't wait to return!",
+    image: "https://images.unsplash.com/photo-1484712401471-05c7215830eb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+  },
+  {
+    id: "review2",
+    author: "Thomas",
+    location: "London, UK",
+    date: "May 2023",
+    rating: 5,
+    content: "A truly magical experience. Waking up to the sounds of nature, swimming in the infinity pool while overlooking the jungle, and enjoying the beautiful Balinese design - it was all perfect. Maya was an exceptional host who arranged a wonderful private yoga session for us.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+  },
+  {
+    id: "review3",
+    author: "Emma & David",
+    location: "Melbourne, Australia",
+    date: "April 2023",
+    rating: 4,
+    content: "We loved our stay at this beautiful villa. The architecture and design are stunning, and the staff was very attentive. The only minor issue was that the Wi-Fi was a bit unreliable, but that actually helped us disconnect and enjoy our vacation more fully!",
+    image: "https://images.unsplash.com/photo-1499887142886-791eca5918cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+  }
+];
+
+export default function Property() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-1 pt-20">
-        {/* Hero Section */}
-        <section className="relative h-[70vh]">
-          <div className="absolute inset-0">
-            <AnimatedImage
-              src={property.mainImage}
-              alt={property.title}
-              className="h-full w-full"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
-          </div>
-          
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-            <div className="max-w-7xl mx-auto">
-              <div className="inline-block mb-4 animate-fade-up opacity-0 [animation-delay:100ms] [animation-fill-mode:forwards]">
-                <span className="bg-background/80 backdrop-blur-sm text-xs font-medium px-2.5 py-1 rounded">
-                  {property.location}
-                </span>
-              </div>
-              <h1 className="heading-xl text-white mb-4 animate-fade-up opacity-0 [animation-delay:200ms] [animation-fill-mode:forwards]">
-                {property.title}
-              </h1>
-              <div className="flex flex-wrap items-center gap-4 animate-fade-up opacity-0 [animation-delay:300ms] [animation-fill-mode:forwards]">
-                <div className="bg-background/80 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
-                  <MapPin size={16} className="mr-2" />
-                  <span>{property.location}</span>
+      <main className="flex-1 pt-16">
+        {/* Property Images Gallery */}
+        <section className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="aspect-[4/3] rounded-xl overflow-hidden">
+              <AnimatedImage
+                src={property.images[0]}
+                alt={property.name}
+                className="h-full w-full"
+                hoverEffect="zoom"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {property.images.slice(1, 5).map((image, index) => (
+                <div key={index} className="aspect-[4/3] rounded-xl overflow-hidden">
+                  <AnimatedImage
+                    src={image}
+                    alt={`${property.name} - View ${index + 2}`}
+                    className="h-full w-full"
+                    hoverEffect="zoom"
+                  />
                 </div>
-                <div className="bg-background/80 backdrop-blur-sm rounded-full px-4 py-2">
-                  ${property.price} <span className="text-sm">/ night</span>
-                </div>
-                <div className="ml-auto">
-                  <Button asChild className="animate-fade-up opacity-0 [animation-delay:400ms] [animation-fill-mode:forwards]" size="lg">
-                    <Link to={`/booking?property=${property.id}`}>Book Now</Link>
-                  </Button>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
         
         {/* Property Details */}
-        <section className="py-12 px-6 md:px-8 lg:px-12">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Main Content */}
-              <div className="lg:col-span-2">
-                <div className="mb-10">
-                  <h2 className="heading-md mb-6">About This Property</h2>
-                  <p className="paragraph text-muted-foreground whitespace-pre-line">
-                    {property.longDescription}
-                  </p>
-                </div>
-                
-                {/* Amenities */}
-                <div className="mb-10">
-                  <h2 className="heading-sm mb-6">Amenities</h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                    {property.amenities.map((amenity, index) => (
-                      <div key={index} className="flex items-center">
-                        <amenity.icon size={20} className="mr-3 text-primary" />
-                        <span>{amenity.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Gallery */}
-                <div className="mb-10">
-                  <h2 className="heading-sm mb-6">Gallery</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {property.galleryImages.map((image, index) => (
-                      <div 
-                        key={index} 
-                        className="rounded-xl overflow-hidden aspect-square"
-                      >
-                        <AnimatedImage
-                          src={image}
-                          alt={`${property.title} - Image ${index + 1}`}
-                          className="h-full w-full"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Reviews */}
+        <section className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Main Content */}
+            <div className="lg:col-span-2">
+              <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h2 className="heading-sm mb-6">Guest Reviews</h2>
-                  <div className="space-y-6">
-                    {property.reviews.map((review, index) => (
-                      <ReviewCard
-                        key={index}
-                        {...review}
-                      />
-                    ))}
+                  <h1 className="heading-lg">{property.name}</h1>
+                  <p className="text-muted-foreground">{property.location}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-semibold">${property.price}<span className="text-sm text-muted-foreground">/night</span></p>
+                  <div className="flex items-center justify-end mt-1">
+                    <span className="text-yellow-500 mr-1">★</span>
+                    <span>{property.rating}</span>
+                    <span className="mx-1">·</span>
+                    <span className="text-muted-foreground">{property.reviewCount} reviews</span>
                   </div>
                 </div>
               </div>
               
-              {/* Sidebar */}
-              <div className="lg:col-span-1">
-                <div className="sticky top-24">
-                  <div className="bg-sand-light p-6 rounded-xl mb-8">
-                    <h3 className="text-xl font-medium mb-4">Property Details</h3>
-                    <div className="space-y-4">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Bedrooms</span>
-                        <span className="font-medium">{property.bedrooms}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Bathrooms</span>
-                        <span className="font-medium">{property.bathrooms}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Max Guests</span>
-                        <span className="font-medium">{property.maxGuests}</span>
-                      </div>
-                      <div className="border-t border-border pt-4">
-                        <div className="flex justify-between items-center">
-                          <span className="text-muted-foreground">Price per night</span>
-                          <span className="text-xl font-medium">${property.price}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-6">
-                      <Button asChild className="w-full">
-                        <Link to={`/booking?property=${property.id}`} className="flex items-center justify-center">
-                          <Calendar size={18} className="mr-2" />
-                          Check Availability
-                        </Link>
-                      </Button>
-                    </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10">
+                {property.highlights.map((highlight, index) => (
+                  <div key={index} className="bg-secondary/30 p-6 rounded-xl">
+                    <h3 className="text-lg font-medium mb-2">{highlight.title}</h3>
+                    <p className="text-muted-foreground">{highlight.description}</p>
                   </div>
-                  
-                  <div className="bg-ocean-light p-6 rounded-xl">
-                    <h3 className="text-xl font-medium mb-4">Need Help?</h3>
-                    <p className="paragraph-sm text-muted-foreground mb-4">
-                      Have questions about this property or want to customize your stay? Our concierge team is here to help.
-                    </p>
-                    <Button asChild variant="outline" className="w-full">
-                      <Link to="/contact">Contact Concierge</Link>
-                    </Button>
+                ))}
+              </div>
+              
+              <div className="prose prose-lg max-w-none my-8">
+                <p>{property.longDescription}</p>
+              </div>
+              
+              <div className="my-12">
+                <h2 className="heading-md mb-6">Amenities</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {property.amenities.map((amenity, index) => (
+                    <div key={index} className="flex items-center">
+                      <div className="bg-primary/10 p-2 rounded-full mr-4">
+                        <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <span>{amenity}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="my-12">
+                <h2 className="heading-md mb-6">Meet Your Host</h2>
+                <div className="flex items-center">
+                  <div className="w-16 h-16 rounded-full overflow-hidden mr-6">
+                    <img src={property.host.image} alt={property.host.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-medium">{property.host.name}</h3>
+                    <p className="text-muted-foreground">{property.host.description}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="bg-background border border-border rounded-xl p-6 sticky top-24">
+                <h3 className="text-xl font-medium mb-6">Book Your Stay</h3>
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-2">Check-in</label>
+                  <input type="date" className="w-full border border-border rounded-md p-2" />
+                </div>
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-2">Check-out</label>
+                  <input type="date" className="w-full border border-border rounded-md p-2" />
+                </div>
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-2">Guests</label>
+                  <select className="w-full border border-border rounded-md p-2">
+                    <option>1 guest</option>
+                    <option>2 guests</option>
+                    <option>3 guests</option>
+                    <option>4 guests</option>
+                    <option>5+ guests</option>
+                  </select>
+                </div>
+                <Button className="w-full mb-4">Book Now</Button>
+                <p className="text-center text-sm text-muted-foreground">You won't be charged yet</p>
+                
+                <div className="mt-6 pt-6 border-t border-border">
+                  <div className="flex justify-between mb-2">
+                    <span>${property.price} × 5 nights</span>
+                    <span>${property.price * 5}</span>
+                  </div>
+                  <div className="flex justify-between mb-2">
+                    <span>Cleaning fee</span>
+                    <span>$75</span>
+                  </div>
+                  <div className="flex justify-between mb-2">
+                    <span>Service fee</span>
+                    <span>$120</span>
+                  </div>
+                  <div className="flex justify-between font-semibold pt-4 border-t border-border mt-4">
+                    <span>Total</span>
+                    <span>${property.price * 5 + 75 + 120}</span>
                   </div>
                 </div>
               </div>
@@ -346,23 +260,58 @@ const Property = () => {
           </div>
         </section>
         
+        {/* Reviews Section */}
+        <section className="container mx-auto px-4 py-12 border-t border-border">
+          <h2 className="heading-md mb-8 flex items-center">
+            <span className="text-yellow-500 mr-2">★</span>
+            {property.rating} · {property.reviewCount} reviews
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {reviews.map((review) => (
+              <div key={review.id} className="bg-background border border-border rounded-xl p-6">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+                    <img src={review.image} alt={review.author} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium">{review.author}</h3>
+                    <p className="text-sm text-muted-foreground">{review.location}</p>
+                  </div>
+                </div>
+                <div className="flex items-center mb-3">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} className={i < review.rating ? "text-yellow-500" : "text-gray-300"}>★</span>
+                  ))}
+                  <span className="ml-2 text-sm text-muted-foreground">{review.date}</span>
+                </div>
+                <p className="text-muted-foreground">{review.content}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-8">
+            <Button variant="outline">View All Reviews</Button>
+          </div>
+        </section>
+        
         {/* Related Services */}
-        <section className="py-16 px-6 md:px-8 lg:px-12 bg-sand-light">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="heading-md mb-8">Enhance Your Stay</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  {...service}
-                />
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <Button asChild>
-                <Link to="/services">View All Services</Link>
-              </Button>
-            </div>
+        <section className="container mx-auto px-4 py-12 border-t border-border">
+          <h2 className="heading-md mb-8">Bespoke Services For This Property</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedServices.map((service) => (
+              <ServiceCard 
+                key={service.id}
+                {...service}
+              />
+            ))}
+          </div>
+          
+          <div className="text-center mt-8">
+            <Button asChild>
+              <Link to="/services">View All Services</Link>
+            </Button>
           </div>
         </section>
       </main>
@@ -370,6 +319,4 @@ const Property = () => {
       <Footer />
     </div>
   );
-};
-
-export default Property;
+}
