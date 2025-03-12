@@ -23,7 +23,7 @@ export function Navbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 md:px-8 lg:px-12 py-4 bg-background/95 backdrop-blur-sm shadow-sm"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 md:px-8 lg:px-12 py-4 bg-background shadow-sm"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">
