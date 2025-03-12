@@ -67,8 +67,8 @@ export function ServiceCard({
             hoverEffect="zoom"
           />
         </div>
-        <div className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1">
-          <span className="text-xs font-medium">{categoryLabels[category]}</span>
+        <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1">
+          <span className="text-xs font-medium text-foreground">{categoryLabels[category]}</span>
         </div>
         {location && (
           <div className="absolute top-4 right-4 bg-primary/90 text-primary-foreground rounded-full px-3 py-1">
@@ -79,11 +79,11 @@ export function ServiceCard({
       
       <div className="flex-1 p-6 flex flex-col">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="text-xl font-medium">{title}</h3>
-          <p className="text-lg font-medium">${price}</p>
+          <h3 className="text-xl font-medium text-foreground">{title}</h3>
+          <p className="text-lg font-medium text-foreground">${price}</p>
         </div>
         
-        <p className="text-muted-foreground flex-1 line-clamp-3 mb-4">{description}</p>
+        <p className="text-foreground/80 flex-1 line-clamp-3 mb-4">{description}</p>
         
         <div className="mt-auto">
           <Button asChild className="w-full">

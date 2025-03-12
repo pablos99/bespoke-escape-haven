@@ -12,8 +12,8 @@ export const CustomServicesCTA: React.FC = () => {
             <div className="inline-block mb-4">
               <span className="bg-terra-dark text-white text-xs font-medium px-2.5 py-1 rounded">Personalized Service</span>
             </div>
-            <h2 className="heading-md mb-6">Can't Find What You're Looking For?</h2>
-            <p className="paragraph text-muted-foreground mb-6">
+            <h2 className="heading-md mb-6 text-foreground">Can't Find What You're Looking For?</h2>
+            <p className="paragraph text-foreground/80 mb-6">
               Our concierge team specializes in creating custom experiences tailored to your preferences.
               Whether you're looking for a special celebration, a unique cultural experience, or
               specific artisanal products, we're here to help.
