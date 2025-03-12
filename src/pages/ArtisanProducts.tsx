@@ -1,10 +1,17 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ServiceBookingCard } from '@/components/ui/ServiceBookingCard';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const products = [
   {
@@ -14,6 +21,7 @@ const products = [
     image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 65,
     category: "product" as const,
+    location: "bali"
   },
   {
     id: "2",
@@ -22,6 +30,7 @@ const products = [
     image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 89,
     category: "product" as const,
+    location: "tulum"
   },
   {
     id: "3",
@@ -30,6 +39,7 @@ const products = [
     image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 42,
     category: "product" as const,
+    location: "bali"
   },
   {
     id: "4",
@@ -38,10 +48,33 @@ const products = [
     image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 55,
     category: "product" as const,
+    location: "tulum"
   },
 ];
 
 export default function ArtisanProducts() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [location, setLocation] = useState<string>(searchParams.get("location") || "all");
+  const [filteredProducts, setFilteredProducts] = useState(products);
+
+  useEffect(() => {
+    if (location === "all") {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(products.filter(product => product.location === location));
+    }
+  }, [location]);
+
+  const handleLocationChange = (value: string) => {
+    setLocation(value);
+    if (value === "all") {
+      searchParams.delete("location");
+    } else {
+      searchParams.set("location", value);
+    }
+    setSearchParams(searchParams);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -56,8 +89,21 @@ export default function ArtisanProducts() {
             </p>
           </div>
           
+          <div className="flex justify-end mb-8">
+            <Select value={location} onValueChange={handleLocationChange}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter by location" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Locations</SelectItem>
+                <SelectItem value="bali">Bali</SelectItem>
+                <SelectItem value="tulum">Tulum</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <ServiceBookingCard key={product.id} {...product} />
             ))}
           </div>

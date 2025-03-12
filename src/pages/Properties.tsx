@@ -1,11 +1,17 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { PropertyCard } from '@/components/ui/PropertyCard';
 import { PropertyBookingCard } from '@/components/ui/PropertyBookingCard';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const properties = [
   {
@@ -21,6 +27,7 @@ const properties = [
     price: 250,
     features: ["3 Bedrooms", "Private Pool", "Rice Field View", "Daily Breakfast", "Free Yoga Sessions"],
     rating: 4.9,
+    locationFilter: "bali",
   },
   {
     id: "tulum-beach",
@@ -35,10 +42,33 @@ const properties = [
     price: 320,
     features: ["2 Bedrooms", "Oceanfront", "Rooftop Terrace", "Private Chef", "Bicycle Rental"],
     rating: 4.8,
+    locationFilter: "tulum",
   },
 ];
 
 export default function Properties() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [location, setLocation] = useState<string>(searchParams.get("location") || "all");
+  const [filteredProperties, setFilteredProperties] = useState(properties);
+
+  useEffect(() => {
+    if (location === "all") {
+      setFilteredProperties(properties);
+    } else {
+      setFilteredProperties(properties.filter(property => property.locationFilter === location));
+    }
+  }, [location]);
+
+  const handleLocationChange = (value: string) => {
+    setLocation(value);
+    if (value === "all") {
+      searchParams.delete("location");
+    } else {
+      searchParams.set("location", value);
+    }
+    setSearchParams(searchParams);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -53,8 +83,21 @@ export default function Properties() {
             </p>
           </div>
           
+          <div className="flex justify-end mb-8">
+            <Select value={location} onValueChange={handleLocationChange}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter by location" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Locations</SelectItem>
+                <SelectItem value="bali">Bali</SelectItem>
+                <SelectItem value="tulum">Tulum</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {properties.map((property) => (
+            {filteredProperties.map((property) => (
               <PropertyBookingCard 
                 key={property.id}
                 id={property.id}

@@ -12,6 +12,7 @@ export interface ServiceCardProps {
   image: string;
   price: number;
   category: 'products' | 'activities' | 'guides';
+  location?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -23,6 +24,7 @@ export function ServiceCard({
   image,
   price,
   category,
+  location,
   className,
   style
 }: ServiceCardProps) {
@@ -30,6 +32,22 @@ export function ServiceCard({
     products: 'Artisan Product',
     activities: 'Bespoke Activity',
     guides: 'Local Guide'
+  };
+
+  // Generate the appropriate booking link based on category and include location if available
+  const getBookingLink = () => {
+    const baseLink = `/booking`;
+    const productType = category === 'products' ? 'product' : 
+                        category === 'guides' ? 'guide' : 'activity';
+    
+    let link = `${baseLink}/${productType}/${id}`;
+    
+    // Add location query parameter if available
+    if (location) {
+      link += `?location=${location}`;
+    }
+    
+    return link;
   };
 
   return (
@@ -52,6 +70,11 @@ export function ServiceCard({
         <div className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1">
           <span className="text-xs font-medium">{categoryLabels[category]}</span>
         </div>
+        {location && (
+          <div className="absolute top-4 right-4 bg-primary/90 text-primary-foreground rounded-full px-3 py-1">
+            <span className="text-xs font-medium capitalize">{location}</span>
+          </div>
+        )}
       </div>
       
       <div className="flex-1 p-6 flex flex-col">
@@ -64,7 +87,9 @@ export function ServiceCard({
         
         <div className="mt-auto">
           <Button asChild className="w-full">
-            <Link to={`/services/${category}/${id}`}>View Details</Link>
+            <Link to={getBookingLink()}>
+              {category === 'products' ? 'Purchase Now' : 'Book Now'}
+            </Link>
           </Button>
         </div>
       </div>

@@ -15,6 +15,7 @@ type PropertyBookingCardProps = {
   image: string;
   price: number;
   rating: number;
+  locationFilter?: string;
 };
 
 export function PropertyBookingCard({ 
@@ -24,9 +25,19 @@ export function PropertyBookingCard({
   description, 
   image, 
   price, 
-  rating 
+  rating,
+  locationFilter
 }: PropertyBookingCardProps) {
   const { t } = useApp();
+
+  // Generate booking link that preserves location filter
+  const getBookingLink = () => {
+    let link = `/booking/property/${id}`;
+    if (locationFilter) {
+      link += `?location=${locationFilter}`;
+    }
+    return link;
+  };
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -41,6 +52,11 @@ export function PropertyBookingCard({
         <div className="absolute top-3 right-3 bg-primary text-primary-foreground px-2 py-1 text-sm font-medium rounded">
           ${price}/{t('booking.night')}
         </div>
+        {locationFilter && (
+          <div className="absolute top-3 left-3 bg-primary/90 text-primary-foreground px-2 py-1 text-sm font-medium rounded capitalize">
+            {locationFilter}
+          </div>
+        )}
       </div>
       
       <CardHeader className="pb-2">
@@ -62,7 +78,7 @@ export function PropertyBookingCard({
       
       <CardFooter>
         <Button asChild className="w-full">
-          <Link to={`/booking/property/${id}`}>{t('buttons.bookNow')}</Link>
+          <Link to={getBookingLink()}>{t('buttons.bookNow')}</Link>
         </Button>
       </CardFooter>
     </Card>

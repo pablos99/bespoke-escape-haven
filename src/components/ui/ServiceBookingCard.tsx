@@ -13,22 +13,42 @@ type ServiceBookingCardProps = {
   image: string;
   price: number;
   category: 'product' | 'guide' | 'activity';
+  location?: string;
 };
 
-export function ServiceBookingCard({ id, title, description, image, price, category }: ServiceBookingCardProps) {
+export function ServiceBookingCard({ 
+  id, 
+  title, 
+  description, 
+  image, 
+  price, 
+  category,
+  location
+}: ServiceBookingCardProps) {
   const { t } = useApp();
   
   const getBookingLink = () => {
+    let link = '';
     switch (category) {
       case 'product':
-        return `/booking/product/${id}`;
+        link = `/booking/product/${id}`;
+        break;
       case 'guide':
-        return `/booking/guide/${id}`;
+        link = `/booking/guide/${id}`;
+        break;
       case 'activity':
-        return `/booking/activity/${id}`;
+        link = `/booking/activity/${id}`;
+        break;
       default:
-        return '/booking';
+        link = '/booking';
     }
+    
+    // Add location as a query parameter if available
+    if (location) {
+      link += `?location=${location}`;
+    }
+    
+    return link;
   };
   
   const getButtonText = () => {
@@ -56,6 +76,11 @@ export function ServiceBookingCard({ id, title, description, image, price, categ
         <div className="absolute top-3 right-3 bg-primary text-primary-foreground px-2 py-1 text-sm font-medium rounded">
           ${price}{category !== 'product' ? `/${category === 'guide' ? t('booking.perSession') : t('booking.perActivity')}` : ''}
         </div>
+        {location && (
+          <div className="absolute top-3 left-3 bg-primary/90 text-primary-foreground px-2 py-1 text-sm font-medium rounded capitalize">
+            {location}
+          </div>
+        )}
       </div>
       
       <CardHeader className="pb-2">
