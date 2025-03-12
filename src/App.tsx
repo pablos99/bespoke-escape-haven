@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
 import { ScrollToTop } from "@/components/navigation/ScrollToTop";
+import { TopNav } from "@/components/navigation/TopNav";
+import { SideNav } from "@/components/navigation/SideNav";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import Services from "./pages/Services";
@@ -33,6 +35,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <TopNav />
+          <SideNav />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/properties" element={<Properties />} />
