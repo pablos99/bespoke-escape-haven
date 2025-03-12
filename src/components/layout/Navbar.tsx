@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -104,7 +103,6 @@ export function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          {/* Language Selector */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -121,7 +119,6 @@ export function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
           
-          {/* Theme Toggle */}
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </Button>
@@ -133,7 +130,6 @@ export function Navbar() {
 
         {/* Mobile menu button */}
         <div className="flex md:hidden items-center space-x-2">
-          {/* Language Selector - Mobile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -150,7 +146,6 @@ export function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
           
-          {/* Theme Toggle - Mobile */}
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </Button>
@@ -164,10 +159,10 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation - Changed to have solid background instead of backdrop blur */}
       <div
         className={cn(
-          'fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center space-y-8 md:hidden transform transition-transform duration-300 ease-in-out',
+          'fixed inset-0 bg-background z-40 flex flex-col items-center justify-center space-y-8 md:hidden transform transition-transform duration-300 ease-in-out',
           isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >

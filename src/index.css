@@ -16,8 +16,9 @@
     --popover: 0 0% 100%;
     --popover-foreground: 24 10% 10%;
 
-    --primary: 24 15% 25%;
-    --primary-foreground: 30 33% 99%;
+    /* Changed to a more vibrant primary color */
+    --primary: 202 80% 45%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 30 20% 96%;
     --secondary-foreground: 24 15% 25%;
@@ -48,8 +49,9 @@
     --popover: 24 15% 15%;
     --popover-foreground: 30 20% 90%;
 
-    --primary: 30 20% 90%;
-    --primary-foreground: 24 15% 10%;
+    /* Changed to a more vibrant primary color in dark mode */
+    --primary: 202 80% 60%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 24 15% 20%;
     --secondary-foreground: 30 20% 90%;
