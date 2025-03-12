@@ -1,0 +1,77 @@
+
+{
+  "nav": {
+    "home": "Home",
+    "properties": "Properties",
+    "services": "Services",
+    "cities": "Destinations",
+    "bali": "Bali",
+    "tulum": "Tulum",
+    "booking": "Booking",
+    "about": "About Us"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "rights": "All rights reserved."
+  },
+  "button": {
+    "bookNow": "Book Now",
+    "learnMore": "Learn More",
+    "viewAll": "View All",
+    "readMore": "Read More"
+  },
+  "buttons": {
+    "bookNow": "Book Now",
+    "purchase": "Purchase Now",
+    "book": "Book Session"
+  },
+  "booking": {
+    "reservationDetails": "Reservation Details",
+    "guestInformation": "Guest Information",
+    "selectedItem": "Selected Item",
+    "checkIn": "Check-in Date",
+    "checkOut": "Check-out Date",
+    "date": "Date",
+    "selectDate": "Select date",
+    "adults": "Adults",
+    "children": "Children",
+    "specialRequests": "Special Requests",
+    "specialRequestsPlaceholder": "Let us know if you have any special requirements or requests",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Your first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Your last name",
+    "email": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "phone": "Phone Number",
+    "phonePlaceholder": "+1 (555) 000-0000",
+    "requestBooking": "Request Booking",
+    "purchase": "Purchase Now",
+    "processing": "Processing...",
+    "bookingDisclaimer": "Our team will contact you within 24 hours to confirm availability and finalize your booking.",
+    "productDisclaimer": "You will receive a confirmation email with details after your purchase is complete.",
+    "quantity": "Quantity",
+    "successTitle": "Request Submitted",
+    "successDescription": "We've received your request and will be in touch shortly.",
+    "perNight": "per night",
+    "perSession": "per session",
+    "night": "night",
+    "perActivity": "per person",
+    "propertyNotFound": "Property Not Found",
+    "propertyNotFoundDesc": "The property you are looking for does not exist or has been removed.",
+    "backToProperties": "Back to Properties",
+    "productNotFound": "Product Not Found",
+    "productNotFoundDesc": "The product you are looking for does not exist or has been removed.",
+    "backToProducts": "Back to Products",
+    "guideNotFound": "Guide Not Found",
+    "guideNotFoundDesc": "The guide you are looking for does not exist or has been removed.",
+    "backToGuides": "Back to Guides",
+    "bookProperty": "Book Your Stay",
+    "bookPropertyDesc": "Complete the form below to request a booking for this property.",
+    "purchaseProduct": "Purchase Product",
+    "purchaseProductDesc": "Complete the form below to purchase this artisan product.",
+    "bookGuide": "Book a Guide",
+    "bookGuideDesc": "Complete the form below to request a session with this guide."
+  }
+}

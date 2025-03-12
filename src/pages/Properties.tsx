@@ -3,6 +3,7 @@ import React from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PropertyCard } from '@/components/ui/PropertyCard';
+import { PropertyBookingCard } from '@/components/ui/PropertyBookingCard';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -43,7 +44,7 @@ export default function Properties() {
       <Navbar />
       
       <main className="flex-1 pt-24 pb-16">
-        <section className="container max-w-6xl mx-auto px-4 mb-16">
+        <section className="container max-w-6xl mx-auto px-4 mb-16" id="properties-list">
           <div className="text-center mb-10">
             <h1 className="heading-lg mb-4">Our Exclusive Properties</h1>
             <p className="paragraph-lg max-w-3xl mx-auto text-muted-foreground">
@@ -54,7 +55,7 @@ export default function Properties() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {properties.map((property) => (
-              <PropertyCard 
+              <PropertyBookingCard 
                 key={property.id}
                 id={property.id}
                 title={property.title}
@@ -68,7 +69,7 @@ export default function Properties() {
           </div>
         </section>
         
-        <section className="bg-secondary py-16">
+        <section className="bg-secondary py-16" id="property-features">
           <div className="container max-w-6xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div className="rounded-xl overflow-hidden">

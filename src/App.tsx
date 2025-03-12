@@ -16,6 +16,11 @@ import Cities from "./pages/cities/Cities";
 import Bali from "./pages/cities/Bali";
 import Tulum from "./pages/cities/Tulum";
 import NotFound from "./pages/NotFound";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import PropertyBooking from "./pages/booking/PropertyBooking";
+import ProductBooking from "./pages/booking/ProductBooking";
+import GuideBooking from "./pages/booking/GuideBooking";
 
 const queryClient = new QueryClient();
 
@@ -33,10 +38,15 @@ const App = () => (
             <Route path="/services/products" element={<ArtisanProducts />} />
             <Route path="/services/guides" element={<Guides />} />
             <Route path="/booking" element={<Booking />} />
+            <Route path="/booking/property/:propertyId" element={<PropertyBooking />} />
+            <Route path="/booking/product/:productId" element={<ProductBooking />} />
+            <Route path="/booking/guide/:guideId" element={<GuideBooking />} />
             <Route path="/about" element={<About />} />
             <Route path="/cities" element={<Cities />} />
             <Route path="/cities/bali" element={<Bali />} />
             <Route path="/cities/tulum" element={<Tulum />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,0 +1,77 @@
+
+{
+  "nav": {
+    "home": "Inicio",
+    "properties": "Propiedades",
+    "services": "Servicios",
+    "cities": "Destinos",
+    "bali": "Bali",
+    "tulum": "Tulum", 
+    "booking": "Reservas",
+    "about": "Sobre Nosotros"
+  },
+  "footer": {
+    "quickLinks": "Enlaces Rápidos",
+    "contactUs": "Contáctenos",
+    "rights": "Todos los derechos reservados."
+  },
+  "button": {
+    "bookNow": "Reservar Ahora",
+    "learnMore": "Más Información",
+    "viewAll": "Ver Todo",
+    "readMore": "Leer Más"
+  },
+  "buttons": {
+    "bookNow": "Reservar Ahora",
+    "purchase": "Comprar Ahora",
+    "book": "Reservar Sesión"
+  },
+  "booking": {
+    "reservationDetails": "Detalles de la Reserva",
+    "guestInformation": "Información del Huésped",
+    "selectedItem": "Artículo Seleccionado",
+    "checkIn": "Fecha de Llegada",
+    "checkOut": "Fecha de Salida",
+    "date": "Fecha",
+    "selectDate": "Seleccionar fecha",
+    "adults": "Adultos",
+    "children": "Niños",
+    "specialRequests": "Peticiones Especiales",
+    "specialRequestsPlaceholder": "Háganos saber si tiene algún requisito o petición especial",
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Su nombre",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Su apellido",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "su.correo@ejemplo.com",
+    "phone": "Número de Teléfono",
+    "phonePlaceholder": "+34 (555) 000-000",
+    "requestBooking": "Solicitar Reserva",
+    "purchase": "Comprar Ahora",
+    "processing": "Procesando...",
+    "bookingDisclaimer": "Nuestro equipo se pondrá en contacto con usted en 24 horas para confirmar la disponibilidad y finalizar su reserva.",
+    "productDisclaimer": "Recibirá un correo electrónico de confirmación con los detalles una vez completada su compra.",
+    "quantity": "Cantidad",
+    "successTitle": "Solicitud Enviada",
+    "successDescription": "Hemos recibido su solicitud y nos pondremos en contacto en breve.",
+    "perNight": "por noche",
+    "perSession": "por sesión",
+    "night": "noche",
+    "perActivity": "por persona",
+    "propertyNotFound": "Propiedad No Encontrada",
+    "propertyNotFoundDesc": "La propiedad que está buscando no existe o ha sido eliminada.",
+    "backToProperties": "Volver a Propiedades",
+    "productNotFound": "Producto No Encontrado",
+    "productNotFoundDesc": "El producto que está buscando no existe o ha sido eliminado.",
+    "backToProducts": "Volver a Productos",
+    "guideNotFound": "Guía No Encontrado",
+    "guideNotFoundDesc": "El guía que está buscando no existe o ha sido eliminado.",
+    "backToGuides": "Volver a Guías",
+    "bookProperty": "Reserve Su Estancia",
+    "bookPropertyDesc": "Complete el formulario a continuación para solicitar una reserva para esta propiedad.",
+    "purchaseProduct": "Comprar Producto",
+    "purchaseProductDesc": "Complete el formulario a continuación para comprar este producto artesanal.",
+    "bookGuide": "Reservar un Guía",
+    "bookGuideDesc": "Complete el formulario a continuación para solicitar una sesión con este guía."
+  }
+}

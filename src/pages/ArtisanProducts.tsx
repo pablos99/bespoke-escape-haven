@@ -2,18 +2,18 @@
 import React from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { ServiceCard, ServiceCardProps } from '@/components/ui/ServiceCard';
+import { ServiceBookingCard } from '@/components/ui/ServiceBookingCard';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
-const products: ServiceCardProps[] = [
+const products = [
   {
     id: "1",
     title: "Handwoven Bali Basket",
     description: "Traditional handwoven basket made by local Balinese artisans using sustainable materials. Perfect for storing fruits or as a decorative piece.",
     image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 65,
-    category: "products" as const,
+    category: "product" as const,
   },
   {
     id: "2",
@@ -21,7 +21,7 @@ const products: ServiceCardProps[] = [
     description: "Hand-painted ceramic vase created by Tulum artisans using traditional Mayan patterns and techniques. Each piece is unique and tells a story.",
     image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 89,
-    category: "products" as const,
+    category: "product" as const,
   },
   {
     id: "3",
@@ -29,7 +29,7 @@ const products: ServiceCardProps[] = [
     description: "Organic coconut wax candles in repurposed coconut shells. Made with essential oils by a women's cooperative in Bali.",
     image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 42,
-    category: "products" as const,
+    category: "product" as const,
   },
   {
     id: "4",
@@ -37,7 +37,7 @@ const products: ServiceCardProps[] = [
     description: "Authentic dreamcatcher handcrafted by Mayan artisans in Tulum using locally sourced materials and traditional weaving techniques.",
     image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 55,
-    category: "products" as const,
+    category: "product" as const,
   },
 ];
 
@@ -47,7 +47,7 @@ export default function ArtisanProducts() {
       <Navbar />
       
       <main className="flex-1 pt-24 pb-16">
-        <section className="container max-w-6xl mx-auto px-4 mb-16">
+        <section className="container max-w-6xl mx-auto px-4 mb-16" id="products-list">
           <div className="text-center mb-10">
             <h1 className="heading-lg mb-4">Artisan Products</h1>
             <p className="paragraph-lg max-w-3xl mx-auto text-muted-foreground">
@@ -58,7 +58,7 @@ export default function ArtisanProducts() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product) => (
-              <ServiceCard key={product.id} {...product} />
+              <ServiceBookingCard key={product.id} {...product} />
             ))}
           </div>
           
@@ -69,7 +69,7 @@ export default function ArtisanProducts() {
           </div>
         </section>
         
-        <section className="bg-secondary py-16">
+        <section className="bg-secondary py-16" id="artisan-impact">
           <div className="container max-w-6xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
