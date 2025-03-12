@@ -13,6 +13,7 @@ interface ServiceCardProps {
   price: number;
   category: 'products' | 'activities' | 'guides';
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function ServiceCard({
@@ -22,7 +23,8 @@ export function ServiceCard({
   image,
   price,
   category,
-  className
+  className,
+  style
 }: ServiceCardProps) {
   const categoryLabels = {
     products: 'Artisan Product',
@@ -36,6 +38,7 @@ export function ServiceCard({
         'group magic-card flex flex-col bg-background border border-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg',
         className
       )}
+      style={style}
     >
       <div className="relative h-56 w-full overflow-hidden">
         <div className="absolute inset-0">

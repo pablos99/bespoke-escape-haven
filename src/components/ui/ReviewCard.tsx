@@ -11,6 +11,7 @@ interface ReviewCardProps {
   content: string;
   avatar?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function ReviewCard({
@@ -20,7 +21,8 @@ export function ReviewCard({
   rating,
   content,
   avatar,
-  className
+  className,
+  style
 }: ReviewCardProps) {
   return (
     <div 
@@ -28,6 +30,7 @@ export function ReviewCard({
         'p-6 bg-background border border-border rounded-xl transition-all duration-300 hover:shadow-md',
         className
       )}
+      style={style}
     >
       <div className="flex items-center mb-4">
         <div className="w-12 h-12 rounded-full overflow-hidden bg-muted mr-4">

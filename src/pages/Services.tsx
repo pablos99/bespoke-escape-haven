@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -6,6 +5,7 @@ import { Hero } from '@/components/sections/Hero';
 import { ServiceCard } from '@/components/ui/ServiceCard';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatedImage } from '@/components/ui/AnimatedImage';
 
 // Temporary mock data - in a real app would come from API/backend
 const services = {
@@ -16,7 +16,7 @@ const services = {
       description: 'Authentic hand-woven textiles made by local Balinese artisans using traditional techniques passed down through generations.',
       image: 'https://images.unsplash.com/photo-1621812956658-78796291dc2e?q=80&w=2670&auto=format&fit=crop',
       price: 120,
-      category: 'products'
+      category: 'products' as const
     },
     {
       id: 'tulum-pottery',
@@ -24,7 +24,7 @@ const services = {
       description: 'Beautiful handmade pottery crafted by local Mexican artisans, featuring traditional designs and techniques.',
       image: 'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?q=80&w=2669&auto=format&fit=crop',
       price: 95,
-      category: 'products'
+      category: 'products' as const
     },
     {
       id: 'bali-woodcarving',
@@ -32,7 +32,7 @@ const services = {
       description: 'Exquisite hand-carved wooden sculptures and decorative items created by skilled Balinese woodcarvers.',
       image: 'https://images.unsplash.com/photo-1584283092092-a9c90507cb65?q=80&w=2670&auto=format&fit=crop',
       price: 150,
-      category: 'products'
+      category: 'products' as const
     },
     {
       id: 'tulum-dreamcatcher',
@@ -40,7 +40,7 @@ const services = {
       description: 'Handcrafted dream catchers made by local Mayan artisans using traditional techniques and natural materials.',
       image: 'https://images.unsplash.com/photo-1514047413421-005d8841293e?q=80&w=2574&auto=format&fit=crop',
       price: 75,
-      category: 'products'
+      category: 'products' as const
     }
   ],
   activities: [
@@ -50,7 +50,7 @@ const services = {
       description: 'Experience the healing touch of Balinese massage in the comfort of your villa, performed by skilled local therapists.',
       image: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=2670&auto=format&fit=crop',
       price: 85,
-      category: 'activities'
+      category: 'activities' as const
     },
     {
       id: 'bali-cooking',
@@ -58,7 +58,7 @@ const services = {
       description: 'Learn to prepare authentic Balinese dishes with a private chef using fresh local ingredients from the morning market.',
       image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2670&auto=format&fit=crop',
       price: 120,
-      category: 'activities'
+      category: 'activities' as const
     },
     {
       id: 'cenote-dive',
@@ -66,7 +66,7 @@ const services = {
       description: 'Exclusive guided diving tour of hidden cenotes near Tulum with a professional diver. Explore crystal clear waters and unique cave formations.',
       image: 'https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=2670&auto=format&fit=crop',
       price: 180,
-      category: 'activities'
+      category: 'activities' as const
     },
     {
       id: 'tulum-yoga',
@@ -74,7 +74,7 @@ const services = {
       description: 'Start your day with a private yoga session on the beach, led by experienced local instructors against the backdrop of the Caribbean Sea.',
       image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=2622&auto=format&fit=crop',
       price: 65,
-      category: 'activities'
+      category: 'activities' as const
     }
   ],
   guides: [
@@ -84,7 +84,7 @@ const services = {
       description: 'Discover the rich cultural history of Tulum with a knowledgeable local guide of Mayan descent. Visit ancient ruins and sacred sites.',
       image: 'https://images.unsplash.com/photo-1605217613423-0aea4fb32906?q=80&w=2670&auto=format&fit=crop',
       price: 150,
-      category: 'guides'
+      category: 'guides' as const
     },
     {
       id: 'bali-temple-guide',
@@ -92,7 +92,7 @@ const services = {
       description: 'Explore Bali\'s most significant temples with a local guide who will explain the cultural and spiritual significance of each site.',
       image: 'https://images.unsplash.com/photo-1604922824961-87cefb9dc1ce?q=80&w=2574&auto=format&fit=crop',
       price: 130,
-      category: 'guides'
+      category: 'guides' as const
     },
     {
       id: 'tulum-foodie-tour',
@@ -100,7 +100,7 @@ const services = {
       description: 'A guided tour of Tulum\'s best local eateries and food markets with a culinary expert who will introduce you to authentic Mexican flavors.',
       image: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?q=80&w=2535&auto=format&fit=crop',
       price: 110,
-      category: 'guides'
+      category: 'guides' as const
     },
     {
       id: 'bali-art-tour',
@@ -108,11 +108,12 @@ const services = {
       description: 'Visit the artistic heart of Bali with a guide who will take you to the best galleries, workshops, and craft villages around Ubud.',
       image: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?q=80&w=2670&auto=format&fit=crop',
       price: 120,
-      category: 'guides'
+      category: 'guides' as const
     }
   ]
 };
 
+// Convert service categories to an array for all services
 const allServices = [...services.products, ...services.activities, ...services.guides];
 
 const Services = () => {

@@ -40,7 +40,7 @@ const featuredServices = [
     description: 'Authentic hand-woven textiles made by local Balinese artisans using traditional techniques passed down through generations.',
     image: 'https://images.unsplash.com/photo-1621812956658-78796291dc2e?q=80&w=2670&auto=format&fit=crop',
     price: 120,
-    category: 'products'
+    category: 'products' as const
   },
   {
     id: 'cenote-dive',
@@ -48,7 +48,7 @@ const featuredServices = [
     description: 'Exclusive guided diving tour of hidden cenotes near Tulum with a professional diver. Explore crystal clear waters and unique cave formations.',
     image: 'https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=2670&auto=format&fit=crop',
     price: 180,
-    category: 'activities'
+    category: 'activities' as const
   },
   {
     id: 'mayan-guide',
@@ -56,7 +56,7 @@ const featuredServices = [
     description: 'Discover the rich cultural history of Tulum with a knowledgeable local guide of Mayan descent. Visit ancient ruins and sacred sites.',
     image: 'https://images.unsplash.com/photo-1605217613423-0aea4fb32906?q=80&w=2670&auto=format&fit=crop',
     price: 150,
-    category: 'guides'
+    category: 'guides' as const
   }
 ];
 

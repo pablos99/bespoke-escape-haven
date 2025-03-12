@@ -15,6 +15,7 @@ interface PropertyCardProps {
   rating: number;
   price: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function PropertyCard({
@@ -25,7 +26,8 @@ export function PropertyCard({
   image,
   rating,
   price,
-  className
+  className,
+  style
 }: PropertyCardProps) {
   return (
     <div 
@@ -33,6 +35,7 @@ export function PropertyCard({
         'group magic-card flex flex-col bg-background border border-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg',
         className
       )}
+      style={style}
     >
       <div className="relative h-64 w-full overflow-hidden">
         <div className="absolute inset-0">
