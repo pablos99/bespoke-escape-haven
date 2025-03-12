@@ -12,6 +12,8 @@ export function MobileMenuButton({ isOpen, setIsOpen }: MobileMenuButtonProps) {
     <button
       className="relative z-50 text-primary"
       onClick={() => setIsOpen(!isOpen)}
+      aria-expanded={isOpen}
+      aria-label="Toggle menu"
     >
       {isOpen ? <X size={24} /> : <Menu size={24} />}
     </button>

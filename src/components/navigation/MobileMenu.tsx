@@ -18,10 +18,10 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-40 flex flex-col items-start justify-start pt-20 px-6 overflow-y-auto md:hidden transform transition-transform duration-300 ease-in-out h-full',
+        'fixed inset-0 z-40 flex flex-col items-start justify-start pt-20 px-6 overflow-y-auto md:hidden bg-background transform transition-transform duration-300 ease-in-out h-full',
         isOpen ? 'translate-x-0' : '-translate-x-full'
       )}
-      style={{ backgroundColor: 'var(--background)', boxShadow: isOpen ? '0 0 15px rgba(0,0,0,0.1)' : 'none' }}
+      style={{ boxShadow: isOpen ? '0 0 15px rgba(0,0,0,0.1)' : 'none' }}
     >
       <div className="w-full space-y-6 mt-4">
         {navigation.map((item) => {
