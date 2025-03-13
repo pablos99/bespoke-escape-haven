@@ -67,10 +67,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProfile = async (userId: string) => {
     try {
+      // Use functions API to check if user is admin
+      const { data: isAdminData, error: isAdminError } = await supabase.rpc('is_admin');
+      if (isAdminError) {
+        console.error('Error checking admin status:', isAdminError);
+      } else {
+        setIsAdmin(isAdminData);
+      }
+
+      // Get user data from the users table
       const { data, error } = await supabase
-        .from('profiles')
+        .from('users')
         .select('*')
-        .eq('id', userId)
+        .eq('auth_id', userId)
         .single();
 
       if (error) {
@@ -79,7 +88,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      setProfile(data as ProfileData);
+      const profileData: ProfileData = {
+        id: data.id,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
+        role: data.role
+      };
+
+      setProfile(profileData);
       setIsAdmin(data.role === 'admin');
       setLoading(false);
     } catch (error) {
