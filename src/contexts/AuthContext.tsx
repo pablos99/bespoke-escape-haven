@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,
-        role: data.role
+        role: data.role === 'admin' ? 'admin' : 'customer' // Convert 'user' to 'customer'
       };
 
       setProfile(profileData);
