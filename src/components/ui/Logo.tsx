@@ -7,9 +7,10 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LogoProps {
   className?: string;
+  hideText?: boolean;
 }
 
-export function Logo({ className }: LogoProps) {
+export function Logo({ className, hideText = false }: LogoProps) {
   const isMobile = useIsMobile();
   
   return (
@@ -20,7 +21,9 @@ export function Logo({ className }: LogoProps) {
           <TreePalm className="text-primary h-6 w-6 absolute -bottom-1 -right-1" />
         </div>
       )}
-      <span className="text-lg font-light tracking-tight text-primary text-center w-full">Jungle Properties</span>
+      {!hideText && (
+        <span className="text-lg font-light tracking-tight text-primary text-center w-full">Jungle Properties</span>
+      )}
     </Link>
   );
 }

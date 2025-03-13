@@ -17,7 +17,7 @@ export function TopNav() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-10">
           <div className="hidden sm:block">
-            <Logo />
+            <Logo hideText={true} />
           </div>
           
           {/* Desktop Navigation */}
