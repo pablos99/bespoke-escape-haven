@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -12,6 +12,8 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Logo } from '@/components/ui/Logo';
 import { useApp } from '@/contexts/AppContext';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 const registerSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
@@ -29,7 +31,9 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function Register() {
   const { signUp } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { t } = useApp();
+  const navigate = useNavigate();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -43,11 +47,14 @@ export default function Register() {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
+    setError(null);
+    
     try {
       setIsLoading(true);
       await signUp(data.email, data.password, data.firstName, data.lastName);
-    } catch (error) {
-      console.error('Registration error:', error);
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      setError(err?.message || 'Failed to register. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -63,6 +70,14 @@ export default function Register() {
           <h1 className="text-2xl font-bold mt-4">Create an account</h1>
           <p className="text-muted-foreground mt-1">Sign up to get started</p>
         </div>
+
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Registration failed</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
         <Card>
           <CardContent className="pt-6">

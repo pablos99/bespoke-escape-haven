@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Session, User } from '@supabase/supabase-js';
@@ -136,7 +135,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signUp({
+      
+      // Check if user already exists
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('email')
+        .eq('email', email)
+        .single();
+
+      if (existingUser) {
+        toast({
+          title: "Registration failed",
+          description: "An account with this email already exists",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Register the user with Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -148,6 +165,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (error) {
+        console.error('Signup error:', error);
         toast({
           title: "Registration failed",
           description: error.message,
@@ -156,11 +174,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw error;
       }
 
+      // Success toast message
       toast({
         title: "Registration successful",
         description: "Please check your email to confirm your account.",
       });
       
+      // Even though the auth is handled by the trigger,
+      // we'll navigate to login page
       navigate('/auth/login');
     } catch (error) {
       console.error('Error signing up:', error);
