@@ -42,5 +42,27 @@ export const pageToKeyPrefixMap: Record<string, string[]> = {
   'destinations': ['nav', 'footer', 'button', 'buttons', 'common', 'destinations', 'cities'],
   'privacy': ['nav', 'footer', 'button', 'buttons', 'common'],
   'terms': ['nav', 'footer', 'button', 'buttons', 'common'],
-  'auth': ['nav', 'footer', 'button', 'buttons', 'common', 'auth']
+  'auth': ['nav', 'footer', 'button', 'buttons', 'common', 'auth'],
+  'admin': ['nav', 'footer', 'button', 'buttons', 'common', 'admin']
 };
+
+// Utility function to get all page options for dropdown
+export function getPageOptions(): string[] {
+  const pages = new Set<string>();
+  
+  // Add all pages from the map
+  Object.values(pageToKeyPrefixMap).forEach(prefixes => {
+    prefixes.forEach(prefix => pages.add(prefix));
+  });
+  
+  return Array.from(pages).sort();
+}
+
+// Translation interface for consistency
+export interface Translation {
+  id: string;
+  key: string;
+  en: string;
+  es: string;
+  page: string;
+}

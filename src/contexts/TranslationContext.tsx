@@ -1,9 +1,10 @@
+
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import enTranslations from '@/locales/en.json';
 import esTranslations from '@/locales/es.json';
 import { useToast } from '@/hooks/use-toast';
-import { getNestedValue, processTranslations, pageToKeyPrefixMap } from '@/utils/translationUtils';
+import { getNestedValue, processTranslations, pageToKeyPrefixMap, Translation } from '@/utils/translationUtils';
 import { useApp } from './AppContext';
 
 type Language = 'en' | 'es';
@@ -14,6 +15,7 @@ interface TranslationContextType {
   isTranslationsLoading: boolean;
   currentPage: string;
   setCurrentPage: (page: string) => void;
+  refreshTranslations: () => Promise<void>;
 }
 
 // Generate combined translations object where each key points to an object with language values
@@ -45,56 +47,57 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [currentPage, setCurrentPage] = useState<string>('index');
   const { toast } = useToast();
 
-  // Load translations from Supabase based on current page
-  useEffect(() => {
-    async function fetchTranslations() {
-      try {
-        setIsTranslationsLoading(true);
-        
-        // Determine which page prefixes to load
-        const pagesToLoad = pageToKeyPrefixMap[currentPage] || ['common', 'nav', 'footer', 'button', 'buttons'];
-        
-        const { data, error } = await supabase
-          .from('translations')
-          .select('key, en, es, page')
-          .in('page', pagesToLoad);
-        
-        if (error) {
-          console.error('Error fetching translations:', error);
-          toast({
-            title: 'Translation Error',
-            description: 'Could not load translations. Using fallback values.',
-            variant: 'destructive',
-          });
-          return;
-        }
-        
-        const translationsMap: Record<string, Record<Language, string>> = {};
-        if (data && data.length > 0) {
-          data.forEach(row => {
-            translationsMap[row.key] = {
-              en: row.en || row.key,
-              es: row.es || row.key
-            };
-          });
-          setDbTranslations(translationsMap);
-        } else {
-          console.log('No translations found for pages:', pagesToLoad);
-        }
-      } catch (error) {
-        console.error('Error in fetching translations:', error);
+  // Function to fetch translations that can be called to refresh data
+  const fetchTranslations = async () => {
+    try {
+      setIsTranslationsLoading(true);
+      
+      // Determine which page prefixes to load
+      const pagesToLoad = pageToKeyPrefixMap[currentPage] || ['common', 'nav', 'footer', 'button', 'buttons'];
+      
+      const { data, error } = await supabase
+        .from('translations')
+        .select('*')
+        .in('page', pagesToLoad);
+      
+      if (error) {
+        console.error('Error fetching translations:', error);
         toast({
           title: 'Translation Error',
           description: 'Could not load translations. Using fallback values.',
           variant: 'destructive',
         });
-      } finally {
-        setIsTranslationsLoading(false);
+        return;
       }
+      
+      const translationsMap: Record<string, Record<Language, string>> = {};
+      if (data && data.length > 0) {
+        data.forEach((row: Translation) => {
+          translationsMap[row.key] = {
+            en: row.en || row.key,
+            es: row.es || row.key
+          };
+        });
+        setDbTranslations(translationsMap);
+      } else {
+        console.log('No translations found for pages:', pagesToLoad);
+      }
+    } catch (error) {
+      console.error('Error in fetching translations:', error);
+      toast({
+        title: 'Translation Error',
+        description: 'Could not load translations. Using fallback values.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsTranslationsLoading(false);
     }
-    
+  };
+
+  // Load translations from Supabase based on current page
+  useEffect(() => {
     fetchTranslations();
-  }, [currentPage, toast]);
+  }, [currentPage]);
 
   // Merge local JSON translations with DB translations
   const mergedTranslations = useMemo(() => {
@@ -142,7 +145,8 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
         t,
         currentPage,
         setCurrentPage,
-        isTranslationsLoading
+        isTranslationsLoading,
+        refreshTranslations: fetchTranslations
       }}
     >
       {children}
