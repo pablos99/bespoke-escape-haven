@@ -3,6 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+// Extract the Supabase URL and key from the environment or client config
+const SUPABASE_URL = "https://bwxesdupbzdcnknaupuy.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3eGVzZHVwYnpkY25rbmF1cHV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1ODkzODIsImV4cCI6MjA1NzE2NTM4Mn0.eRZ0inq2ZtJjbfbDQwW_G2TBeA_NDnap3lZt44as5dc";
+
 export const usePropertyById = (propertyId: string | undefined) => {
   const { toast } = useToast();
   
@@ -31,11 +35,11 @@ export const usePropertyById = (propertyId: string | undefined) => {
           // Second attempt: using REST client directly
           console.log('Attempt 2: Using direct REST endpoint');
           const restResponse = await fetch(
-            `${supabase.supabaseUrl}/rest/v1/properties?id=eq.${propertyId}&select=*,property_images(image_url,is_primary)`,
+            `${SUPABASE_URL}/rest/v1/properties?id=eq.${propertyId}&select=*,property_images(image_url,is_primary)`,
             {
               headers: {
-                'apikey': supabase.supabaseKey,
-                'Authorization': `Bearer ${supabase.supabaseKey}`,
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'Prefer': 'return=representation'
