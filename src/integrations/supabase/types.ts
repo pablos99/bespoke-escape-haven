@@ -187,6 +187,51 @@ export type Database = {
         }
         Relationships: []
       }
+      old_property_translations: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          language_code: string | null
+          property_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          language_code?: string | null
+          property_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          language_code?: string | null
+          property_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_translations_language_code_fkey"
+            columns: ["language_code"]
+            isOneToOne: false
+            referencedRelation: "languages"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "property_translations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       old_translations: {
         Row: {
           created_at: string
@@ -486,41 +531,37 @@ export type Database = {
       property_translations: {
         Row: {
           created_at: string
-          description: string
+          description_en: string
+          description_es: string
           id: string
-          language_code: string | null
           property_id: string | null
-          title: string
+          title_en: string
+          title_es: string
           updated_at: string
         }
         Insert: {
           created_at?: string
-          description: string
+          description_en?: string
+          description_es?: string
           id?: string
-          language_code?: string | null
           property_id?: string | null
-          title: string
+          title_en?: string
+          title_es?: string
           updated_at?: string
         }
         Update: {
           created_at?: string
-          description?: string
+          description_en?: string
+          description_es?: string
           id?: string
-          language_code?: string | null
           property_id?: string | null
-          title?: string
+          title_en?: string
+          title_es?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "property_translations_language_code_fkey"
-            columns: ["language_code"]
-            isOneToOne: false
-            referencedRelation: "languages"
-            referencedColumns: ["code"]
-          },
-          {
-            foreignKeyName: "property_translations_property_id_fkey"
+            foreignKeyName: "new_property_translations_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"

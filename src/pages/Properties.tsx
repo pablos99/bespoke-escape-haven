@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Footer } from '@/components/layout/Footer';
 import { PropertyBookingCard } from '@/components/ui/PropertyBookingCard';
@@ -10,7 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useApp } from '@/contexts/AppContext';
+import { supabase } from '@/integrations/supabase/client';
 
+// Sample properties - in a production app, this would be fetched from the API
 const properties = [
   {
     id: "bali-villa",
@@ -45,10 +49,44 @@ const properties = [
 ];
 
 export default function Properties() {
+  const { language, t } = useApp();
   const [searchParams, setSearchParams] = useSearchParams();
   const [location, setLocation] = useState<string>(searchParams.get("location") || "all");
   const [filteredProperties, setFilteredProperties] = useState(properties);
+  const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch property translations from Supabase
+  useEffect(() => {
+    async function fetchPropertyTranslations() {
+      try {
+        const { data, error } = await supabase
+          .from('property_translations')
+          .select('property_id, title_en, description_en, title_es, description_es');
+        
+        if (error) {
+          console.error('Error fetching property translations:', error);
+          return;
+        }
+        
+        // Convert data array to a map keyed by property_id
+        const translationsMap: Record<string, any> = {};
+        data.forEach(item => {
+          translationsMap[item.property_id] = item;
+        });
+        
+        setPropertyTranslations(translationsMap);
+      } catch (error) {
+        console.error('Error in fetching property translations:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchPropertyTranslations();
+  }, []);
+
+  // Filter properties based on location
   useEffect(() => {
     if (location === "all") {
       setFilteredProperties(properties);
@@ -67,25 +105,39 @@ export default function Properties() {
     setSearchParams(searchParams);
   };
 
+  // Helper function to get localized property content
+  const getLocalizedPropertyContent = (property: any) => {
+    const translation = propertyTranslations[property.id];
+    
+    // If we have a translation, use it; otherwise fall back to the property data
+    return {
+      title: translation ? translation[`title_${language}`] || property.title : property.title,
+      description: translation ? translation[`description_${language}`] || property.description : property.description
+    };
+  };
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading properties...</div>;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 pt-8 pb-16">
         <section className="container max-w-6xl mx-auto px-4 mb-16" id="properties-list">
           <div className="text-center mb-10">
-            <h1 className="heading-lg mb-4">Our Exclusive Properties</h1>
+            <h1 className="heading-lg mb-4">{t('properties.title')}</h1>
             <p className="paragraph-lg max-w-3xl mx-auto text-muted-foreground">
-              Experience the ultimate in luxury and comfort with our carefully curated villas in Bali and Tulum.
-              Each property offers a unique blend of local culture and modern amenities.
+              {t('properties.subtitle')}
             </p>
           </div>
           
           <div className="flex justify-end mb-8">
             <Select value={location} onValueChange={handleLocationChange}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by location" />
+                <SelectValue placeholder={t('properties.filterByLocation')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
+                <SelectItem value="all">{t('properties.allLocations')}</SelectItem>
                 <SelectItem value="bali">Bali</SelectItem>
                 <SelectItem value="tulum">Tulum</SelectItem>
               </SelectContent>
@@ -93,18 +145,22 @@ export default function Properties() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredProperties.map((property) => (
-              <PropertyBookingCard 
-                key={property.id}
-                id={property.id}
-                title={property.title}
-                location={property.location}
-                description={property.description}
-                image={property.images[0]}
-                price={property.price}
-                rating={property.rating}
-              />
-            ))}
+            {filteredProperties.map((property) => {
+              const localizedContent = getLocalizedPropertyContent(property);
+              
+              return (
+                <PropertyBookingCard 
+                  key={property.id}
+                  id={property.id}
+                  title={localizedContent.title}
+                  location={property.location}
+                  description={localizedContent.description}
+                  image={property.images[0]}
+                  price={property.price}
+                  rating={property.rating}
+                />
+              );
+            })}
           </div>
         </section>
         
@@ -119,15 +175,15 @@ export default function Properties() {
                 />
               </div>
               <div>
-                <h2 className="heading-md mb-4">Exceptional Service, Unforgettable Stays</h2>
+                <h2 className="heading-md mb-4">{t('properties.serviceHeading')}</h2>
                 <p className="paragraph mb-6">
-                  When you book with Serene Stays, you're not just getting a beautiful property – you're gaining access to our full suite of concierge services designed to make your vacation truly special.
+                  {t('properties.serviceDescription1')}
                 </p>
                 <p className="paragraph mb-6">
-                  From airport transfers and daily cleaning to private chefs and guided excursions, we take care of every detail so you can focus on creating memories.
+                  {t('properties.serviceDescription2')}
                 </p>
                 <Button asChild>
-                  <Link to="/booking">Book Your Stay</Link>
+                  <Link to="/booking">{t('buttons.bookYourStay')}</Link>
                 </Button>
               </div>
             </div>

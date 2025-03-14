@@ -1,12 +1,15 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { AnimatedImage } from '@/components/ui/AnimatedImage';
-import { ServiceCard, ServiceCardProps } from '@/components/ui/ServiceCard';
+import { ServiceCard } from '@/components/ui/ServiceCard';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from 'react-router-dom';
+import { useApp } from '@/contexts/AppContext';
+import { supabase } from '@/integrations/supabase/client';
 
 // Mock property data - in a real app would be fetched from API
 const property = {
@@ -117,6 +120,58 @@ const reviews = [
 ];
 
 export default function Property() {
+  const { propertyId } = useParams<{ propertyId: string }>();
+  const { language, t } = useApp();
+  const [translation, setTranslation] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch property translation from Supabase
+  useEffect(() => {
+    async function fetchPropertyTranslation() {
+      if (!propertyId) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('property_translations')
+          .select('*')
+          .eq('property_id', propertyId)
+          .single();
+        
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching property translation:', error);
+          return;
+        }
+        
+        if (data) {
+          setTranslation(data);
+        }
+      } catch (error) {
+        console.error('Error in fetching property translation:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchPropertyTranslation();
+  }, [propertyId]);
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading property details...</div>;
+  }
+
+  // Helper function to get localized content
+  const getLocalizedContent = (key: 'name' | 'description' | 'longDescription') => {
+    if (!translation) return property[key];
+    
+    if (key === 'name') {
+      return translation[`title_${language}`] || property.name;
+    } else if (key === 'description' || key === 'longDescription') {
+      return translation[`description_${language}`] || property[key];
+    }
+    
+    return property[key];
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -128,7 +183,7 @@ export default function Property() {
             <div className="aspect-[4/3] rounded-xl overflow-hidden">
               <AnimatedImage
                 src={property.images[0]}
-                alt={property.name}
+                alt={getLocalizedContent('name')}
                 className="h-full w-full"
                 hoverEffect="zoom"
               />
@@ -138,7 +193,7 @@ export default function Property() {
                 <div key={index} className="aspect-[4/3] rounded-xl overflow-hidden">
                   <AnimatedImage
                     src={image}
-                    alt={`${property.name} - View ${index + 2}`}
+                    alt={`${getLocalizedContent('name')} - View ${index + 2}`}
                     className="h-full w-full"
                     hoverEffect="zoom"
                   />
@@ -155,16 +210,16 @@ export default function Property() {
             <div className="lg:col-span-2">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h1 className="heading-lg">{property.name}</h1>
+                  <h1 className="heading-lg">{getLocalizedContent('name')}</h1>
                   <p className="text-muted-foreground">{property.location}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-semibold">${property.price}<span className="text-sm text-muted-foreground">/night</span></p>
+                  <p className="text-2xl font-semibold">${property.price}<span className="text-sm text-muted-foreground">/{t('booking.night')}</span></p>
                   <div className="flex items-center justify-end mt-1">
                     <span className="text-yellow-500 mr-1">★</span>
                     <span>{property.rating}</span>
                     <span className="mx-1">·</span>
-                    <span className="text-muted-foreground">{property.reviewCount} reviews</span>
+                    <span className="text-muted-foreground">{property.reviewCount} {t('property.reviews')}</span>
                   </div>
                 </div>
               </div>
@@ -179,11 +234,11 @@ export default function Property() {
               </div>
               
               <div className="prose prose-lg max-w-none my-8">
-                <p>{property.longDescription}</p>
+                <p>{getLocalizedContent('longDescription')}</p>
               </div>
               
               <div className="my-12">
-                <h2 className="heading-md mb-6">Amenities</h2>
+                <h2 className="heading-md mb-6">{t('property.amenities')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {property.amenities.map((amenity, index) => (
                     <div key={index} className="flex items-center">
@@ -199,7 +254,7 @@ export default function Property() {
               </div>
               
               <div className="my-12">
-                <h2 className="heading-md mb-6">Meet Your Host</h2>
+                <h2 className="heading-md mb-6">{t('property.meetHost')}</h2>
                 <div className="flex items-center">
                   <div className="w-16 h-16 rounded-full overflow-hidden mr-6">
                     <img src={property.host.image} alt={property.host.name} className="w-full h-full object-cover" />
@@ -215,43 +270,43 @@ export default function Property() {
             {/* Sidebar */}
             <div className="lg:col-span-1">
               <div className="bg-background border border-border rounded-xl p-6 sticky top-24">
-                <h3 className="text-xl font-medium mb-6">Book Your Stay</h3>
+                <h3 className="text-xl font-medium mb-6">{t('property.bookStay')}</h3>
                 <div className="mb-6">
-                  <label className="block text-sm font-medium mb-2">Check-in</label>
+                  <label className="block text-sm font-medium mb-2">{t('property.checkIn')}</label>
                   <input type="date" className="w-full border border-border rounded-md p-2" />
                 </div>
                 <div className="mb-6">
-                  <label className="block text-sm font-medium mb-2">Check-out</label>
+                  <label className="block text-sm font-medium mb-2">{t('property.checkOut')}</label>
                   <input type="date" className="w-full border border-border rounded-md p-2" />
                 </div>
                 <div className="mb-6">
-                  <label className="block text-sm font-medium mb-2">Guests</label>
+                  <label className="block text-sm font-medium mb-2">{t('property.guests')}</label>
                   <select className="w-full border border-border rounded-md p-2">
-                    <option>1 guest</option>
-                    <option>2 guests</option>
-                    <option>3 guests</option>
-                    <option>4 guests</option>
-                    <option>5+ guests</option>
+                    <option>1 {t('property.guest')}</option>
+                    <option>2 {t('property.guests')}</option>
+                    <option>3 {t('property.guests')}</option>
+                    <option>4 {t('property.guests')}</option>
+                    <option>5+ {t('property.guests')}</option>
                   </select>
                 </div>
-                <Button className="w-full mb-4">Book Now</Button>
-                <p className="text-center text-sm text-muted-foreground">You won't be charged yet</p>
+                <Button className="w-full mb-4">{t('buttons.bookNow')}</Button>
+                <p className="text-center text-sm text-muted-foreground">{t('property.noChargeYet')}</p>
                 
                 <div className="mt-6 pt-6 border-t border-border">
                   <div className="flex justify-between mb-2">
-                    <span>${property.price} × 5 nights</span>
+                    <span>${property.price} × 5 {t('property.nights')}</span>
                     <span>${property.price * 5}</span>
                   </div>
                   <div className="flex justify-between mb-2">
-                    <span>Cleaning fee</span>
+                    <span>{t('property.cleaningFee')}</span>
                     <span>$75</span>
                   </div>
                   <div className="flex justify-between mb-2">
-                    <span>Service fee</span>
+                    <span>{t('property.serviceFee')}</span>
                     <span>$120</span>
                   </div>
                   <div className="flex justify-between font-semibold pt-4 border-t border-border mt-4">
-                    <span>Total</span>
+                    <span>{t('property.total')}</span>
                     <span>${property.price * 5 + 75 + 120}</span>
                   </div>
                 </div>
@@ -264,7 +319,7 @@ export default function Property() {
         <section className="container mx-auto px-4 py-12 border-t border-border">
           <h2 className="heading-md mb-8 flex items-center">
             <span className="text-yellow-500 mr-2">★</span>
-            {property.rating} · {property.reviewCount} reviews
+            {property.rating} · {property.reviewCount} {t('property.reviews')}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -291,13 +346,13 @@ export default function Property() {
           </div>
           
           <div className="text-center mt-8">
-            <Button variant="outline">View All Reviews</Button>
+            <Button variant="outline">{t('buttons.viewAllReviews')}</Button>
           </div>
         </section>
         
         {/* Related Services */}
         <section className="container mx-auto px-4 py-12 border-t border-border">
-          <h2 className="heading-md mb-8">Bespoke Services For This Property</h2>
+          <h2 className="heading-md mb-8">{t('property.bespokeServices')}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {relatedServices.map((service) => (
@@ -310,7 +365,7 @@ export default function Property() {
           
           <div className="text-center mt-8">
             <Button asChild>
-              <Link to="/services">View All Services</Link>
+              <Link to="/services">{t('buttons.viewAllServices')}</Link>
             </Button>
           </div>
         </section>

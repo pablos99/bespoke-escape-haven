@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { AnimatedImage } from './AnimatedImage';
 import { MapPin, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useApp } from '@/contexts/AppContext';
 
 interface PropertyCardProps {
   id: string;
@@ -29,6 +30,8 @@ export function PropertyCard({
   className,
   style
 }: PropertyCardProps) {
+  const { language, t } = useApp();
+  
   return (
     <div 
       className={cn(
@@ -55,7 +58,7 @@ export function PropertyCard({
       <div className="flex-1 p-6 flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <h3 className="text-xl font-medium text-foreground">{title}</h3>
-          <p className="text-lg font-medium text-foreground">${price}<span className="text-sm text-foreground/70">/night</span></p>
+          <p className="text-lg font-medium text-foreground">${price}<span className="text-sm text-foreground/70">/{t('booking.night')}</span></p>
         </div>
         
         <div className="flex items-center text-foreground/70 mb-4">
@@ -67,10 +70,10 @@ export function PropertyCard({
         
         <div className="mt-auto flex justify-between items-center">
           <Link to={`/property/${id}`} className="text-sm font-medium text-primary hover:underline transition-colors">
-            View Details
+            {t('buttons.viewDetails')}
           </Link>
           <Button asChild>
-            <Link to={`/booking?property=${id}`}>Book Now</Link>
+            <Link to={`/booking?property=${id}`}>{t('buttons.bookNow')}</Link>
           </Button>
         </div>
       </div>
