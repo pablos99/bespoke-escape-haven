@@ -7,9 +7,9 @@ interface Service {
   id: string;
   title: string;
   description: string;
-  image: string;
+  image_url: string;
   price: number;
-  category: 'products' | 'activities' | 'guides';
+  category: string;
   location: string;
 }
 
@@ -39,7 +39,13 @@ export const ServiceList: React.FC<ServiceListProps> = ({ services, clearLocatio
       {services.map((service) => (
         <ServiceCard 
           key={service.id}
-          {...service}
+          id={service.id}
+          title={service.title}
+          description={service.description}
+          image={service.image_url}
+          price={service.price}
+          category={service.category === 'products' ? 'products' : service.category === 'guides' ? 'guides' : 'activities'}
+          location={service.location.split(',')[0].trim()}
         />
       ))}
     </div>

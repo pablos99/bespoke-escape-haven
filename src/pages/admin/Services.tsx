@@ -13,7 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Pencil, Trash2, Plus } from 'lucide-react';
+import { Pencil, Trash2, Plus, ImageIcon } from 'lucide-react';
 
 interface Service {
   id: string;
@@ -23,6 +23,7 @@ interface Service {
   duration: string;
   location: string;
   category: string;
+  image_url: string;
   is_featured: boolean;
   status: string;
   created_at: string;
@@ -43,6 +44,7 @@ const AdminServices = () => {
     duration: '',
     location: '',
     category: 'tour',
+    image_url: '',
     is_featured: false,
     status: 'active',
   });
@@ -158,6 +160,7 @@ const AdminServices = () => {
       duration: formData.duration,
       location: formData.location,
       category: formData.category,
+      image_url: formData.image_url,
       is_featured: formData.is_featured,
       status: formData.status
     };
@@ -181,6 +184,7 @@ const AdminServices = () => {
       duration: service.duration,
       location: service.location,
       category: service.category,
+      image_url: service.image_url,
       is_featured: service.is_featured,
       status: service.status
     });
@@ -206,6 +210,7 @@ const AdminServices = () => {
       duration: '',
       location: '',
       category: 'tour',
+      image_url: '',
       is_featured: false,
       status: 'active'
     });
@@ -234,6 +239,19 @@ const AdminServices = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {services && services.map((service) => (
             <Card key={service.id} className="overflow-hidden">
+              <div className="h-40 relative overflow-hidden bg-muted">
+                {service.image_url ? (
+                  <img 
+                    src={service.image_url} 
+                    alt={service.title} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full bg-muted">
+                    <ImageIcon className="h-12 w-12 text-muted-foreground/40" />
+                  </div>
+                )}
+              </div>
               <CardHeader className="p-4">
                 <CardTitle className="flex justify-between items-start">
                   <span className="text-lg">{service.title}</span>
@@ -249,7 +267,7 @@ const AdminServices = () => {
                 <CardDescription>${service.price} - {service.duration}</CardDescription>
               </CardHeader>
               <CardContent className="p-4 pt-0">
-                <p className="text-sm text-muted-foreground mb-2">{service.description}</p>
+                <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{service.description}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
                     {service.category}
@@ -343,6 +361,18 @@ const AdminServices = () => {
                   required
                 />
               </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="image_url" className="text-right">Image URL</Label>
+                <Input 
+                  id="image_url" 
+                  name="image_url"
+                  value={formData.image_url}
+                  onChange={handleInputChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
               
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="category" className="text-right">Category</Label>
@@ -359,6 +389,7 @@ const AdminServices = () => {
                     <SelectItem value="food">Food</SelectItem>
                     <SelectItem value="adventure">Adventure</SelectItem>
                     <SelectItem value="cultural">Cultural</SelectItem>
+                    <SelectItem value="products">Products</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

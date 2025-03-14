@@ -4,35 +4,36 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ServiceCard } from '@/components/ui/ServiceCard';
 import { ArrowRight } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
-const featuredServices = [
-  {
-    id: 'balinese-craft',
-    title: 'Handcrafted Balinese Textiles',
-    description: 'Authentic hand-woven textiles made by local Balinese artisans using traditional techniques passed down through generations.',
-    image: 'https://images.unsplash.com/photo-1621812956658-78796291dc2e?q=80&w=2670&auto=format&fit=crop',
-    price: 120,
-    category: 'products' as const
-  },
-  {
-    id: 'cenote-dive',
-    title: 'Private Cenote Diving Experience',
-    description: 'Exclusive guided diving tour of hidden cenotes near Tulum with a professional diver. Explore crystal clear waters and unique cave formations.',
-    image: 'https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=2670&auto=format&fit=crop',
-    price: 180,
-    category: 'activities' as const
-  },
-  {
-    id: 'mayan-guide',
-    title: 'Mayan Heritage Tour with Local Guide',
-    description: 'Discover the rich cultural history of Tulum with a knowledgeable local guide of Mayan descent. Visit ancient ruins and sacred sites.',
-    image: 'https://images.unsplash.com/photo-1605217613423-0aea4fb32906?q=80&w=2670&auto=format&fit=crop',
-    price: 150,
-    category: 'guides' as const
-  }
-];
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  price: number;
+  category: string;
+  location: string;
+  is_featured: boolean;
+}
 
 export function ServicesSection() {
+  const { data: featuredServices = [], isLoading } = useQuery({
+    queryKey: ['featured-services'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_featured', true)
+        .eq('status', 'active')
+        .limit(3);
+      
+      if (error) throw error;
+      return data as Service[];
+    }
+  });
+
   return (
     <section className="py-20 px-6 md:px-8 lg:px-12 bg-ocean-light">
       <div className="max-w-7xl mx-auto">
@@ -44,16 +45,28 @@ export function ServicesSection() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredServices.map((service) => (
-            <ServiceCard 
-              key={service.id}
-              {...service}
-              className="animate-fade-up opacity-0 [animation-fill-mode:forwards]"
-              style={{ animationDelay: `${featuredServices.indexOf(service) * 100}ms` }}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredServices.map((service, index) => (
+              <ServiceCard 
+                key={service.id}
+                id={service.id}
+                title={service.title}
+                description={service.description}
+                image={service.image_url}
+                price={service.price}
+                category={service.category === 'products' ? 'products' : service.category === 'guides' ? 'guides' : 'activities'}
+                location={service.location.split(',')[0].trim()}
+                className="animate-fade-up opacity-0 [animation-fill-mode:forwards]"
+                style={{ animationDelay: `${index * 100}ms` }}
+              />
+            ))}
+          </div>
+        )}
         
         <div className="text-center mt-12">
           <Button asChild>

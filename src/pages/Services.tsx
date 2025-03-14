@@ -4,18 +4,57 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { useSearchParams } from 'react-router-dom';
-import { services, getFilteredServices } from '@/data/ServicesData';
 import { ServiceFilters } from '@/components/services/ServiceFilters';
 import { ServiceList } from '@/components/services/ServiceList';
 import { CustomServicesCTA } from '@/components/services/CustomServicesCTA';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  price: number;
+  category: string;
+  location: string;
+  duration: string;
+  is_featured: boolean;
+}
 
 const Services = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState(searchParams.get('category') || 'all');
   const [location, setLocation] = useState<string>(searchParams.get('location') || 'all');
   
-  // Get filtered services based on current filters
-  const filteredServices = getFilteredServices(activeTab, location);
+  // Fetch services from Supabase
+  const { data: services = [], isLoading } = useQuery({
+    queryKey: ['services', activeTab, location],
+    queryFn: async () => {
+      let query = supabase
+        .from('services')
+        .select('*')
+        .eq('status', 'active');
+      
+      // Apply category filter if not 'all'
+      if (activeTab !== 'all') {
+        query = query.eq('category', activeTab);
+      }
+      
+      // Apply location filter if not 'all'
+      if (location !== 'all') {
+        query = query.ilike('location', `%${location}%`);
+      }
+      
+      const { data, error } = await query;
+      
+      if (error) {
+        throw error;
+      }
+      
+      return data as Service[];
+    }
+  });
   
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -49,11 +88,11 @@ const Services = () => {
     const categoryParam = searchParams.get('category');
     const locationParam = searchParams.get('location');
     
-    if (categoryParam && (categoryParam === 'all' || categoryParam in services)) {
+    if (categoryParam) {
       setActiveTab(categoryParam);
     }
     
-    if (locationParam && (locationParam === 'all' || locationParam === 'bali' || locationParam === 'tulum')) {
+    if (locationParam) {
       setLocation(locationParam);
     }
   }, [searchParams]);
@@ -87,10 +126,16 @@ const Services = () => {
               onLocationChange={handleLocationChange}
             />
             
-            <ServiceList 
-              services={filteredServices}
-              clearLocationFilter={clearLocationFilter}
-            />
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              </div>
+            ) : (
+              <ServiceList 
+                services={services}
+                clearLocationFilter={clearLocationFilter}
+              />
+            )}
           </div>
         </section>
         
