@@ -6,6 +6,7 @@ import { Logo } from '@/components/ui/Logo';
 import { useApp } from '@/contexts/AppContext';
 import { ThemeToggle } from '@/components/navigation/ThemeToggle';
 import { LanguageSwitcher } from '@/components/navigation/LanguageSwitcher';
+import { ProfileMenu } from '@/components/navigation/ProfileMenu';
 import { navigation } from './navigation-data';
 
 export function TopNav() {
@@ -47,6 +48,7 @@ export function TopNav() {
         <div className="flex items-center space-x-4">
           <LanguageSwitcher />
           <ThemeToggle />
+          <ProfileMenu />
         </div>
       </div>
     </header>
