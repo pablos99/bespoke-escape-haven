@@ -13,6 +13,7 @@ import { PropertyReviews } from '@/components/property/PropertyReviews';
 import { PropertyRelatedServices } from '@/components/property/PropertyRelatedServices';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { usePropertyById } from '@/hooks/usePropertyById';
 
 // Mock property data - in a real app would be fetched from API
 const property = {
@@ -127,9 +128,11 @@ export default function Property() {
   const { language } = useApp();
   const { t, setCurrentPage } = useTranslation();
   const [translation, setTranslation] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const { toast } = useToast();
+  
+  // Use our custom hook to fetch property data
+  const { data: propertyData, isLoading, error: propertyError } = usePropertyById(propertyId);
 
   // Set the current page for translations
   useEffect(() => {
@@ -142,14 +145,13 @@ export default function Property() {
       if (!propertyId) return;
       
       try {
-        setIsLoading(true);
         setHasError(false);
         
         const { data, error } = await supabase
           .from('property_translations')
           .select('*')
           .eq('property_id', propertyId)
-          .maybeSingle(); // Use maybeSingle instead of single to avoid errors if no data
+          .maybeSingle();
         
         if (error) {
           console.error('Error fetching property translation:', error);
@@ -175,8 +177,6 @@ export default function Property() {
           description: 'Using default property information',
           variant: 'destructive',
         });
-      } finally {
-        setIsLoading(false);
       }
     }
     
@@ -185,6 +185,16 @@ export default function Property() {
 
   // Helper function to get localized content
   const getLocalizedContent = (key: 'name' | 'description' | 'longDescription') => {
+    // First try to get from database
+    if (propertyData && key === 'name') {
+      return propertyData.title || property.name;
+    }
+    
+    if (propertyData && (key === 'description' || key === 'longDescription')) {
+      return propertyData.description || property[key];
+    }
+    
+    // Then fall back to translations
     if (!translation) return property[key];
     
     if (key === 'name') {
@@ -209,17 +219,19 @@ export default function Property() {
       <Navbar />
       
       <main className="flex-1 pt-16">
-        {hasError && (
+        {(hasError || propertyError) && (
           <Alert variant="destructive" className="max-w-4xl mx-auto my-4">
             <AlertDescription>
-              Could not load property translations. Showing default content.
+              {propertyError ? 'Could not load property data.' : 'Could not load property translations.'} Showing default content.
             </AlertDescription>
           </Alert>
         )}
         
         {/* Property Images Gallery */}
         <PropertyGallery 
-          images={property.images} 
+          images={propertyData?.property_images?.length > 0 
+            ? propertyData.property_images.map((img: any) => img.image_url) 
+            : property.images} 
           propertyName={getLocalizedContent('name')} 
         />
         
@@ -229,8 +241,8 @@ export default function Property() {
             {/* Main Content */}
             <PropertyDetails
               name={getLocalizedContent('name')}
-              location={property.location}
-              price={property.price}
+              location={propertyData?.city ? `${propertyData.city}, ${propertyData.country}` : property.location}
+              price={propertyData?.price_per_share || property.price}
               rating={property.rating}
               reviewCount={property.reviewCount}
               longDescription={getLocalizedContent('longDescription')}
@@ -242,8 +254,8 @@ export default function Property() {
             
             {/* Sidebar */}
             <PropertyBookingSidebar
-              price={property.price}
-              propertyId={property.id}
+              price={propertyData?.price_per_share || property.price}
+              propertyId={propertyId || property.id}
             />
           </div>
         </section>
