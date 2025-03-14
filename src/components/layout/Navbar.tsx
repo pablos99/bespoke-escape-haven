@@ -49,13 +49,11 @@ export function Navbar() {
           <ThemeToggle />
           
           {!user ? (
-            <ProfileMenu />
+            <Button asChild>
+              <Link to="/login">{t('auth.login')}</Link>
+            </Button>
           ) : (
-            <div className="flex items-center space-x-2">
-              <Button asChild variant="ghost" size="sm" onClick={handleSignOut}>
-                <Link to="/">{t('auth.logout')}</Link>
-              </Button>
-            </div>
+            <ProfileMenu />
           )}
           
           <Button asChild>

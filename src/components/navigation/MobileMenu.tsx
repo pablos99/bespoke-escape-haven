@@ -89,14 +89,9 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
           </Button>
           
           {!user ? (
-            <div className="flex flex-col space-y-2 mt-4">
-              <Button asChild variant="outline" className="w-full">
-                <Link to="/login">{t('auth.login')}</Link>
-              </Button>
-              <Button asChild variant="secondary" className="w-full">
-                <Link to="/signup">{t('auth.signup')}</Link>
-              </Button>
-            </div>
+            <Button asChild variant="outline" className="w-full">
+              <Link to="/login">{t('auth.login')}</Link>
+            </Button>
           ) : (
             <Button 
               variant="outline" 
