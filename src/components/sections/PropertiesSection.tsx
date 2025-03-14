@@ -29,28 +29,15 @@ const properties = [
   }
 ];
 
-// Add sample property translations
-const mockPropertyTranslations = {
-  'bali-villa': {
-    property_id: 'bali-villa',
-    title_en: 'Beachfront Villa',
-    description_en: 'A stunning beachfront villa with panoramic ocean views, infinity pool, and lush tropical gardens. Perfect for a luxury getaway in paradise.',
-    title_es: 'Villa Frente al Mar',
-    description_es: 'Una impresionante villa frente al mar con vistas panorámicas al océano, piscina infinita y exuberantes jardines tropicales. Perfecto para una escapada de lujo en el paraíso.'
-  },
-  'tulum-retreat': {
-    property_id: 'tulum-retreat',
-    title_en: 'Jungle Retreat',
-    description_en: 'Nestled in the lush jungle just minutes from Tulum\'s pristine beaches. Features a private cenote, open-air living, and sustainable design.',
-    title_es: 'Retiro en la Selva',
-    description_es: 'Ubicado en la exuberante selva a solo minutos de las prístinas playas de Tulum. Cuenta con un cenote privado, espacios al aire libre y diseño sostenible.'
-  }
-};
-
 export function PropertiesSection() {
-  const { language, t } = useApp();
+  const { language, t, setCurrentPage } = useApp();
   const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
+
+  // Set the current page to ensure proper translations are loaded
+  useEffect(() => {
+    setCurrentPage('properties');
+  }, [setCurrentPage]);
 
   // Fetch property translations from Supabase
   useEffect(() => {
@@ -70,11 +57,6 @@ export function PropertiesSection() {
         if (data && data.length > 0) {
           data.forEach(item => {
             translationsMap[item.property_id] = item;
-          });
-        } else {
-          // Use mock translations if no data from Supabase
-          Object.keys(mockPropertyTranslations).forEach(key => {
-            translationsMap[key] = mockPropertyTranslations[key as keyof typeof mockPropertyTranslations];
           });
         }
         

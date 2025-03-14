@@ -121,9 +121,14 @@ const reviews = [
 
 export default function Property() {
   const { propertyId } = useParams<{ propertyId: string }>();
-  const { language, t } = useApp();
+  const { language, t, setCurrentPage } = useApp();
   const [translation, setTranslation] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Set the current page for translations
+  useEffect(() => {
+    setCurrentPage('property');
+  }, [setCurrentPage]);
 
   // Fetch property translation from Supabase
   useEffect(() => {
@@ -156,7 +161,7 @@ export default function Property() {
   }, [propertyId]);
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading property details...</div>;
+    return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
   }
 
   // Helper function to get localized content

@@ -14,6 +14,8 @@ interface AppContextType {
   setTheme: (theme: Theme) => void;
   translations: Record<string, Record<Language, string>>;
   t: (key: string) => string;
+  currentPage: string;
+  setCurrentPage: (page: string) => void;
 }
 
 // Get all translation keys
@@ -53,6 +55,22 @@ function getNestedValue(obj: any, path: string): string | undefined {
 // Initialize translations
 processTranslations({ ...enTranslations, ...esTranslations }, '', allTranslations);
 
+// Define page mappings for translation loading
+const pageToKeyPrefixMap: Record<string, string[]> = {
+  'index': ['nav', 'footer', 'button', 'buttons', 'common'],
+  'properties': ['nav', 'footer', 'button', 'buttons', 'common', 'properties', 'property'],
+  'property': ['nav', 'footer', 'button', 'buttons', 'common', 'properties', 'property'],
+  'services': ['nav', 'footer', 'button', 'buttons', 'common', 'services'],
+  'about': ['nav', 'footer', 'button', 'buttons', 'common', 'about'],
+  'booking': ['nav', 'footer', 'button', 'buttons', 'common', 'booking'],
+  'guides': ['nav', 'footer', 'button', 'buttons', 'common', 'guides'],
+  'artisanProducts': ['nav', 'footer', 'button', 'buttons', 'common', 'artisan', 'products'],
+  'destinations': ['nav', 'footer', 'button', 'buttons', 'common', 'destinations', 'cities'],
+  'privacy': ['nav', 'footer', 'button', 'buttons', 'common'],
+  'terms': ['nav', 'footer', 'button', 'buttons', 'common'],
+  'auth': ['nav', 'footer', 'button', 'buttons', 'common', 'auth']
+};
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -72,14 +90,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [dbTranslations, setDbTranslations] = useState<Record<string, Record<Language, string>>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState<string>('index');
 
-  // Load translations from Supabase
+  // Load translations from Supabase based on current page
   useEffect(() => {
     async function fetchTranslations() {
       try {
+        // Determine which page prefixes to load
+        const pagesToLoad = pageToKeyPrefixMap[currentPage] || ['common', 'nav', 'footer', 'button', 'buttons'];
+        
         const { data, error } = await supabase
           .from('translations')
-          .select('key, en, es');
+          .select('key, en, es, page')
+          .in('page', pagesToLoad);
         
         if (error) {
           console.error('Error fetching translations:', error);
@@ -103,7 +126,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     
     fetchTranslations();
-  }, []);
+  }, [currentPage]);
 
   // Save preferences to localStorage
   useEffect(() => {
@@ -153,7 +176,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         theme, 
         setTheme,
         translations: mergedTranslations,
-        t
+        t,
+        currentPage,
+        setCurrentPage
       }}
     >
       {children}

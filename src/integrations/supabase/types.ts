@@ -534,6 +534,7 @@ export type Database = {
           description_en: string
           description_es: string
           id: string
+          page: string
           property_id: string | null
           title_en: string
           title_es: string
@@ -544,6 +545,7 @@ export type Database = {
           description_en?: string
           description_es?: string
           id?: string
+          page?: string
           property_id?: string | null
           title_en?: string
           title_es?: string
@@ -554,6 +556,7 @@ export type Database = {
           description_en?: string
           description_es?: string
           id?: string
+          page?: string
           property_id?: string | null
           title_en?: string
           title_es?: string
@@ -675,6 +678,7 @@ export type Database = {
           es: string
           id: string
           key: string
+          page: string
           updated_at: string
         }
         Insert: {
@@ -683,6 +687,7 @@ export type Database = {
           es?: string
           id?: string
           key: string
+          page?: string
           updated_at?: string
         }
         Update: {
@@ -691,6 +696,7 @@ export type Database = {
           es?: string
           id?: string
           key?: string
+          page?: string
           updated_at?: string
         }
         Relationships: []

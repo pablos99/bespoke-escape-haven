@@ -20,10 +20,10 @@ export function PropertyHighlights({ highlights }: PropertyHighlightsProps) {
       {highlights.map((highlight, index) => (
         <div key={index} className="bg-secondary/30 p-6 rounded-xl">
           <h3 className="text-lg font-medium mb-2">
-            {highlight.key ? t(highlight.key) : highlight.title}
+            {highlight.key ? t(`property.${highlight.key}`) : highlight.title}
           </h3>
           <p className="text-muted-foreground">
-            {highlight.key ? t(`${highlight.key}Desc`) : highlight.description}
+            {highlight.key ? t(`property.${highlight.key}Desc`) : highlight.description}
           </p>
         </div>
       ))}

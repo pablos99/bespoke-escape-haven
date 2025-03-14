@@ -49,12 +49,17 @@ const properties = [
 ];
 
 export default function Properties() {
-  const { language, t } = useApp();
+  const { language, t, setCurrentPage } = useApp();
   const [searchParams, setSearchParams] = useSearchParams();
   const [location, setLocation] = useState<string>(searchParams.get("location") || "all");
   const [filteredProperties, setFilteredProperties] = useState(properties);
   const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
+
+  // Set the current page for translations
+  useEffect(() => {
+    setCurrentPage('properties');
+  }, [setCurrentPage]);
 
   // Fetch property translations from Supabase
   useEffect(() => {
@@ -117,7 +122,7 @@ export default function Properties() {
   };
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading properties...</div>;
+    return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
   }
 
   return (
