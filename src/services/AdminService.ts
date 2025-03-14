@@ -12,7 +12,7 @@ import { QueryClient } from '@tanstack/react-query';
  * @param queryKeysToInvalidate - Array of query keys to invalidate after successful operation
  * @returns The result of the operation
  */
-export async function adminUpdate<T extends { id?: string }>(
+export async function adminUpdate<T extends object>(
   tableName: string,
   data: T,
   id: string | undefined,
@@ -27,7 +27,7 @@ export async function adminUpdate<T extends { id?: string }>(
     if (id) {
       // Update existing record
       const { data: updatedData, error } = await supabase
-        .from(tableName)
+        .from(tableName as any)
         .update({ ...data })
         .eq('id', id)
         .select()
@@ -39,7 +39,7 @@ export async function adminUpdate<T extends { id?: string }>(
     } else {
       // Create new record
       const { data: newData, error } = await supabase
-        .from(tableName)
+        .from(tableName as any)
         .insert({ ...data })
         .select()
         .single();
@@ -79,7 +79,7 @@ export async function adminDelete(
   
   try {
     const { error } = await supabase
-      .from(tableName)
+      .from(tableName as any)
       .delete()
       .eq('id', id);
       

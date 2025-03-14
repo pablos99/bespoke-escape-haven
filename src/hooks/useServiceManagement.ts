@@ -59,7 +59,7 @@ export function useServiceManagement() {
       console.log('Creating service with data:', serviceData);
       setIsProcessing(true);
       
-      const result = await adminUpdate(
+      const result = await adminUpdate<Omit<Service, 'id'>>(
         'services', 
         serviceData, 
         undefined, 
@@ -86,7 +86,7 @@ export function useServiceManagement() {
       console.log('Updating service:', id, serviceData);
       setIsProcessing(true);
       
-      const result = await adminUpdate(
+      const result = await adminUpdate<Omit<Service, 'id'>>(
         'services', 
         serviceData, 
         id, 

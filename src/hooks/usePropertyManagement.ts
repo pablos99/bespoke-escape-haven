@@ -67,7 +67,7 @@ export function usePropertyManagement() {
           property.minimum_investment = property.price_per_share;
         }
         
-        const result = await adminUpdate(
+        const result = await adminUpdate<Partial<Property>>(
           'properties',
           property,
           property.id,
