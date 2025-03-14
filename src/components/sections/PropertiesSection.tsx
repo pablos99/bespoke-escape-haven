@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PropertyCard } from '@/components/ui/PropertyCard';
@@ -127,7 +128,6 @@ export function PropertiesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {properties.map(property => {
             const localizedContent = getLocalizedPropertyContent(property);
-            // Pass direct links to PropertyCard
             return <PropertyCard 
               key={property.id} 
               {...property} 

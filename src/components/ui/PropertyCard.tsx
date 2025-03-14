@@ -38,9 +38,9 @@ export function PropertyCard({
   const { language } = useApp();
   const { t } = useTranslation();
   
-  // Default links if not provided
+  // Default links if not provided - ensure we use the correct format for property booking
   const detailsLink = viewDetailsLink || `/property/${id}`;
-  const bookingLink = bookNowLink || `/booking?property=${id}`;
+  const bookingLink = bookNowLink || `/booking/property/${id}`;
   
   return (
     <div 
