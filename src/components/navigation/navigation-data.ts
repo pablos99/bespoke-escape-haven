@@ -21,3 +21,11 @@ export const navigation: NavigationItem[] = [
   },
   { name: 'nav.services', href: '/services' },
 ];
+
+// Admin navigation items - only shown to admin users
+export const adminNavigation: NavigationItem[] = [
+  { name: 'admin.dashboard', href: '/admin' },
+  { name: 'admin.properties', href: '/admin/properties' },
+  { name: 'admin.translations', href: '/admin/translations' },
+  { name: 'admin.orders', href: '/admin/orders' },
+];

@@ -22,6 +22,11 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import GuideBooking from './pages/booking/GuideBooking';
 import ProductBooking from './pages/booking/ProductBooking';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminProperties from './pages/admin/Properties';
+import AdminTranslations from './pages/admin/Translations';
+import AdminOrders from './pages/admin/Orders';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -52,6 +57,15 @@ function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/booking/guide/:id" element={<GuideBooking />} />
             <Route path="/booking/product/:id" element={<ProductBooking />} />
+            
+            {/* Admin Routes - Protected */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/properties" element={<AdminProperties />} />
+              <Route path="/admin/translations" element={<AdminTranslations />} />
+              <Route path="/admin/orders" element={<AdminOrders />} />
+            </Route>
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
