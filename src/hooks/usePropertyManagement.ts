@@ -32,23 +32,33 @@ export function usePropertyManagement() {
   const { data: properties, isLoading, refetch } = useQuery({
     queryKey: ['admin-properties'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('properties')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error fetching properties:', error);
+      try {
+        const { data, error } = await supabase
+          .from('properties')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.error('Error fetching properties:', error);
+          toast({
+            title: 'Error fetching properties',
+            description: error.message,
+            variant: 'destructive'
+          });
+          throw error;
+        }
+        
+        console.log('Fetched properties:', data);
+        return data || [];
+      } catch (error: any) {
+        console.error('Exception in fetchProperties:', error);
         toast({
           title: 'Error fetching properties',
-          description: error.message,
+          description: error.message || 'An unexpected error occurred',
           variant: 'destructive'
         });
-        throw error;
+        return [];
       }
-      
-      console.log('Fetched properties:', data);
-      return data;
     }
   });
 
@@ -78,7 +88,7 @@ export function usePropertyManagement() {
         );
         
         if (result.error) throw result.error;
-        return result.data;
+        return result.data || { id: id || 'new-id' }; // Ensure we return some data even if result.data is null
       } finally {
         setIsPending(false);
       }
@@ -86,8 +96,10 @@ export function usePropertyManagement() {
     onSuccess: (data) => {
       const action = data.id ? 'updated' : 'created';
       adminService.handleSuccess(action, 'Property');
+      refetch(); // Refresh the properties list after successful operation
     },
     onError: (error: any) => {
+      console.error('Error in upsertProperty:', error);
       adminService.handleError('saving', 'Property', error);
     }
   });
@@ -107,8 +119,9 @@ export function usePropertyManagement() {
       if (result.error) throw result.error;
       return id;
     },
-    onSuccess: () => {
+    onSuccess: (id) => {
       adminService.handleSuccess('deleted', 'Property');
+      refetch(); // Refresh the properties list after successful deletion
     },
     onError: (error: any) => {
       adminService.handleError('deleting', 'Property', error);
