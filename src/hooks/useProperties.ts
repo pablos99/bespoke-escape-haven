@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -133,7 +133,7 @@ export const useProperties = (locationFilter: string = 'all') => {
   });
 
   // Process properties data to match our UI needs
-  const processedProperties = React.useMemo(() => {
+  const processedProperties = useMemo(() => {
     if (!supabaseProperties || supabaseProperties.length === 0) {
       return fallbackProperties;
     }
