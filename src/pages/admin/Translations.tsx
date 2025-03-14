@@ -103,6 +103,8 @@ export default function AdminTranslations() {
           onCancel={() => setDeleteDialogOpen(false)}
           onConfirm={handleDelete}
           isPending={deleteTranslation.isPending}
+          itemName={currentTranslation?.key}
+          itemType="translation"
         />
       </Dialog>
     </AdminLayout>

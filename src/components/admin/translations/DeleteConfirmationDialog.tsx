@@ -5,7 +5,8 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle, 
-  DialogFooter 
+  DialogFooter,
+  DialogDescription
 } from '@/components/ui/dialog';
 import { useTranslation } from '@/contexts/TranslationContext';
 
@@ -13,12 +14,16 @@ interface DeleteConfirmationDialogProps {
   onCancel: () => void;
   onConfirm: () => void;
   isPending: boolean;
+  itemName?: string;
+  itemType?: string;
 }
 
 export function DeleteConfirmationDialog({
   onCancel,
   onConfirm,
-  isPending
+  isPending,
+  itemName = '',
+  itemType = 'item'
 }: DeleteConfirmationDialogProps) {
   const { t } = useTranslation();
 
@@ -26,9 +31,12 @@ export function DeleteConfirmationDialog({
     <DialogContent>
       <DialogHeader>
         <DialogTitle>{t('admin.confirm_delete')}</DialogTitle>
+        <DialogDescription className="text-destructive font-medium pt-2">
+          {itemName ? itemName : t('admin.delete_confirmation_generic')}
+        </DialogDescription>
       </DialogHeader>
       <div className="py-4">
-        <p>{t('admin.delete_confirmation')}</p>
+        <p>{itemType ? t('admin.delete_confirmation_specific', { itemType }) : t('admin.delete_confirmation')}</p>
       </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onCancel}>
@@ -40,7 +48,7 @@ export function DeleteConfirmationDialog({
           disabled={isPending}
           onClick={onConfirm}
         >
-          {t('admin.delete')}
+          {isPending ? t('admin.deleting') : t('admin.delete')}
         </Button>
       </DialogFooter>
     </DialogContent>

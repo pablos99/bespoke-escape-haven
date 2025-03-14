@@ -81,44 +81,6 @@ export type Database = {
         }
         Relationships: []
       }
-      dividend_payments: {
-        Row: {
-          amount_per_share: number
-          created_at: string
-          id: string
-          notes: string | null
-          payment_date: string
-          property_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          amount_per_share: number
-          created_at?: string
-          id?: string
-          notes?: string | null
-          payment_date: string
-          property_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          amount_per_share?: number
-          created_at?: string
-          id?: string
-          notes?: string | null
-          payment_date?: string
-          property_id?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "dividend_payments_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "properties"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       faqs: {
         Row: {
           answer: string
@@ -222,86 +184,6 @@ export type Database = {
           native_name?: string
         }
         Relationships: []
-      }
-      old_property_translations: {
-        Row: {
-          created_at: string
-          description: string
-          id: string
-          language_code: string | null
-          property_id: string | null
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          id?: string
-          language_code?: string | null
-          property_id?: string | null
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          id?: string
-          language_code?: string | null
-          property_id?: string | null
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "property_translations_language_code_fkey"
-            columns: ["language_code"]
-            isOneToOne: false
-            referencedRelation: "languages"
-            referencedColumns: ["code"]
-          },
-          {
-            foreignKeyName: "property_translations_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "properties"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      old_translations: {
-        Row: {
-          created_at: string
-          id: string
-          key: string
-          language_code: string | null
-          updated_at: string
-          value: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          key: string
-          language_code?: string | null
-          updated_at?: string
-          value: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          key?: string
-          language_code?: string | null
-          updated_at?: string
-          value?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "translations_language_code_fkey"
-            columns: ["language_code"]
-            isOneToOne: false
-            referencedRelation: "languages"
-            referencedColumns: ["code"]
-          },
-        ]
       }
       orders: {
         Row: {
@@ -781,57 +663,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      user_dividends: {
-        Row: {
-          amount: number
-          created_at: string
-          dividend_payment_id: string | null
-          id: string
-          is_paid: boolean
-          paid_date: string | null
-          shares_owned: number
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          amount: number
-          created_at?: string
-          dividend_payment_id?: string | null
-          id?: string
-          is_paid?: boolean
-          paid_date?: string | null
-          shares_owned: number
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          amount?: number
-          created_at?: string
-          dividend_payment_id?: string | null
-          id?: string
-          is_paid?: boolean
-          paid_date?: string | null
-          shares_owned?: number
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_dividends_dividend_payment_id_fkey"
-            columns: ["dividend_payment_id"]
-            isOneToOne: false
-            referencedRelation: "dividend_payments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_dividends_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       users: {
         Row: {
