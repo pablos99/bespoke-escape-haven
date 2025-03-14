@@ -15,7 +15,15 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   const location = useLocation();
   const { t } = useApp();
-  const { user } = useAuth();
+  
+  // Use try/catch to handle case where AuthProvider might not be fully initialized
+  let user = null;
+  try {
+    const auth = useAuth();
+    user = auth?.user;
+  } catch (error) {
+    console.log('Auth context not available yet');
+  }
   
   return (
     <div
@@ -75,10 +83,10 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
           {!user ? (
             <div className="flex flex-col space-y-2 mt-4">
               <Button asChild variant="outline" className="w-full">
-                <Link to="/auth/login">{t('auth.login')}</Link>
+                <Link to="/login">{t('auth.login')}</Link>
               </Button>
               <Button asChild variant="secondary" className="w-full">
-                <Link to="/auth/signup">{t('auth.signup')}</Link>
+                <Link to="/signup">{t('auth.signup')}</Link>
               </Button>
             </div>
           ) : null}
