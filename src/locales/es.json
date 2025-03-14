@@ -26,7 +26,8 @@
   "buttons": {
     "bookNow": "Reservar Ahora",
     "purchase": "Comprar Ahora",
-    "book": "Reservar Sesión"
+    "book": "Reservar Sesión",
+    "bookYourStay": "Reservar su Estancia"
   },
   "booking": {
     "reservationDetails": "Detalles de la Reserva",
@@ -75,5 +76,32 @@
     "purchaseProductDesc": "Complete el formulario a continuación para comprar este producto artesanal.",
     "bookGuide": "Reservar un Guía",
     "bookGuideDesc": "Complete el formulario a continuación para solicitar una sesión con este guía."
+  },
+  "property": {
+    "title": "Nuestras Propiedades",
+    "subtitle": "Descubra nuestras exclusivas propiedades en las ubicaciones más hermosas del mundo. Cada propiedad está seleccionada a mano para ofrecer una experiencia única y auténtica.",
+    "filterByLocation": "Filtrar por ubicación",
+    "allLocations": "Todas las ubicaciones",
+    "serviceHeading": "Servicios y Experiencias Premium",
+    "serviceDescription1": "Nuestras propiedades incluyen servicios de conserjería personalizados y experiencias locales auténticas para hacer que su estancia sea inolvidable.",
+    "serviceDescription2": "Desde chefs privados hasta guías locales, nos encargamos de todos los detalles para que pueda relajarse y disfrutar de su tiempo.",
+    "meetHost": "Conozca a su Anfitrión",
+    "amenities": "Comodidades",
+    "tranquilSetting": "Entorno Tranquilo",
+    "tranquilSettingDesc": "Rodeado de exuberante selva y arrozales, ofreciendo total privacidad y ambiente pacífico",
+    "culturalImmersion": "Inmersión Cultural",
+    "culturalImmersionDesc": "Arquitectura tradicional balinesa con auténticas artesanías locales en toda la propiedad",
+    "premiumLocation": "Ubicación Premium",
+    "premiumLocationDesc": "A solo 15 minutos del centro de Ubud, con servicio de transporte gratuito disponible"
+  },
+  "properties": {
+    "title": "Propiedades de Lujo",
+    "subtitle": "Explore nuestra colección exclusiva de propiedades de lujo en los destinos más impresionantes del mundo.",
+    "filterByLocation": "Filtrar por ubicación",
+    "allLocations": "Todas las ubicaciones",
+    "serviceHeading": "Servicios y Experiencias Premium",
+    "serviceDescription1": "Nuestras propiedades incluyen servicios de conserjería personalizados y experiencias locales auténticas para hacer que su estancia sea inolvidable.",
+    "serviceDescription2": "Desde chefs privados hasta guías locales, nos encargamos de todos los detalles para que pueda relajarse y disfrutar de su tiempo.",
+    "amenities": "Comodidades"
   }
 }
