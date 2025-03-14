@@ -28,19 +28,12 @@ const properties = [{
 }];
 
 export function PropertiesSection() {
-  const {
-    language
-  } = useApp();
-  const {
-    t,
-    setCurrentPage
-  } = useTranslation();
+  const { language } = useApp();
+  const { t, setCurrentPage } = useTranslation();
   const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   
   // Set the current page to ensure proper translations are loaded
   useEffect(() => {
@@ -53,10 +46,7 @@ export function PropertiesSection() {
       try {
         setIsLoading(true);
         setHasError(false);
-        const {
-          data,
-          error
-        } = await supabase.from('property_translations').select('property_id, title_en, description_en, title_es, description_es');
+        const { data, error } = await supabase.from('property_translations').select('property_id, title_en, description_en, title_es, description_es');
         if (error) {
           console.error('Error fetching property translations:', error);
           setHasError(true);
@@ -138,7 +128,6 @@ export function PropertiesSection() {
                 animationDelay: `${properties.indexOf(property) * 100}ms`
               }}
               viewDetailsLink={`/property/${property.id}`}
-              bookNowLink={`/booking/property/${property.id}`}
             />;
           })}
         </div>
