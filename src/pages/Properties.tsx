@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import { useApp } from '@/contexts/AppContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 // Sample properties - in a production app, this would be fetched from the API
 const properties = [
@@ -55,6 +57,8 @@ export default function Properties() {
   const [filteredProperties, setFilteredProperties] = useState(properties);
   const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const { toast } = useToast();
 
   // Set the current page for translations
   useEffect(() => {
@@ -65,31 +69,49 @@ export default function Properties() {
   useEffect(() => {
     async function fetchPropertyTranslations() {
       try {
+        setIsLoading(true);
+        setHasError(false);
+        
         const { data, error } = await supabase
           .from('property_translations')
           .select('property_id, title_en, description_en, title_es, description_es');
         
         if (error) {
           console.error('Error fetching property translations:', error);
+          setHasError(true);
+          toast({
+            title: 'Translation Error',
+            description: 'Could not load property translations. Using default values.',
+            variant: 'destructive',
+          });
           return;
         }
         
         // Convert data array to a map keyed by property_id
         const translationsMap: Record<string, any> = {};
-        data.forEach(item => {
-          translationsMap[item.property_id] = item;
-        });
-        
-        setPropertyTranslations(translationsMap);
+        if (data && data.length > 0) {
+          data.forEach(item => {
+            translationsMap[item.property_id] = item;
+          });
+          setPropertyTranslations(translationsMap);
+        } else {
+          console.log('No property translations found');
+        }
       } catch (error) {
         console.error('Error in fetching property translations:', error);
+        setHasError(true);
+        toast({
+          title: 'Translation Error',
+          description: 'Could not load property translations. Using default values.',
+          variant: 'destructive',
+        });
       } finally {
         setIsLoading(false);
       }
     }
     
     fetchPropertyTranslations();
-  }, []);
+  }, [toast]);
 
   // Filter properties based on location
   useEffect(() => {
@@ -122,7 +144,11 @@ export default function Properties() {
   };
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
@@ -135,6 +161,14 @@ export default function Properties() {
               {t('properties.subtitle')}
             </p>
           </div>
+          
+          {hasError && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>
+                Could not load property translations. Showing default content.
+              </AlertDescription>
+            </Alert>
+          )}
           
           <div className="flex justify-end mb-8">
             <Select value={location} onValueChange={handleLocationChange}>

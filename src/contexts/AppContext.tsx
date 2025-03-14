@@ -1,8 +1,8 @@
-
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import enTranslations from '@/locales/en.json';
 import esTranslations from '@/locales/es.json';
+import { useToast } from '@/hooks/use-toast';
 
 type Language = 'en' | 'es';
 type Theme = 'light' | 'dark';
@@ -16,6 +16,7 @@ interface AppContextType {
   t: (key: string) => string;
   currentPage: string;
   setCurrentPage: (page: string) => void;
+  isTranslationsLoading: boolean;
 }
 
 // Get all translation keys
@@ -89,13 +90,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [dbTranslations, setDbTranslations] = useState<Record<string, Record<Language, string>>>({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isTranslationsLoading, setIsTranslationsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<string>('index');
+  const { toast } = useToast();
 
   // Load translations from Supabase based on current page
   useEffect(() => {
     async function fetchTranslations() {
       try {
+        setIsTranslationsLoading(true);
+        
         // Determine which page prefixes to load
         const pagesToLoad = pageToKeyPrefixMap[currentPage] || ['common', 'nav', 'footer', 'button', 'buttons'];
         
@@ -106,27 +110,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         
         if (error) {
           console.error('Error fetching translations:', error);
+          toast({
+            title: 'Translation Error',
+            description: 'Could not load translations. Using fallback values.',
+            variant: 'destructive',
+          });
           return;
         }
         
         const translationsMap: Record<string, Record<Language, string>> = {};
-        data.forEach(row => {
-          translationsMap[row.key] = {
-            en: row.en || '',
-            es: row.es || ''
-          };
-        });
-        
-        setDbTranslations(translationsMap);
+        if (data && data.length > 0) {
+          data.forEach(row => {
+            translationsMap[row.key] = {
+              en: row.en || row.key,
+              es: row.es || row.key
+            };
+          });
+          setDbTranslations(translationsMap);
+        } else {
+          console.log('No translations found for pages:', pagesToLoad);
+        }
       } catch (error) {
         console.error('Error in fetching translations:', error);
+        toast({
+          title: 'Translation Error',
+          description: 'Could not load translations. Using fallback values.',
+          variant: 'destructive',
+        });
       } finally {
-        setIsLoading(false);
+        setIsTranslationsLoading(false);
       }
     }
     
     fetchTranslations();
-  }, [currentPage]);
+  }, [currentPage, toast]);
 
   // Save preferences to localStorage
   useEffect(() => {
@@ -156,16 +173,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Translation function
   const t = (key: string): string => {
-    if (mergedTranslations[key] && mergedTranslations[key][language]) {
+    // If the key doesn't exist in translations, return the key itself as fallback
+    if (!mergedTranslations[key]) {
+      console.warn(`Translation key not found: ${key}`);
+      return key;
+    }
+    
+    // If the translation exists for the current language, return it
+    if (mergedTranslations[key][language]) {
       return mergedTranslations[key][language];
     }
-    // Fallback to key if translation not found
+    
+    // Otherwise return the key as fallback
+    console.warn(`Translation missing for key: ${key} in language: ${language}`);
     return key;
   };
 
-  if (isLoading) {
-    // You might want to add a loading indicator or skeleton here
-    return <div>Loading translations...</div>;
+  // During initial loading, show a simple spinner rather than blocking the entire app
+  if (isTranslationsLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
@@ -178,7 +208,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         translations: mergedTranslations,
         t,
         currentPage,
-        setCurrentPage
+        setCurrentPage,
+        isTranslationsLoading
       }}
     >
       {children}

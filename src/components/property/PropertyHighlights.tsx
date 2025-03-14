@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useApp } from '@/contexts/AppContext';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface Highlight {
   title: string;
@@ -13,20 +14,26 @@ interface PropertyHighlightsProps {
 }
 
 export function PropertyHighlights({ highlights }: PropertyHighlightsProps) {
-  const { t } = useApp();
+  const { t, isTranslationsLoading } = useApp();
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10">
-      {highlights.map((highlight, index) => (
-        <div key={index} className="bg-secondary/30 p-6 rounded-xl">
-          <h3 className="text-lg font-medium mb-2">
-            {highlight.key ? t(`property.${highlight.key}`) : highlight.title}
-          </h3>
-          <p className="text-muted-foreground">
-            {highlight.key ? t(`property.${highlight.key}Desc`) : highlight.description}
-          </p>
-        </div>
-      ))}
+      {highlights.map((highlight, index) => {
+        // Get title and description with fallback to the original content
+        const title = highlight.key ? t(`property.${highlight.key}`) : highlight.title;
+        const description = highlight.key ? t(`property.${highlight.key}Desc`) : highlight.description;
+        
+        return (
+          <div key={index} className="bg-secondary/30 p-6 rounded-xl">
+            <h3 className="text-lg font-medium mb-2">
+              {title}
+            </h3>
+            <p className="text-muted-foreground">
+              {description}
+            </p>
+          </div>
+        );
+      })}
     </div>
   );
 }

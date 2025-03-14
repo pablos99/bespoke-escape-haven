@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 // Temporary mock data - in a real app would come from API/backend
 const properties = [
@@ -33,6 +34,8 @@ export function PropertiesSection() {
   const { language, t, setCurrentPage } = useApp();
   const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const { toast } = useToast();
 
   // Set the current page to ensure proper translations are loaded
   useEffect(() => {
@@ -43,12 +46,21 @@ export function PropertiesSection() {
   useEffect(() => {
     async function fetchPropertyTranslations() {
       try {
+        setIsLoading(true);
+        setHasError(false);
+        
         const { data, error } = await supabase
           .from('property_translations')
           .select('property_id, title_en, description_en, title_es, description_es');
         
         if (error) {
           console.error('Error fetching property translations:', error);
+          setHasError(true);
+          toast({
+            title: 'Error loading property data',
+            description: 'Using default property information',
+            variant: 'destructive',
+          });
           return;
         }
         
@@ -58,18 +70,25 @@ export function PropertiesSection() {
           data.forEach(item => {
             translationsMap[item.property_id] = item;
           });
+          setPropertyTranslations(translationsMap);
+        } else {
+          console.log('No property translations found');
         }
-        
-        setPropertyTranslations(translationsMap);
       } catch (error) {
         console.error('Error in fetching property translations:', error);
+        setHasError(true);
+        toast({
+          title: 'Error loading property data',
+          description: 'Using default property information',
+          variant: 'destructive',
+        });
       } finally {
         setIsLoading(false);
       }
     }
     
     fetchPropertyTranslations();
-  }, []);
+  }, [toast]);
 
   // Helper function to get localized property content
   const getLocalizedPropertyContent = (property: any) => {

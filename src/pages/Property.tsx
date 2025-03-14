@@ -10,6 +10,8 @@ import { PropertyDetails } from '@/components/property/PropertyDetails';
 import { PropertyBookingSidebar } from '@/components/property/PropertyBookingSidebar';
 import { PropertyReviews } from '@/components/property/PropertyReviews';
 import { PropertyRelatedServices } from '@/components/property/PropertyRelatedServices';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
 
 // Mock property data - in a real app would be fetched from API
 const property = {
@@ -124,6 +126,8 @@ export default function Property() {
   const { language, t, setCurrentPage } = useApp();
   const [translation, setTranslation] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const { toast } = useToast();
 
   // Set the current page for translations
   useEffect(() => {
@@ -136,33 +140,46 @@ export default function Property() {
       if (!propertyId) return;
       
       try {
+        setIsLoading(true);
+        setHasError(false);
+        
         const { data, error } = await supabase
           .from('property_translations')
           .select('*')
           .eq('property_id', propertyId)
-          .single();
+          .maybeSingle(); // Use maybeSingle instead of single to avoid errors if no data
         
-        if (error && error.code !== 'PGRST116') {
+        if (error) {
           console.error('Error fetching property translation:', error);
+          setHasError(true);
+          toast({
+            title: 'Error loading property data',
+            description: 'Using default property information',
+            variant: 'destructive',
+          });
           return;
         }
         
         if (data) {
           setTranslation(data);
+        } else {
+          console.log(`No translation found for property: ${propertyId}`);
         }
       } catch (error) {
         console.error('Error in fetching property translation:', error);
+        setHasError(true);
+        toast({
+          title: 'Error loading property data',
+          description: 'Using default property information',
+          variant: 'destructive',
+        });
       } finally {
         setIsLoading(false);
       }
     }
     
     fetchPropertyTranslation();
-  }, [propertyId]);
-
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
-  }
+  }, [propertyId, toast]);
 
   // Helper function to get localized content
   const getLocalizedContent = (key: 'name' | 'description' | 'longDescription') => {
@@ -177,11 +194,27 @@ export default function Property() {
     return property[key];
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-1 pt-16">
+        {hasError && (
+          <Alert variant="destructive" className="max-w-4xl mx-auto my-4">
+            <AlertDescription>
+              Could not load property translations. Showing default content.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         {/* Property Images Gallery */}
         <PropertyGallery 
           images={property.images} 
