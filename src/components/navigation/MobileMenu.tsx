@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/contexts/AppContext';
 import { NavigationItem } from './types';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   const location = useLocation();
   const { t } = useApp();
+  const { user } = useAuth();
   
   return (
     <div
@@ -65,10 +67,21 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
           );
         })}
         
-        <div className="pt-6 border-t border-border">
+        <div className="pt-6 border-t border-border space-y-4">
           <Button asChild className="w-full">
             <Link to="/booking">{t('button.bookNow')}</Link>
           </Button>
+          
+          {!user ? (
+            <div className="flex flex-col space-y-2 mt-4">
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/auth/login">{t('auth.login')}</Link>
+              </Button>
+              <Button asChild variant="secondary" className="w-full">
+                <Link to="/auth/signup">{t('auth.signup')}</Link>
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

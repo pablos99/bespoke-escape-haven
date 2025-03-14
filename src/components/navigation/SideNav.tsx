@@ -8,6 +8,8 @@ import { LanguageSwitcher } from '@/components/navigation/LanguageSwitcher';
 import { Logo } from '@/components/ui/Logo';
 import { navigation } from './navigation-data';
 import { Menu, X } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 export function SideNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +17,7 @@ export function SideNav() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
   const { t } = useApp();
+  const { user } = useAuth();
   
   const toggleMenu = () => setIsOpen(!isOpen);
   
@@ -90,6 +93,17 @@ export function SideNav() {
               </Link>
             ))}
           </nav>
+          
+          {!user && (
+            <div className="flex flex-col space-y-2 mt-auto mb-4 border-t border-border pt-4">
+              <Button asChild variant="outline" size="sm">
+                <Link to="/auth/login">{t('auth.login')}</Link>
+              </Button>
+              <Button asChild variant="secondary" size="sm">
+                <Link to="/auth/signup">{t('auth.signup')}</Link>
+              </Button>
+            </div>
+          )}
           
           <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
             <LanguageSwitcher />
