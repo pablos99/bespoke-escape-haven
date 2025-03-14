@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { PropertyBookingCard } from '@/components/ui/PropertyBookingCard';
 import { Button } from '@/components/ui/button';
@@ -153,7 +153,8 @@ export default function Properties() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 pt-8 pb-16">
+      <Navbar />
+      <main className="flex-1 pt-24 pb-16">
         <section className="container max-w-6xl mx-auto px-4 mb-16" id="properties-list">
           <div className="text-center mb-10">
             <h1 className="heading-lg mb-4">{t('properties.title')}</h1>
