@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
@@ -7,11 +6,11 @@ import { useApp } from '@/contexts/AppContext';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { supabase } from '@/integrations/supabase/client';
 import { PropertyGallery } from '@/components/property/PropertyGallery';
-import { PropertyDetails } from '@/components/property/PropertyDetails';
-import { PropertyBookingSidebar } from '@/components/property/PropertyBookingSidebar';
+import { PropertyContent } from '@/components/property/PropertyContent';
 import { PropertyReviews } from '@/components/property/PropertyReviews';
 import { PropertyRelatedServices } from '@/components/property/PropertyRelatedServices';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { PropertyLoader } from '@/components/property/PropertyLoader';
+import { ErrorAlert } from '@/components/property/ErrorAlert';
 import { useToast } from '@/hooks/use-toast';
 import { usePropertyById } from '@/hooks/usePropertyById';
 
@@ -78,7 +77,7 @@ const relatedServices = [
     id: "balinese-craft",
     title: "Handcrafted Balinese Textiles",
     description: "Authentic hand-woven textiles made by local Balinese artisans using traditional techniques passed down through generations.",
-    image: "https://images.unsplash.com/photo-1621812956658-78796291dc2e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1621812956658-78796291dc2e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     price: 120,
     category: "products" as const
   },
@@ -207,11 +206,7 @@ export default function Property() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <PropertyLoader />;
   }
 
   return (
@@ -219,13 +214,7 @@ export default function Property() {
       <Navbar />
       
       <main className="flex-1 pt-16">
-        {(hasError || propertyError) && (
-          <Alert variant="destructive" className="max-w-4xl mx-auto my-4">
-            <AlertDescription>
-              {propertyError ? 'Could not load property data.' : 'Could not load property translations.'} Showing default content.
-            </AlertDescription>
-          </Alert>
-        )}
+        <ErrorAlert hasError={hasError} propertyError={propertyError} />
         
         {/* Property Images Gallery */}
         <PropertyGallery 
@@ -235,30 +224,20 @@ export default function Property() {
           propertyName={getLocalizedContent('name')} 
         />
         
-        {/* Property Details */}
-        <section className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Main Content */}
-            <PropertyDetails
-              name={getLocalizedContent('name')}
-              location={propertyData?.city ? `${propertyData.city}, ${propertyData.country}` : property.location}
-              price={propertyData?.price_per_share || property.price}
-              rating={property.rating}
-              reviewCount={property.reviewCount}
-              longDescription={getLocalizedContent('longDescription')}
-              highlights={property.highlights}
-              amenities={property.amenities}
-              host={property.host}
-              t={t}
-            />
-            
-            {/* Sidebar */}
-            <PropertyBookingSidebar
-              price={propertyData?.price_per_share || property.price}
-              propertyId={propertyId || property.id}
-            />
-          </div>
-        </section>
+        {/* Property Content Section */}
+        <PropertyContent
+          propertyId={propertyId || property.id}
+          name={getLocalizedContent('name')}
+          location={propertyData?.city ? `${propertyData.city}, ${propertyData.country}` : property.location}
+          price={propertyData?.price_per_share || property.price}
+          rating={property.rating}
+          reviewCount={property.reviewCount}
+          longDescription={getLocalizedContent('longDescription')}
+          highlights={property.highlights}
+          amenities={property.amenities}
+          host={property.host}
+          t={t}
+        />
         
         {/* Reviews Section */}
         <PropertyReviews
