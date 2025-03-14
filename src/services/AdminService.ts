@@ -2,9 +2,9 @@
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { QueryClient } from '@tanstack/react-query';
-import { Database } from '@/integrations/supabase/types';
 
-type TableNames = keyof Database['public']['Tables'];
+// Using a string literal type instead of referencing the complex Database type
+type TableNames = 'translations' | 'destinations' | 'services' | 'properties' | 'property_translations';
 
 /**
  * Generic update function for admin operations
