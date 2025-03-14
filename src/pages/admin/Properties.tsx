@@ -125,9 +125,26 @@ export default function AdminProperties() {
           return data;
         } else {
           // Create new property
+          // Make sure the object has all required fields for a new property
+          const newProperty = {
+            title: property.title || '',
+            description: property.description || '',
+            address: property.address || '',
+            city: property.city || '',
+            state: property.state || '',
+            country: property.country || '',
+            zip_code: property.zip_code || '',
+            price_per_share: Number(property.price_per_share) || 0,
+            total_shares: Number(property.total_shares) || 0,
+            available_shares: Number(property.available_shares) || 0,
+            status: property.status || 'pending',
+            minimum_investment: Number(property.price_per_share) || 0,
+            total_price: (Number(property.price_per_share) || 0) * (Number(property.total_shares) || 0),
+          };
+
           const { data, error } = await supabase
             .from('properties')
-            .insert([property])
+            .insert(newProperty)
             .select()
             .single();
             
