@@ -45,6 +45,42 @@ export type Database = {
         }
         Relationships: []
       }
+      destinations: {
+        Row: {
+          country: string
+          created_at: string
+          description: string
+          featured: boolean
+          id: string
+          image_url: string | null
+          name: string
+          properties_count: number
+          updated_at: string
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          description: string
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          name: string
+          properties_count?: number
+          updated_at?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          description?: string
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          name?: string
+          properties_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       dividend_payments: {
         Row: {
           amount_per_share: number

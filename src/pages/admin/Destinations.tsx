@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AdminLayout } from '@/components/layout/AdminLayout';
@@ -57,8 +56,12 @@ const AdminDestinations = () => {
   });
 
   const addDestinationMutation = useMutation({
-    mutationFn: async (newDestination: any) => {
-      const { data, error } = await supabase.from('destinations').insert(newDestination);
+    mutationFn: async (newDestination: Omit<Destination, 'id' | 'created_at'>) => {
+      const { data, error } = await supabase
+        .from('destinations')
+        .insert(newDestination)
+        .select();
+        
       if (error) throw error;
       return data;
     },
@@ -81,11 +84,13 @@ const AdminDestinations = () => {
   });
 
   const updateDestinationMutation = useMutation({
-    mutationFn: async ({ id, destination }: { id: string; destination: any }) => {
+    mutationFn: async ({ id, destination }: { id: string; destination: Omit<Destination, 'id' | 'created_at'> }) => {
       const { data, error } = await supabase
         .from('destinations')
         .update(destination)
-        .eq('id', id);
+        .eq('id', id)
+        .select();
+        
       if (error) throw error;
       return data;
     },
@@ -109,7 +114,11 @@ const AdminDestinations = () => {
 
   const deleteDestinationMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('destinations').delete().eq('id', id);
+      const { error } = await supabase
+        .from('destinations')
+        .delete()
+        .eq('id', id);
+        
       if (error) throw error;
       return id;
     },
