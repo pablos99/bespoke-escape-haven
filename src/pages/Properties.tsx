@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -111,6 +112,18 @@ const properties = [
   }
 ];
 
+export default function Properties() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialLocation = searchParams.get("location") || "all";
+  const [location, setLocation] = useState(initialLocation);
+  const [filteredProperties, setFilteredProperties] = useState(properties);
+  const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const { language } = useApp();
+  const { t, setCurrentPage } = useTranslation();
+  const { toast } = useToast();
+
   // Set the current page for translations
   useEffect(() => {
     setCurrentPage('properties');
@@ -202,7 +215,6 @@ const properties = [
     );
   }
 
-  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
