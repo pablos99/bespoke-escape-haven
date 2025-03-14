@@ -23,7 +23,9 @@ export function AnimatedImage({
 }: AnimatedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const fallbackSrc = "/placeholder.svg"; // Using placeholder from public directory
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,6 +52,12 @@ export function AnimatedImage({
     setIsLoaded(true);
   };
 
+  const handleError = () => {
+    console.error(`Failed to load image: ${src}`);
+    setHasError(true);
+    setIsLoaded(true); // Consider the image "loaded" even though it's the fallback
+  };
+
   const getHoverClass = () => {
     switch (hoverEffect) {
       case 'zoom':
@@ -71,7 +79,7 @@ export function AnimatedImage({
       >
         <img
           ref={imgRef}
-          src={src}
+          src={hasError ? fallbackSrc : src}
           alt={alt}
           width={width}
           height={height}
@@ -83,6 +91,7 @@ export function AnimatedImage({
             isInView && !isLoaded ? 'blur-sm' : 'blur-0'
           )}
           onLoad={handleLoad}
+          onError={handleError}
         />
       </div>
     </div>
