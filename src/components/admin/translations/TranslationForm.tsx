@@ -68,6 +68,7 @@ export function TranslationForm({
       ? { id: translation.id, ...formData } 
       : formData;
     
+    console.log('Submitting translation data:', submissionData);
     onSubmit(submissionData);
   };
 

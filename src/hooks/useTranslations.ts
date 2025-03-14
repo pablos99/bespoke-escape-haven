@@ -38,13 +38,19 @@ export function useTranslations() {
   // Create translation mutation
   const createTranslation = useMutation({
     mutationFn: async (data: Omit<Translation, 'id'>) => {
+      console.log('Creating translation:', data);
       const { error, data: result } = await supabase
         .from('translations')
         .insert([data])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating translation:', error);
+        throw error;
+      }
+      
+      console.log('Translation created successfully:', result);
       return result;
     },
     onSuccess: () => {
@@ -63,13 +69,21 @@ export function useTranslations() {
   // Update translation mutation
   const updateTranslation = useMutation({
     mutationFn: async ({ id, ...data }: Translation) => {
-      const { error } = await supabase
+      console.log('Updating translation:', id, data);
+      const { error, data: result } = await supabase
         .from('translations')
         .update(data)
-        .eq('id', id);
+        .eq('id', id)
+        .select()
+        .single();
 
-      if (error) throw error;
-      return { id, ...data };
+      if (error) {
+        console.error('Error updating translation:', error);
+        throw error;
+      }
+      
+      console.log('Translation updated successfully:', result);
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-translations'] });
@@ -87,12 +101,18 @@ export function useTranslations() {
   // Delete translation mutation
   const deleteTranslation = useMutation({
     mutationFn: async (id: string) => {
+      console.log('Deleting translation:', id);
       const { error } = await supabase
         .from('translations')
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error deleting translation:', error);
+        throw error;
+      }
+      
+      console.log('Translation deleted successfully');
       return id;
     },
     onSuccess: () => {
