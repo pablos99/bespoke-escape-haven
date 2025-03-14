@@ -10,14 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useApp } from '@/contexts/AppContext';
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ className }: { className?: string }) {
   const { language, setLanguage } = useApp();
   
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Globe size={20} />
+        <Button variant="ghost" size="icon" className={className}>
+          <Globe size={18} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

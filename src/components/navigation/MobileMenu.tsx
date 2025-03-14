@@ -8,6 +8,8 @@ import { NavigationItem } from './types';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { Globe, Moon, Sun } from 'lucide-react';
+import { useApp } from '@/contexts/AppContext';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -18,6 +20,7 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   const location = useLocation();
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
+  const { theme, setTheme, language, setLanguage } = useApp();
   
   const handleSignOut = async () => {
     try {
@@ -25,6 +28,10 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
     } catch (error) {
       console.error("Error signing out:", error);
     }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
   };
   
   return (
@@ -77,19 +84,50 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
           );
         })}
         
-        {/* Theme and Language Toggles */}
-        <div className="flex items-center justify-between pt-4 border-t border-border">
-          <ThemeToggle />
-          <LanguageSwitcher />
+        {/* Settings section */}
+        <div className="pt-6 border-t border-border">
+          <div className="text-lg font-medium text-primary mb-4">{t('settings.title') || 'Settings'}</div>
+          
+          {/* Theme Toggle */}
+          <button
+            className="flex items-center justify-between w-full py-2 text-base text-muted-foreground hover:text-primary"
+            onClick={toggleTheme}
+          >
+            <span>{t('settings.theme') || 'Theme'}</span>
+            <span className="flex items-center">
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </span>
+          </button>
+          
+          {/* Language Options */}
+          <div className="py-2">
+            <div className="text-base text-muted-foreground mb-2">{t('settings.language') || 'Language'}</div>
+            <div className="flex flex-col space-y-2 pl-2">
+              <button
+                className={cn(
+                  "text-left text-base py-1",
+                  language === 'en' ? 'text-primary font-medium' : 'text-muted-foreground'
+                )}
+                onClick={() => setLanguage('en')}
+              >
+                English
+              </button>
+              <button
+                className={cn(
+                  "text-left text-base py-1",
+                  language === 'es' ? 'text-primary font-medium' : 'text-muted-foreground'
+                )}
+                onClick={() => setLanguage('es')}
+              >
+                Español
+              </button>
+            </div>
+          </div>
         </div>
         
-        <div className="pt-6 border-t border-border space-y-4">
-          <Button asChild className="w-full">
-            <Link to="/booking">{t('button.bookNow')}</Link>
-          </Button>
-          
+        <div className="pt-6 border-t border-border">
           {!user ? (
-            <Button asChild variant="outline" className="w-full">
+            <Button asChild className="w-full">
               <Link to="/login">{t('auth.login')}</Link>
             </Button>
           ) : (

@@ -10,7 +10,7 @@ interface MobileMenuButtonProps {
 export function MobileMenuButton({ isOpen, setIsOpen }: MobileMenuButtonProps) {
   return (
     <button
-      className="relative z-50 text-primary"
+      className="md:hidden relative z-50 text-primary"
       onClick={() => setIsOpen(!isOpen)}
       aria-expanded={isOpen}
       aria-label="Toggle menu"

@@ -6,12 +6,12 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { Logo } from '@/components/ui/Logo';
 import { DesktopMenu } from '@/components/navigation/DesktopMenu';
 import { MobileMenu } from '@/components/navigation/MobileMenu';
-import { LanguageSwitcher } from '@/components/navigation/LanguageSwitcher';
-import { ThemeToggle } from '@/components/navigation/ThemeToggle';
-import { MobileMenuButton } from '@/components/navigation/MobileMenuButton';
+import { Settings } from 'lucide-react';
 import { navigation } from '@/components/navigation/navigation-data';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProfileMenu } from '@/components/navigation/ProfileMenu';
+import { SettingsMenu } from '@/components/navigation/SettingsMenu';
+import { MobileMenuButton } from '@/components/navigation/MobileMenuButton';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,8 +45,7 @@ export function Navbar() {
         <DesktopMenu navigation={navigation} />
 
         <div className="hidden md:flex items-center space-x-4">
-          <LanguageSwitcher />
-          <ThemeToggle />
+          <SettingsMenu />
           
           {!user ? (
             <Button asChild>
@@ -55,14 +54,10 @@ export function Navbar() {
           ) : (
             <ProfileMenu />
           )}
-          
-          <Button asChild>
-            <Link to="/booking">{t('button.bookNow')}</Link>
-          </Button>
         </div>
 
-        {/* Mobile menu button - always visible */}
-        <div className="flex md:flex items-center space-x-2">
+        {/* Mobile menu button - only visible on mobile */}
+        <div className="flex md:hidden items-center">
           <MobileMenuButton isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
       </div>
