@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import enTranslations from '@/locales/en.json';
 import esTranslations from '@/locales/es.json';
 
@@ -69,6 +70,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
+  const [dbTranslations, setDbTranslations] = useState<Record<string, Record<Language, string>>>({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load translations from Supabase
+  useEffect(() => {
+    async function fetchTranslations() {
+      try {
+        const { data, error } = await supabase
+          .from('translations')
+          .select('key, en, es');
+        
+        if (error) {
+          console.error('Error fetching translations:', error);
+          return;
+        }
+        
+        const translationsMap: Record<string, Record<Language, string>> = {};
+        data.forEach(row => {
+          translationsMap[row.key] = {
+            en: row.en || '',
+            es: row.es || ''
+          };
+        });
+        
+        setDbTranslations(translationsMap);
+      } catch (error) {
+        console.error('Error in fetching translations:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchTranslations();
+  }, []);
+
   // Save preferences to localStorage
   useEffect(() => {
     localStorage.setItem('language', language);
@@ -83,14 +119,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [theme]);
 
+  // Merge local JSON translations with DB translations
+  const mergedTranslations = useMemo(() => {
+    const merged = { ...allTranslations };
+    
+    // Override with database translations if available
+    Object.keys(dbTranslations).forEach(key => {
+      merged[key] = dbTranslations[key];
+    });
+    
+    return merged;
+  }, [dbTranslations]);
+
   // Translation function
   const t = (key: string): string => {
-    if (allTranslations[key] && allTranslations[key][language]) {
-      return allTranslations[key][language];
+    if (mergedTranslations[key] && mergedTranslations[key][language]) {
+      return mergedTranslations[key][language];
     }
     // Fallback to key if translation not found
     return key;
   };
+
+  if (isLoading) {
+    // You might want to add a loading indicator or skeleton here
+    return <div>Loading translations...</div>;
+  }
 
   return (
     <AppContext.Provider 
@@ -99,7 +152,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setLanguage, 
         theme, 
         setTheme,
-        translations: allTranslations,
+        translations: mergedTranslations,
         t
       }}
     >

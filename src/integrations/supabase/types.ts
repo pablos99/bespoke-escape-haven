@@ -187,6 +187,41 @@ export type Database = {
         }
         Relationships: []
       }
+      old_translations: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          language_code: string | null
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          language_code?: string | null
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          language_code?: string | null
+          updated_at?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "translations_language_code_fkey"
+            columns: ["language_code"]
+            isOneToOne: false
+            referencedRelation: "languages"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       orders: {
         Row: {
           created_at: string
@@ -595,37 +630,29 @@ export type Database = {
       translations: {
         Row: {
           created_at: string
+          en: string
+          es: string
           id: string
           key: string
-          language_code: string | null
           updated_at: string
-          value: string
         }
         Insert: {
           created_at?: string
+          en?: string
+          es?: string
           id?: string
           key: string
-          language_code?: string | null
           updated_at?: string
-          value: string
         }
         Update: {
           created_at?: string
+          en?: string
+          es?: string
           id?: string
           key?: string
-          language_code?: string | null
           updated_at?: string
-          value?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "translations_language_code_fkey"
-            columns: ["language_code"]
-            isOneToOne: false
-            referencedRelation: "languages"
-            referencedColumns: ["code"]
-          },
-        ]
+        Relationships: []
       }
       user_dividends: {
         Row: {
