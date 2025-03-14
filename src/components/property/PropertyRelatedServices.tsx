@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ServiceCard } from '@/components/ui/ServiceCard';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface Service {
   id: string;
@@ -19,7 +19,7 @@ interface PropertyRelatedServicesProps {
 }
 
 export function PropertyRelatedServices({ services }: PropertyRelatedServicesProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <section className="container mx-auto px-4 py-12 border-t border-border">

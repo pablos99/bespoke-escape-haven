@@ -6,6 +6,7 @@ import { AnimatedImage } from './AnimatedImage';
 import { MapPin, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface PropertyCardProps {
   id: string;
@@ -30,7 +31,8 @@ export function PropertyCard({
   className,
   style
 }: PropertyCardProps) {
-  const { language, t } = useApp();
+  const { language } = useApp();
+  const { t } = useTranslation();
   
   return (
     <div 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { ThemeToggle } from '@/components/navigation/ThemeToggle';
 import { LanguageSwitcher } from '@/components/navigation/LanguageSwitcher';
 import { Logo } from '@/components/ui/Logo';
@@ -16,7 +16,7 @@ export function SideNav() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
-  const { t } = useApp();
+  const { t } = useTranslation();
   const { user } = useAuth();
   
   const toggleMenu = () => setIsOpen(!isOpen);

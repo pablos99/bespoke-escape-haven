@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface Review {
   id: string;
@@ -20,7 +20,7 @@ interface PropertyReviewsProps {
 }
 
 export function PropertyReviews({ reviews, rating, reviewCount }: PropertyReviewsProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <section className="container mx-auto px-4 py-12 border-t border-border">

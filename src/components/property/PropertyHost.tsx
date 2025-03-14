@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface HostInfo {
   name: string;
@@ -13,7 +13,7 @@ interface PropertyHostProps {
 }
 
 export function PropertyHost({ host }: PropertyHostProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <div className="my-12">

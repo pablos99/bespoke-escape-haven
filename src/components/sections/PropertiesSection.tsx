@@ -5,6 +5,7 @@ import { PropertyCard } from '@/components/ui/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -31,7 +32,8 @@ const properties = [
 ];
 
 export function PropertiesSection() {
-  const { language, t, setCurrentPage } = useApp();
+  const { language } = useApp();
+  const { t, setCurrentPage } = useTranslation();
   const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);

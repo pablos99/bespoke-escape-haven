@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface PropertyBookingSidebarProps {
   price: number;
@@ -9,7 +9,7 @@ interface PropertyBookingSidebarProps {
 }
 
 export function PropertyBookingSidebar({ price, propertyId }: PropertyBookingSidebarProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <div className="lg:col-span-1">

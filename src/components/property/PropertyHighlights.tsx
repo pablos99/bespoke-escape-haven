@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface Highlight {
@@ -14,7 +14,7 @@ interface PropertyHighlightsProps {
 }
 
 export function PropertyHighlights({ highlights }: PropertyHighlightsProps) {
-  const { t, isTranslationsLoading } = useApp();
+  const { t, isTranslationsLoading } = useTranslation();
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10">
