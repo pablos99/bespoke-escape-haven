@@ -40,7 +40,7 @@ export function PropertyCard({
   
   // Default links if not provided - ensure we use the correct format for property booking
   const detailsLink = viewDetailsLink || `/property/${id}`;
-  const bookingLink = bookNowLink || `/booking/property/${id}`;
+  const bookingLink = bookNowLink || `/booking/property/${propertyId}`;
   
   return (
     <div 

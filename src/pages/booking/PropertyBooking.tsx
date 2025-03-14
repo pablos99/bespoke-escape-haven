@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -23,7 +24,20 @@ const properties = [
     image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     category: "property" as const
   },
-  // Add more properties if needed
+  {
+    id: "bali-villa",
+    title: "Beachfront Villa",
+    price: 350,
+    image: "https://images.unsplash.com/photo-1570737209810-87a8e7245f88?q=80&w=2532&auto=format&fit=crop",
+    category: "property" as const
+  },
+  {
+    id: "tulum-retreat",
+    title: "Jungle Retreat",
+    price: 295,
+    image: "https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=2670&auto=format&fit=crop",
+    category: "property" as const
+  }
 ];
 
 export default function PropertyBooking() {

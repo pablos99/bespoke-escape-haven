@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '@/contexts/TranslationContext';
 
 interface PropertyBookingSidebarProps {
@@ -10,6 +11,11 @@ interface PropertyBookingSidebarProps {
 
 export function PropertyBookingSidebar({ price, propertyId }: PropertyBookingSidebarProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  
+  const handleBookNow = () => {
+    navigate(`/booking/property/${propertyId}`);
+  };
   
   return (
     <div className="lg:col-span-1">
@@ -33,7 +39,7 @@ export function PropertyBookingSidebar({ price, propertyId }: PropertyBookingSid
             <option>5+ {t('property.guests')}</option>
           </select>
         </div>
-        <Button className="w-full mb-4">{t('buttons.bookNow')}</Button>
+        <Button className="w-full mb-4" onClick={handleBookNow}>{t('buttons.bookNow')}</Button>
         <p className="text-center text-sm text-muted-foreground">{t('property.noChargeYet')}</p>
         
         <div className="mt-6 pt-6 border-t border-border">

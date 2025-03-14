@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PropertyCard } from '@/components/ui/PropertyCard';
@@ -27,6 +26,7 @@ const properties = [{
   rating: 4.8,
   price: 295
 }];
+
 export function PropertiesSection() {
   const {
     language
@@ -41,7 +41,7 @@ export function PropertiesSection() {
   const {
     toast
   } = useToast();
-
+  
   // Set the current page to ensure proper translations are loaded
   useEffect(() => {
     setCurrentPage('properties');
