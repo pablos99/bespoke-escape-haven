@@ -10,11 +10,21 @@ import { LanguageSwitcher } from '@/components/navigation/LanguageSwitcher';
 import { ThemeToggle } from '@/components/navigation/ThemeToggle';
 import { MobileMenuButton } from '@/components/navigation/MobileMenuButton';
 import { navigation } from '@/components/navigation/navigation-data';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { t } = useTranslation();
+  
+  // Use try/catch to handle case where AuthProvider might not be fully initialized
+  let user = null;
+  try {
+    const auth = useAuth();
+    user = auth?.user;
+  } catch (error) {
+    console.log('Auth context not available yet');
+  }
   
   useEffect(() => {
     setIsOpen(false);
@@ -37,14 +47,29 @@ export function Navbar() {
           <LanguageSwitcher />
           <ThemeToggle />
           
-          <div className="flex items-center space-x-2">
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/login">{t('auth.login')}</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link to="/signup">{t('auth.signup')}</Link>
-            </Button>
-          </div>
+          {!user ? (
+            <div className="flex items-center space-x-2">
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/login">{t('auth.login')}</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link to="/signup">{t('auth.signup')}</Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2">
+              <Button asChild variant="ghost" size="sm" onClick={async () => {
+                try {
+                  const { signOut } = useAuth();
+                  await signOut();
+                } catch (error) {
+                  console.error("Error signing out:", error);
+                }
+              }}>
+                <Link to="/">{t('auth.logout')}</Link>
+              </Button>
+            </div>
+          )}
           
           <Button asChild>
             <Link to="/booking">{t('button.bookNow')}</Link>

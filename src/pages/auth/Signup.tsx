@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,7 @@ export default function Signup() {
   const [passwordError, setPasswordError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const validatePasswords = () => {
     if (password !== passwordConfirm) {
@@ -44,6 +45,7 @@ export default function Signup() {
     
     try {
       await signUp(email, password, firstName, lastName);
+      navigate('/login'); // Navigate to login after successful signup
     } finally {
       setIsSubmitting(false);
     }
@@ -133,7 +135,7 @@ export default function Signup() {
         <CardFooter className="flex flex-col space-y-4">
           <div className="text-center text-sm">
             Already have an account?{" "}
-            <Link to="/auth/login" className="text-primary hover:underline">
+            <Link to="/login" className="text-primary hover:underline">
               Sign in
             </Link>
           </div>

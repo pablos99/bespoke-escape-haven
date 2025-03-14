@@ -7,9 +7,11 @@ import { AuthProvider } from './AuthContext';
 export const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <AppProvider>
-      <TranslationProvider>
-        {children}
-      </TranslationProvider>
+      <AuthProvider>
+        <TranslationProvider>
+          {children}
+        </TranslationProvider>
+      </AuthProvider>
     </AppProvider>
   );
 };

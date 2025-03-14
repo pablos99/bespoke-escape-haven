@@ -44,7 +44,9 @@ function App() {
             <Route path="/destinations" element={<Cities />} />
             <Route path="/destinations/bali" element={<Bali />} />
             <Route path="/destinations/tulum" element={<Tulum />} />
+            <Route path="/auth/login" element={<Login />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Signup />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
