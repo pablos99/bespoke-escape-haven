@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { NavigationItem } from './types';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -74,6 +76,12 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
             </Link>
           );
         })}
+        
+        {/* Theme and Language Toggles */}
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <ThemeToggle />
+          <LanguageSwitcher />
+        </div>
         
         <div className="pt-6 border-t border-border space-y-4">
           <Button asChild className="w-full">

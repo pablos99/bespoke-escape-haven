@@ -29,6 +29,11 @@
     "book": "Book Session",
     "viewDetails": "View Details"
   },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out"
+  },
   "booking": {
     "reservationDetails": "Reservation Details",
     "guestInformation": "Guest Information",
