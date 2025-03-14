@@ -20,7 +20,6 @@ import Bali from './pages/cities/Bali';
 import Tulum from './pages/cities/Tulum';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
-import PropertyBooking from './pages/booking/PropertyBooking';
 import GuideBooking from './pages/booking/GuideBooking';
 import ProductBooking from './pages/booking/ProductBooking';
 
@@ -39,6 +38,7 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/booking" element={<Booking />} />
+            <Route path="/booking/property/:id" element={<Booking />} />
             <Route path="/guides" element={<Guides />} />
             <Route path="/artisan-products" element={<ArtisanProducts />} />
             <Route path="/destinations" element={<Cities />} />
@@ -50,7 +50,6 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
-            <Route path="/booking/property/:id" element={<PropertyBooking />} />
             <Route path="/booking/guide/:id" element={<GuideBooking />} />
             <Route path="/booking/product/:id" element={<ProductBooking />} />
             <Route path="*" element={<NotFound />} />

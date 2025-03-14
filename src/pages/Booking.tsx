@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,14 +12,59 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Navbar } from '@/components/layout/Navbar';
+
+// Mock data - in a real app would come from API
+const properties = [
+  {
+    id: "bali-villa",
+    title: "Tranquil Bali Villa",
+    price: 250,
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    category: "property" as const
+  },
+  {
+    id: "tulum-beach",
+    title: "Tulum Beach Retreat",
+    price: 320,
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    category: "property" as const
+  },
+  {
+    id: "beachfront-villa",
+    title: "Beachfront Villa",
+    price: 350,
+    image: "https://images.unsplash.com/photo-1570737209810-87a8e7245f88?q=80&w=2532&auto=format&fit=crop",
+    category: "property" as const
+  },
+  {
+    id: "jungle-retreat",
+    title: "Jungle Retreat",
+    price: 295,
+    image: "https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=2670&auto=format&fit=crop",
+    category: "property" as const
+  }
+];
 
 export default function Booking() {
+  const { id } = useParams<{ id?: string }>();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [selectedProperty, setSelectedProperty] = useState<string>(id || "");
+  
+  // Find the property if an ID was provided
+  const selectedPropertyDetails = properties.find(p => p.id === selectedProperty);
+
+  useEffect(() => {
+    if (id) {
+      setSelectedProperty(id);
+    }
+  }, [id]);
 
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 pt-8 pb-16">
+      <Navbar />
+      <main className="flex-1 pt-24 pb-16">
         <section className="container max-w-6xl mx-auto px-4 mb-16">
           <div className="text-center mb-10">
             <h1 className="heading-lg mb-4">Book Your Stay</h1>
@@ -34,16 +81,26 @@ export default function Booking() {
               <div className="space-y-6">
                 <div>
                   <Label htmlFor="property">Choose Property</Label>
-                  <Select>
+                  <Select value={selectedProperty} onValueChange={setSelectedProperty}>
                     <SelectTrigger id="property" className="w-full">
                       <SelectValue placeholder="Select property" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bali">Tranquil Bali Villa</SelectItem>
-                      <SelectItem value="tulum">Tulum Beach Retreat</SelectItem>
+                      {properties.map(property => (
+                        <SelectItem key={property.id} value={property.id}>
+                          {property.title} - ${property.price}/night
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
+                
+                {selectedPropertyDetails && (
+                  <div className="p-4 bg-muted rounded-lg">
+                    <p className="font-medium">{selectedPropertyDetails.title}</p>
+                    <p className="text-sm text-muted-foreground">${selectedPropertyDetails.price} per night</p>
+                  </div>
+                )}
                 
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="flex-1">
