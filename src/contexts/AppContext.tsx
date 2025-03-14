@@ -1,5 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import enTranslations from '@/locales/en.json';
+import esTranslations from '@/locales/es.json';
 
 type Language = 'en' | 'es';
 type Theme = 'light' | 'dark';
@@ -9,71 +11,46 @@ interface AppContextType {
   setLanguage: (lang: Language) => void;
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  translations: Record<string, Record<string, string>>;
+  translations: Record<string, Record<Language, string>>;
   t: (key: string) => string;
 }
 
-// Basic translations
-const translations = {
-  en: {
-    // Navigation
-    'nav.home': 'Home',
-    'nav.properties': 'Properties',
-    'nav.services': 'Services',
-    'nav.booking': 'Booking',
-    'nav.about': 'About',
-    'nav.cities': 'Destinations',
-    'nav.bali': 'Bali',
-    'nav.tulum': 'Tulum',
-    'button.bookNow': 'Book Now',
-    'button.learnMore': 'Learn More',
-    'button.viewDetails': 'View Details',
-    'button.exploreProperties': 'Explore Properties',
-    'button.exploreCities': 'Explore Destinations',
-    'button.darkMode': 'Dark Mode',
-    'button.lightMode': 'Light Mode',
+// Get all translation keys
+const allTranslations: Record<string, Record<Language, string>> = {};
+
+// Generate combined translations object where each key points to an object with language values
+function processTranslations(obj: any, prefix = '', result: any = {}) {
+  for (const key in obj) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
     
-    // Footer
-    'footer.quickLinks': 'Quick Links',
-    'footer.contactUs': 'Contact Us',
-    'footer.rights': 'All rights reserved.',
-    
-    // Cities
-    'cities.bali.title': 'Discover Bali',
-    'cities.bali.subtitle': 'Explore the island of gods',
-    'cities.tulum.title': 'Discover Tulum',
-    'cities.tulum.subtitle': 'Experience the magic of the Riviera Maya',
-  },
-  es: {
-    // Navigation
-    'nav.home': 'Inicio',
-    'nav.properties': 'Propiedades',
-    'nav.services': 'Servicios',
-    'nav.booking': 'Reservas',
-    'nav.about': 'Nosotros',
-    'nav.cities': 'Destinos',
-    'nav.bali': 'Bali',
-    'nav.tulum': 'Tulum',
-    'button.bookNow': 'Reservar',
-    'button.learnMore': 'Más Información',
-    'button.viewDetails': 'Ver Detalles',
-    'button.exploreProperties': 'Explorar Propiedades',
-    'button.exploreCities': 'Explorar Destinos',
-    'button.darkMode': 'Modo Oscuro',
-    'button.lightMode': 'Modo Claro',
-    
-    // Footer
-    'footer.quickLinks': 'Enlaces Rápidos',
-    'footer.contactUs': 'Contáctanos',
-    'footer.rights': 'Todos los derechos reservados.',
-    
-    // Cities
-    'cities.bali.title': 'Descubre Bali',
-    'cities.bali.subtitle': 'Explora la isla de los dioses',
-    'cities.tulum.title': 'Descubre Tulum',
-    'cities.tulum.subtitle': 'Experimenta la magia de la Riviera Maya',
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      processTranslations(obj[key], fullKey, result);
+    } else {
+      if (!result[fullKey]) {
+        result[fullKey] = { en: '', es: '' };
+      }
+      result[fullKey].en = enTranslations ? getNestedValue(enTranslations, fullKey) || fullKey : fullKey;
+      result[fullKey].es = esTranslations ? getNestedValue(esTranslations, fullKey) || fullKey : fullKey;
+    }
   }
-};
+  return result;
+}
+
+// Helper function to get nested value from object using dot notation
+function getNestedValue(obj: any, path: string): string | undefined {
+  const keys = path.split('.');
+  let current = obj;
+  
+  for (const key of keys) {
+    if (current === undefined || current === null) return undefined;
+    current = current[key];
+  }
+  
+  return typeof current === 'string' ? current : undefined;
+}
+
+// Initialize translations
+processTranslations({ ...enTranslations, ...esTranslations }, '', allTranslations);
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -108,7 +85,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Translation function
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    if (allTranslations[key] && allTranslations[key][language]) {
+      return allTranslations[key][language];
+    }
+    // Fallback to key if translation not found
+    return key;
   };
 
   return (
@@ -118,7 +99,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setLanguage, 
         theme, 
         setTheme,
-        translations,
+        translations: allTranslations,
         t
       }}
     >
