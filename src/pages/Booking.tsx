@@ -1,6 +1,5 @@
-
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,9 +47,11 @@ const properties = [
 
 export default function Booking() {
   const { id } = useParams<{ id?: string }>();
+  const location = useLocation();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [selectedProperty, setSelectedProperty] = useState<string>(id || "");
+  const propertySelectRef = useRef<HTMLDivElement>(null);
   
   // Find the property if an ID was provided
   const selectedPropertyDetails = properties.find(p => p.id === selectedProperty);
@@ -58,6 +59,17 @@ export default function Booking() {
   useEffect(() => {
     if (id) {
       setSelectedProperty(id);
+      
+      // Add a small delay to ensure the component is fully rendered
+      setTimeout(() => {
+        // Scroll to the property selection area
+        if (propertySelectRef.current) {
+          propertySelectRef.current.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }, 100);
     }
   }, [id]);
 
@@ -79,7 +91,7 @@ export default function Booking() {
               <h2 className="heading-md mb-6">Reservation Details</h2>
               
               <div className="space-y-6">
-                <div>
+                <div ref={propertySelectRef}>
                   <Label htmlFor="property">Choose Property</Label>
                   <Select value={selectedProperty} onValueChange={setSelectedProperty}>
                     <SelectTrigger id="property" className="w-full">
