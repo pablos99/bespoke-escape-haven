@@ -106,14 +106,16 @@ export function PropertiesSection() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div className="max-w-2xl">
-            <h2 className="heading-lg mb-4 text-foreground">{t('properties.title')}</h2>
-            <p className="paragraph text-foreground/80">
+            <h2 className="heading-lg mb-4 text-foreground font-medium">
+              {t('properties.title')}
+            </h2>
+            <p className="paragraph text-foreground font-medium">
               {t('properties.subtitle')}
             </p>
           </div>
           <div className="mt-6 md:mt-0">
             <Button asChild variant="outline">
-              <Link to="/properties" className="flex items-center">
+              <Link to="/properties" className="flex items-center text-foreground font-medium">
                 {t('button.viewAll')}
                 <ArrowRight size={16} className="ml-2" />
               </Link>
