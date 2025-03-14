@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useApp } from '@/contexts/AppContext';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { Logo } from '@/components/ui/Logo';
 import { DesktopMenu } from '@/components/navigation/DesktopMenu';
@@ -37,6 +36,15 @@ export function Navbar() {
         <div className="hidden md:flex items-center space-x-4">
           <LanguageSwitcher />
           <ThemeToggle />
+          
+          <div className="flex items-center space-x-2">
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/login">{t('auth.login')}</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link to="/signup">{t('auth.signup')}</Link>
+            </Button>
+          </div>
           
           <Button asChild>
             <Link to="/booking">{t('button.bookNow')}</Link>
