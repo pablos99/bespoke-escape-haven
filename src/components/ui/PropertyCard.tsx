@@ -79,12 +79,20 @@ export function PropertyCard({
         <p className="text-foreground/80 flex-1 line-clamp-3 mb-4">{description}</p>
         
         <div className="mt-auto flex justify-between items-center">
-          <Link to={detailsLink} className="text-sm font-medium text-primary hover:underline transition-colors">
+          <Link 
+            to={detailsLink} 
+            className="text-sm font-medium text-primary hover:underline transition-colors z-10"
+          >
             {t('buttons.viewDetails')}
           </Link>
-          <Button asChild>
-            <Link to={bookingLink}>{t('buttons.bookNow')}</Link>
-          </Button>
+          <Link 
+            to={bookingLink} 
+            className="z-10"
+          >
+            <Button>
+              {t('buttons.bookNow')}
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
