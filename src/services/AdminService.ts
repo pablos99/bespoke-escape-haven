@@ -4,6 +4,8 @@ import { useToast } from '@/hooks/use-toast';
 import { QueryClient } from '@tanstack/react-query';
 import { Database } from '@/integrations/supabase/types';
 
+type TableNames = keyof Database['public']['Tables'];
+
 /**
  * Generic update function for admin operations
  * @param tableName - The Supabase table name
@@ -13,8 +15,8 @@ import { Database } from '@/integrations/supabase/types';
  * @param queryKeysToInvalidate - Array of query keys to invalidate after successful operation
  * @returns The result of the operation
  */
-export async function adminUpdate<T extends object>(
-  tableName: keyof Database['public']['Tables'],
+export async function adminUpdate<T extends Record<string, any>>(
+  tableName: TableNames,
   data: T,
   id: string | undefined,
   queryClient: QueryClient,
@@ -71,7 +73,7 @@ export async function adminUpdate<T extends object>(
  * @returns The result of the operation
  */
 export async function adminDelete(
-  tableName: keyof Database['public']['Tables'],
+  tableName: TableNames,
   id: string,
   queryClient: QueryClient,
   queryKeysToInvalidate: string[] = []
