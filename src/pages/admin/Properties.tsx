@@ -25,6 +25,9 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 
+// Define the property status enum type
+type PropertyStatus = 'pending' | 'active' | 'sold_out' | 'closed';
+
 interface Property {
   id: string;
   title: string;
@@ -35,7 +38,7 @@ interface Property {
   price_per_share: number;
   total_shares: number;
   available_shares: number;
-  status: string;
+  status: PropertyStatus;
   created_at: string;
 }
 
@@ -55,7 +58,7 @@ export default function AdminProperties() {
     price_per_share: '',
     total_shares: '',
     available_shares: '',
-    status: 'pending',
+    status: 'pending' as PropertyStatus,
   });
 
   // Fetch properties
@@ -137,7 +140,7 @@ export default function AdminProperties() {
         price_per_share: parseFloat(formData.price_per_share),
         total_shares: parseInt(formData.total_shares),
         available_shares: parseInt(formData.available_shares),
-        status: formData.status,
+        status: formData.status as PropertyStatus,
         // Add other required fields
         minimum_investment: parseFloat(formData.price_per_share), // Simplified, might need adjustment
         total_price: parseFloat(formData.price_per_share) * parseInt(formData.total_shares), // Calculated

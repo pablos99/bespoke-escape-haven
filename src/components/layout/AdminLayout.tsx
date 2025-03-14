@@ -38,6 +38,7 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
       case 'Building': return <Building className="h-5 w-5" />;
       case 'Languages': return <Languages className="h-5 w-5" />;
       case 'ShoppingCart': return <ShoppingCart className="h-5 w-5" />;
+      case 'User': return <User className="h-5 w-5" />;
       default: return <LayoutDashboard className="h-5 w-5" />;
     }
   };
@@ -57,7 +58,7 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
             <div className="p-4 border-b border-border">
               <div className="flex items-center space-x-3">
                 <Avatar>
-                  <AvatarImage src={user.photoURL || ''} alt={user.email || ''} />
+                  <AvatarImage src="" alt={user.email || ''} />
                   <AvatarFallback>{getInitials()}</AvatarFallback>
                 </Avatar>
                 <div className="space-y-1">
