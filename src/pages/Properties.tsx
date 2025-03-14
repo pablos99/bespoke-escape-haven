@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -17,9 +16,10 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useQuery } from '@tanstack/react-query';
 
-// Sample properties - in a production app, this would be fetched from the API
-const properties = [
+// Fallback properties if Supabase data fails to load
+const fallbackProperties = [
   {
     id: "bali-villa",
     title: "Tranquil Bali Villa",
@@ -43,7 +43,7 @@ const properties = [
     images: [
       "https://images.unsplash.com/photo-1540541338287-41700207dee6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     ],
     price: 375,
     features: ["4 Bedrooms", "Beachfront", "Infinity Pool", "Private Chef", "Beach Cabana"],
@@ -102,8 +102,8 @@ const properties = [
     description: "Elevated luxury in the cloud forest with panoramic canopy views. Sustainably built treehouse with premium amenities and wildlife encounters.",
     images: [
       "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1628744424121-c9dfe5285ada?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1628744424121-c9dfe5285ada?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     ],
     price: 380,
     features: ["2 Bedrooms", "Glass Walls", "Canopy Hot Tub", "Birdwatching Deck", "Gourmet Breakfast"],
@@ -116,10 +116,9 @@ export default function Properties() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialLocation = searchParams.get("location") || "all";
   const [location, setLocation] = useState(initialLocation);
-  const [filteredProperties, setFilteredProperties] = useState(properties);
+  const [filteredProperties, setFilteredProperties] = useState<any[]>([]);
   const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
+  const [hasTranslationError, setHasTranslationError] = useState(false);
   const { language } = useApp();
   const { t, setCurrentPage } = useTranslation();
   const { toast } = useToast();
@@ -129,12 +128,29 @@ export default function Properties() {
     setCurrentPage('properties');
   }, [setCurrentPage]);
 
+  // Fetch properties from Supabase
+  const { data: supabaseProperties, isLoading: isLoadingProperties, error: propertiesError } = useQuery({
+    queryKey: ['properties'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*, property_images(image_url, is_primary)')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        throw error;
+      }
+      
+      return data || [];
+    }
+  });
+
   // Fetch property translations from Supabase
   useEffect(() => {
     async function fetchPropertyTranslations() {
       try {
-        setIsLoading(true);
-        setHasError(false);
+        setHasTranslationError(false);
         
         const { data, error } = await supabase
           .from('property_translations')
@@ -142,7 +158,7 @@ export default function Properties() {
         
         if (error) {
           console.error('Error fetching property translations:', error);
-          setHasError(true);
+          setHasTranslationError(true);
           toast({
             title: 'Translation Error',
             description: 'Could not load property translations. Using default values.',
@@ -163,28 +179,59 @@ export default function Properties() {
         }
       } catch (error) {
         console.error('Error in fetching property translations:', error);
-        setHasError(true);
+        setHasTranslationError(true);
         toast({
           title: 'Translation Error',
           description: 'Could not load property translations. Using default values.',
           variant: 'destructive',
         });
-      } finally {
-        setIsLoading(false);
       }
     }
     
     fetchPropertyTranslations();
   }, [toast]);
 
+  // Process properties data to match our UI needs
+  const processedProperties = React.useMemo(() => {
+    if (!supabaseProperties || supabaseProperties.length === 0) {
+      return fallbackProperties;
+    }
+
+    return supabaseProperties.map(property => {
+      // Find primary image or use first image or a placeholder
+      const propertyImages = property.property_images || [];
+      const primaryImage = propertyImages.find((img: any) => img.is_primary);
+      const firstImage = propertyImages[0];
+      const imageUrl = primaryImage ? 
+        primaryImage.image_url : 
+        (firstImage ? firstImage.image_url : 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2');
+      
+      return {
+        id: property.id,
+        title: property.title,
+        location: `${property.city}, ${property.country}`,
+        description: property.description,
+        images: [imageUrl],
+        price: property.price_per_share,
+        rating: 4.8, // Hardcoded for now, could be fetched from reviews table
+        locationFilter: property.country.toLowerCase().replace(/\s+/g, '-'),
+      };
+    });
+  }, [supabaseProperties]);
+
   // Filter properties based on location
   useEffect(() => {
+    const properties = processedProperties || fallbackProperties;
+    
     if (location === "all") {
       setFilteredProperties(properties);
     } else {
-      setFilteredProperties(properties.filter(property => property.locationFilter === location));
+      setFilteredProperties(properties.filter(property => 
+        property.locationFilter === location || 
+        property.locationFilter.includes(location)
+      ));
     }
-  }, [location]);
+  }, [location, processedProperties]);
 
   const handleLocationChange = (value: string) => {
     setLocation(value);
@@ -207,12 +254,21 @@ export default function Properties() {
     };
   };
 
-  if (isLoading) {
+  if (isLoadingProperties) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
+  }
+
+  if (propertiesError) {
+    console.error('Error loading properties:', propertiesError);
+    toast({
+      title: 'Error',
+      description: 'Failed to load properties. Using default data.',
+      variant: 'destructive',
+    });
   }
 
   return (
@@ -227,10 +283,18 @@ export default function Properties() {
             </p>
           </div>
           
-          {hasError && (
+          {hasTranslationError && (
             <Alert variant="destructive" className="mb-6">
               <AlertDescription>
                 Could not load property translations. Showing default content.
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {propertiesError && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>
+                Could not load properties from database. Showing sample properties.
               </AlertDescription>
             </Alert>
           )}
@@ -249,24 +313,31 @@ export default function Properties() {
             </Select>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredProperties.map((property) => {
-              const localizedContent = getLocalizedPropertyContent(property);
-              
-              return (
-                <PropertyBookingCard 
-                  key={property.id}
-                  id={property.id}
-                  title={localizedContent.title}
-                  location={property.location}
-                  description={localizedContent.description}
-                  image={property.images[0]}
-                  price={property.price}
-                  rating={property.rating}
-                />
-              );
-            })}
-          </div>
+          {filteredProperties.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {filteredProperties.map((property) => {
+                const localizedContent = getLocalizedPropertyContent(property);
+                
+                return (
+                  <PropertyBookingCard 
+                    key={property.id}
+                    id={property.id}
+                    title={localizedContent.title}
+                    location={property.location}
+                    description={localizedContent.description}
+                    image={property.images[0]}
+                    price={property.price}
+                    rating={property.rating}
+                    locationFilter={property.locationFilter}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground">No properties found for this location.</p>
+            </div>
+          )}
         </section>
         
         <section className="bg-secondary py-16" id="property-features">
