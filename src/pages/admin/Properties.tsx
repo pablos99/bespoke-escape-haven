@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { useTranslation } from '@/contexts/TranslationContext';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +24,14 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
+import { usePropertyTranslationManagement } from '@/hooks/usePropertyTranslationManagement';
 
 // Define the property status enum type
 type PropertyStatus = 'pending' | 'active' | 'sold_out' | 'closed';
@@ -40,14 +48,20 @@ interface Property {
   available_shares: number;
   status: PropertyStatus;
   created_at: string;
+  description: string;
+  zip_code: string;
+  minimum_investment: number;
+  total_price: number;
 }
 
 export default function AdminProperties() {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentProperty, setCurrentProperty] = useState<Property | null>(null);
+  const [isPending, setIsPending] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -55,6 +69,7 @@ export default function AdminProperties() {
     city: '',
     state: '',
     country: '',
+    zip_code: '',
     price_per_share: '',
     total_shares: '',
     available_shares: '',
@@ -71,10 +86,104 @@ export default function AdminProperties() {
         .order('created_at', { ascending: false });
       
       if (error) {
+        console.error('Error fetching properties:', error);
+        toast({
+          title: 'Error fetching properties',
+          description: error.message,
+          variant: 'destructive'
+        });
         throw error;
       }
       
+      console.log('Fetched properties:', data);
       return data as Property[];
+    }
+  });
+
+  // Create and update property mutation
+  const upsertProperty = useMutation({
+    mutationFn: async (property: Partial<Property> & { id?: string }) => {
+      setIsPending(true);
+      console.log('Upserting property with data:', property);
+      
+      try {
+        if (property.id) {
+          // Update existing property
+          const { data, error } = await supabase
+            .from('properties')
+            .update(property)
+            .eq('id', property.id)
+            .select()
+            .single();
+            
+          if (error) {
+            console.error('Error updating property:', error);
+            throw error;
+          }
+          
+          console.log('Property updated successfully:', data);
+          return data;
+        } else {
+          // Create new property
+          const { data, error } = await supabase
+            .from('properties')
+            .insert([property])
+            .select()
+            .single();
+            
+          if (error) {
+            console.error('Error creating property:', error);
+            throw error;
+          }
+          
+          console.log('Property created successfully:', data);
+          return data;
+        }
+      } finally {
+        setIsPending(false);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-properties'] });
+      toast({ title: currentProperty ? 'Property updated' : 'Property created' });
+      setDialogOpen(false);
+      resetForm();
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: 'Error', 
+        description: error.message,
+        variant: 'destructive' 
+      });
+    }
+  });
+
+  // Delete property mutation
+  const deleteProperty = useMutation({
+    mutationFn: async (id: string) => {
+      console.log('Deleting property with ID:', id);
+      const { error } = await supabase
+        .from('properties')
+        .delete()
+        .eq('id', id);
+        
+      if (error) {
+        console.error('Error deleting property:', error);
+        throw error;
+      }
+      
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-properties'] });
+      toast({ title: 'Property deleted' });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: 'Error', 
+        description: error.message,
+        variant: 'destructive' 
+      });
     }
   });
 
@@ -92,6 +201,7 @@ export default function AdminProperties() {
       city: '',
       state: '',
       country: '',
+      zip_code: '',
       price_per_share: '',
       total_shares: '',
       available_shares: '',
@@ -105,11 +215,12 @@ export default function AdminProperties() {
       setCurrentProperty(property);
       setFormData({
         title: property.title,
-        description: '',  // Add from properties if available
+        description: property.description,
         address: property.address,
         city: property.city,
         state: property.state,
         country: property.country,
+        zip_code: property.zip_code || '',
         price_per_share: property.price_per_share.toString(),
         total_shares: property.total_shares.toString(),
         available_shares: property.available_shares.toString(),
@@ -126,6 +237,10 @@ export default function AdminProperties() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleStatusChange = (value: string) => {
+    setFormData(prev => ({ ...prev, status: value as PropertyStatus }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -137,39 +252,25 @@ export default function AdminProperties() {
         city: formData.city,
         state: formData.state,
         country: formData.country,
+        zip_code: formData.zip_code,
         price_per_share: parseFloat(formData.price_per_share),
         total_shares: parseInt(formData.total_shares),
         available_shares: parseInt(formData.available_shares),
         status: formData.status as PropertyStatus,
-        // Add other required fields
         minimum_investment: parseFloat(formData.price_per_share), // Simplified, might need adjustment
         total_price: parseFloat(formData.price_per_share) * parseInt(formData.total_shares), // Calculated
-        zip_code: '', // Required field in the schema
       };
       
       if (currentProperty) {
         // Update existing property
-        const { error } = await supabase
-          .from('properties')
-          .update(propertyData)
-          .eq('id', currentProperty.id);
-          
-        if (error) throw error;
-        toast({ title: 'Property updated' });
+        upsertProperty.mutate({ 
+          id: currentProperty.id,
+          ...propertyData
+        });
       } else {
         // Create new property
-        const { error } = await supabase
-          .from('properties')
-          .insert([propertyData]);
-          
-        if (error) throw error;
-        toast({ title: 'Property created' });
+        upsertProperty.mutate(propertyData);
       }
-      
-      // Close dialog and refetch data
-      setDialogOpen(false);
-      resetForm();
-      refetch();
       
     } catch (error: any) {
       toast({ 
@@ -182,26 +283,11 @@ export default function AdminProperties() {
 
   const handleDelete = async (id: string) => {
     if (confirm(t('admin.confirm_delete'))) {
-      try {
-        const { error } = await supabase
-          .from('properties')
-          .delete()
-          .eq('id', id);
-          
-        if (error) throw error;
-        
-        toast({ title: 'Property deleted' });
-        refetch();
-        
-      } catch (error: any) {
-        toast({ 
-          title: 'Error', 
-          description: error.message,
-          variant: 'destructive' 
-        });
-      }
+      deleteProperty.mutate(id);
     }
   };
+
+  const statusOptions: PropertyStatus[] = ['pending', 'active', 'sold_out', 'closed'];
 
   return (
     <AdminLayout title={t('admin.properties')}>
@@ -315,13 +401,16 @@ export default function AdminProperties() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="status">{t('admin.status')}</Label>
-                  <Input
-                    id="status"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <Select value={formData.status} onValueChange={handleStatusChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('admin.select_status')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map((status) => (
+                        <SelectItem key={status} value={status}>{status}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               
@@ -359,7 +448,7 @@ export default function AdminProperties() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="state">{t('admin.state')}</Label>
                   <Input
@@ -376,6 +465,16 @@ export default function AdminProperties() {
                     id="country"
                     name="country"
                     value={formData.country}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="zip_code">{t('admin.zip_code')}</Label>
+                  <Input
+                    id="zip_code"
+                    name="zip_code"
+                    value={formData.zip_code}
                     onChange={handleInputChange}
                     required
                   />
@@ -419,11 +518,11 @@ export default function AdminProperties() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)} disabled={isPending}>
                 {t('admin.cancel')}
               </Button>
-              <Button type="submit">
-                {currentProperty ? t('admin.update') : t('admin.create')}
+              <Button type="submit" disabled={isPending}>
+                {isPending ? 'Processing...' : currentProperty ? t('admin.update') : t('admin.create')}
               </Button>
             </DialogFooter>
           </form>

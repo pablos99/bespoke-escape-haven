@@ -17,12 +17,14 @@ export function useTranslations() {
   } = useQuery({
     queryKey: ['admin-translations'],
     queryFn: async () => {
+      console.log('Fetching all translations');
       const { data, error } = await supabase
         .from('translations')
         .select('*')
         .order('key');
       
       if (error) {
+        console.error('Error loading translations:', error);
         toast({
           title: 'Error loading translations',
           description: error.message,
@@ -31,6 +33,7 @@ export function useTranslations() {
         throw error;
       }
       
+      console.log('Fetched translations:', data?.length);
       return data as Translation[];
     }
   });
@@ -55,9 +58,11 @@ export function useTranslations() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-translations'] });
+      queryClient.invalidateQueries({ queryKey: ['translations'] });
       toast({ title: 'Translation created successfully' });
     },
     onError: (error: any) => {
+      console.error('Error in createTranslation mutation:', error);
       toast({ 
         title: 'Error creating translation', 
         description: error.message,
@@ -87,9 +92,11 @@ export function useTranslations() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-translations'] });
+      queryClient.invalidateQueries({ queryKey: ['translations'] });
       toast({ title: 'Translation updated successfully' });
     },
     onError: (error: any) => {
+      console.error('Error in updateTranslation mutation:', error);
       toast({ 
         title: 'Error updating translation', 
         description: error.message,
@@ -117,9 +124,11 @@ export function useTranslations() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-translations'] });
+      queryClient.invalidateQueries({ queryKey: ['translations'] });
       toast({ title: 'Translation deleted successfully' });
     },
     onError: (error: any) => {
+      console.error('Error in deleteTranslation mutation:', error);
       toast({ 
         title: 'Error deleting translation', 
         description: error.message,

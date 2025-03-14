@@ -32,6 +32,7 @@ export function TranslationForm({
   // Update form when translation changes
   useEffect(() => {
     if (translation) {
+      console.log('Setting form data from translation:', translation);
       setFormData({
         key: translation.key,
         en: translation.en,
@@ -126,11 +127,11 @@ export function TranslationForm({
         </div>
       </div>
       <DialogFooter>
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
           {t('admin.cancel')}
         </Button>
         <Button type="submit" disabled={isPending}>
-          {translation ? t('admin.update') : t('admin.create')}
+          {isPending ? 'Saving...' : translation ? t('admin.update') : t('admin.create')}
         </Button>
       </DialogFooter>
     </form>

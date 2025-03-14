@@ -22,14 +22,16 @@ export function usePropertyTranslationManagement() {
   // Fetch property translations
   const fetchPropertyTranslation = async (propertyId: string) => {
     setIsProcessing(true);
+    console.log('Fetching translation for property ID:', propertyId);
+    
     try {
       const { data, error } = await supabase
         .from('property_translations')
         .select('*')
         .eq('property_id', propertyId)
-        .single();
+        .maybeSingle();
       
-      if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+      if (error) {
         console.error('Error fetching property translation:', error);
         toast({
           title: 'Error',
@@ -39,6 +41,7 @@ export function usePropertyTranslationManagement() {
         return null;
       }
       
+      console.log('Fetched property translation:', data);
       return data;
     } catch (error) {
       console.error('Exception fetching property translation:', error);
@@ -75,6 +78,7 @@ export function usePropertyTranslationManagement() {
       
       if (existingData) {
         // Update existing translation
+        console.log('Updating existing translation with ID:', existingData.id);
         const { data, error } = await supabase
           .from('property_translations')
           .update({
@@ -97,6 +101,7 @@ export function usePropertyTranslationManagement() {
         console.log('Property translation updated successfully:', result);
       } else {
         // Insert new translation
+        console.log('Creating new translation for property ID:', translation.property_id);
         const { data, error } = await supabase
           .from('property_translations')
           .insert([{
@@ -124,10 +129,12 @@ export function usePropertyTranslationManagement() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-properties'] });
       queryClient.invalidateQueries({ queryKey: ['properties'] });
+      queryClient.invalidateQueries({ queryKey: ['property-translations'] });
       toast({ title: 'Property translation saved successfully' });
       setIsProcessing(false);
     },
     onError: (error: any) => {
+      console.error('Error in upsertPropertyTranslation mutation:', error);
       toast({ 
         title: 'Error saving property translation', 
         description: error.message,

@@ -30,6 +30,7 @@ export function useServiceManagement() {
   } = useQuery({
     queryKey: ['admin-services'],
     queryFn: async () => {
+      console.log('Fetching all services');
       const { data, error } = await supabase
         .from('services')
         .select('*')
@@ -45,6 +46,7 @@ export function useServiceManagement() {
         throw error;
       }
       
+      console.log('Fetched services:', data);
       return data;
     }
   });
@@ -52,7 +54,7 @@ export function useServiceManagement() {
   // Create service mutation
   const createService = useMutation({
     mutationFn: async (serviceData: Omit<Service, 'id'>) => {
-      console.log('Creating service:', serviceData);
+      console.log('Creating service with data:', serviceData);
       setIsProcessing(true);
       
       const { data, error } = await supabase
@@ -76,6 +78,7 @@ export function useServiceManagement() {
       setIsProcessing(false);
     },
     onError: (error: any) => {
+      console.error('Error in createService mutation:', error);
       toast({ 
         title: 'Error creating service', 
         description: error.message,
@@ -113,6 +116,7 @@ export function useServiceManagement() {
       setIsProcessing(false);
     },
     onError: (error: any) => {
+      console.error('Error in updateService mutation:', error);
       toast({ 
         title: 'Error updating service', 
         description: error.message,
@@ -148,6 +152,7 @@ export function useServiceManagement() {
       setIsProcessing(false);
     },
     onError: (error: any) => {
+      console.error('Error in deleteService mutation:', error);
       toast({ 
         title: 'Error deleting service', 
         description: error.message,
