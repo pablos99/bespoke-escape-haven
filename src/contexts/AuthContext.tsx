@@ -1,6 +1,5 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -20,7 +19,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -71,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         description: "You have successfully signed in."
       });
       
-      navigate('/');
+      // We'll handle navigation in the component instead
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -108,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         description: "Please check your email to confirm your account."
       });
       
-      navigate('/login');
+      // We'll handle navigation in the component instead
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -136,7 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         description: "You have been signed out successfully."
       });
       
-      navigate('/');
+      // We'll handle navigation in the component instead
     } catch (error: any) {
       toast({
         variant: "destructive",
