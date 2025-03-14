@@ -3,6 +3,7 @@ import React from 'react';
 import { PropertyHighlights } from './PropertyHighlights';
 import { PropertyAmenities } from './PropertyAmenities';
 import { PropertyHost } from './PropertyHost';
+import { PropertyDescription } from './PropertyDescription';
 
 interface Highlight {
   title: string;
@@ -60,9 +61,7 @@ export function PropertyDetails({
       
       <PropertyHighlights highlights={highlights} />
       
-      <div className="prose prose-lg max-w-none my-8">
-        <p>{longDescription}</p>
-      </div>
+      <PropertyDescription description={longDescription} />
       
       <PropertyAmenities amenities={amenities} />
       
