@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { supabase } from '@/integrations/supabase/client';
 import { PropertyGallery } from '@/components/property/PropertyGallery';
 import { PropertyDetails } from '@/components/property/PropertyDetails';
@@ -123,7 +124,8 @@ const reviews = [
 
 export default function Property() {
   const { propertyId } = useParams<{ propertyId: string }>();
-  const { language, t, setCurrentPage } = useApp();
+  const { language } = useApp();
+  const { t, setCurrentPage } = useTranslation();
   const [translation, setTranslation] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);

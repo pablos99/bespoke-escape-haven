@@ -6,7 +6,7 @@ import { Hero } from '@/components/sections/Hero';
 import { Button } from '@/components/ui/button';
 import { AnimatedImage } from '@/components/ui/AnimatedImage';
 import { ArrowRight } from 'lucide-react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 const destinations = [
   {
@@ -26,7 +26,7 @@ const destinations = [
 ];
 
 export default function Cities() {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <div className="min-h-screen flex flex-col">

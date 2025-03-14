@@ -2,8 +2,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AppProvider } from './contexts/AppContext';
-import { AuthProvider } from './contexts/AuthContext';
 import { Toaster } from './components/ui/toaster';
 import Index from './pages/Index';
 import Properties from './pages/Properties';
@@ -31,34 +29,30 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppProvider>
-        <Router>
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/properties" element={<Properties />} />
-              <Route path="/property/:id" element={<Property />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/booking" element={<Booking />} />
-              <Route path="/guides" element={<Guides />} />
-              <Route path="/artisan-products" element={<ArtisanProducts />} />
-              <Route path="/destinations" element={<Cities />} />
-              <Route path="/destinations/bali" element={<Bali />} />
-              <Route path="/destinations/tulum" element={<Tulum />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/booking/property/:id" element={<PropertyBooking />} />
-              <Route path="/booking/guide/:id" element={<GuideBooking />} />
-              <Route path="/booking/product/:id" element={<ProductBooking />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Toaster />
-          </AuthProvider>
-        </Router>
-      </AppProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/properties" element={<Properties />} />
+          <Route path="/property/:id" element={<Property />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/guides" element={<Guides />} />
+          <Route path="/artisan-products" element={<ArtisanProducts />} />
+          <Route path="/destinations" element={<Cities />} />
+          <Route path="/destinations/bali" element={<Bali />} />
+          <Route path="/destinations/tulum" element={<Tulum />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/booking/property/:id" element={<PropertyBooking />} />
+          <Route path="/booking/guide/:id" element={<GuideBooking />} />
+          <Route path="/booking/product/:id" element={<ProductBooking />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Toaster />
+      </Router>
     </QueryClientProvider>
   );
 }

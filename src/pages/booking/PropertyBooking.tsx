@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { BookingForm, BookingItem } from '@/components/booking/BookingForm';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 // Mock data - in a real app would come from API
 const properties = [
@@ -29,7 +29,7 @@ const properties = [
 export default function PropertyBooking() {
   const { propertyId } = useParams<{ propertyId: string }>();
   const navigate = useNavigate();
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   const property = properties.find(p => p.id === propertyId);
   

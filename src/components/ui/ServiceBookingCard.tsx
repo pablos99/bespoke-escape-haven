@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 type ServiceBookingCardProps = {
   id: string;
@@ -25,7 +24,7 @@ export function ServiceBookingCard({
   category,
   location
 }: ServiceBookingCardProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   const getBookingLink = () => {
     let link = '';

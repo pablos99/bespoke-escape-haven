@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { BookingForm, BookingItem } from '@/components/booking/BookingForm';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 // Mock data - in a real app would come from API
 const guides = [
@@ -13,14 +13,14 @@ const guides = [
     id: "1",
     title: "Maya - Cultural Historian",
     price: 95,
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     category: "guide" as const
   },
   {
     id: "2",
     title: "Ketut - Spiritual Guide",
     price: 120,
-    image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     category: "guide" as const
   },
   // Add more guides if needed
@@ -29,7 +29,7 @@ const guides = [
 export default function GuideBooking() {
   const { guideId } = useParams<{ guideId: string }>();
   const navigate = useNavigate();
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   const guide = guides.find(g => g.id === guideId);
   

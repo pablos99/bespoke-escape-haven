@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
@@ -9,7 +8,7 @@ import { PropertyCard } from '@/components/ui/PropertyCard';
 import { ServiceCard } from '@/components/ui/ServiceCard';
 import { AnimatedImage } from '@/components/ui/AnimatedImage';
 import { ArrowRight, MapPin } from 'lucide-react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 const baliProperties = [
   {
@@ -83,7 +82,7 @@ const baliHighlights = [
 ];
 
 export default function Bali() {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <div className="min-h-screen flex flex-col">

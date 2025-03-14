@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -12,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -51,7 +53,8 @@ const properties = [
 ];
 
 export default function Properties() {
-  const { language, t, setCurrentPage } = useApp();
+  const { language } = useApp();
+  const { t, setCurrentPage } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [location, setLocation] = useState<string>(searchParams.get("location") || "all");
   const [filteredProperties, setFilteredProperties] = useState(properties);
