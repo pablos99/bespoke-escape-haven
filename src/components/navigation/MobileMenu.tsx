@@ -20,7 +20,7 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-40 flex flex-col items-start justify-start pt-20 px-6 overflow-y-auto md:hidden bg-background transform transition-transform duration-300 ease-in-out h-full',
+        'fixed inset-0 z-40 flex flex-col items-start justify-start pt-20 px-6 overflow-y-auto bg-background transform transition-transform duration-300 ease-in-out h-full',
         isOpen ? 'translate-y-0' : '-translate-y-full'
       )}
       style={{ boxShadow: isOpen ? '0 4px 15px rgba(0,0,0,0.1)' : 'none' }}

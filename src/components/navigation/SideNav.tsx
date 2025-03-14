@@ -48,11 +48,11 @@ export function SideNav() {
   
   return (
     <>
-      {/* Mobile Menu Trigger Button */}
+      {/* Mobile Menu Trigger Button - Now visible on all breakpoints */}
       <button
         onClick={toggleMenu}
         className={cn(
-          "fixed top-4 right-4 z-50 md:hidden bg-primary text-primary-foreground rounded-full p-2 shadow-lg transition-all duration-300",
+          "fixed top-4 right-4 z-50 bg-primary text-primary-foreground rounded-full p-2 shadow-lg transition-all duration-300",
           isVisible ? "translate-y-0 opacity-100" : "translate-y-[-100px] opacity-0"
         )}
         aria-label="Toggle navigation menu"
@@ -63,7 +63,7 @@ export function SideNav() {
       {/* Mobile Navigation Slide-in Panel */}
       <div
         className={cn(
-          "fixed inset-y-0 right-0 z-40 w-64 bg-background shadow-lg transform transition-transform duration-300 ease-in-out md:hidden",
+          "fixed inset-y-0 right-0 z-40 w-64 bg-background shadow-lg transform transition-transform duration-300 ease-in-out",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >

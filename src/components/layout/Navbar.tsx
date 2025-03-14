@@ -42,8 +42,8 @@ export function Navbar() {
           </Button>
         </div>
 
-        {/* Mobile menu button */}
-        <div className="flex md:hidden items-center space-x-2">
+        {/* Mobile menu button - always visible */}
+        <div className="flex items-center space-x-2">
           <LanguageSwitcher />
           <ThemeToggle />
           <MobileMenuButton isOpen={isOpen} setIsOpen={setIsOpen} />
