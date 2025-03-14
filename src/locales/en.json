@@ -27,7 +27,9 @@
     "bookNow": "Book Now",
     "purchase": "Purchase Now",
     "book": "Book Session",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "viewAllServices": "View All Services",
+    "bookYourStay": "Book Your Stay"
   },
   "auth": {
     "login": "Log In",
@@ -123,6 +125,29 @@
   "properties": {
     "title": "Luxury Properties",
     "subtitle": "Explore our exclusive collection of luxury properties in the world's most stunning destinations.",
-    "allLocations": "All Locations"
+    "allLocations": "All Locations",
+    "filterByLocation": "Filter by location",
+    "serviceHeading": "Bespoke Services & Experiences",
+    "serviceDescription1": "Each property comes with access to our exclusive concierge services, helping you create memorable experiences tailored to your preferences.",
+    "serviceDescription2": "From private chefs to guided excursions, our local experts will ensure your stay exceeds expectations."
+  },
+  "property": {
+    "amenities": "Amenities",
+    "meetHost": "Meet Your Host",
+    "bespokeServices": "Enhance Your Stay",
+    "tranquilSetting": "Tranquil Setting",
+    "tranquilSettingDesc": "Surrounded by lush jungle and rice paddies, offering complete privacy and peaceful ambiance",
+    "culturalImmersion": "Cultural Immersion",
+    "culturalImmersionDesc": "Traditional Balinese architecture with authentic local arts and crafts throughout",
+    "premiumLocation": "Premium Location",
+    "premiumLocationDesc": "Just 15 minutes from central Ubud, with complimentary shuttle service available"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language"
+  },
+  "profile": {
+    "title": "Profile"
   }
 }

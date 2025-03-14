@@ -31,19 +31,19 @@ export function processTranslations(obj: any, prefix = '', result: any = {}) {
 
 // Define page mappings for translation loading
 export const pageToKeyPrefixMap: Record<string, string[]> = {
-  'index': ['nav', 'footer', 'button', 'buttons', 'common', 'admin'],
-  'properties': ['nav', 'footer', 'button', 'buttons', 'common', 'properties', 'property', 'admin'],
-  'property': ['nav', 'footer', 'button', 'buttons', 'common', 'properties', 'property', 'admin'],
-  'services': ['nav', 'footer', 'button', 'buttons', 'common', 'services', 'admin'],
-  'about': ['nav', 'footer', 'button', 'buttons', 'common', 'about', 'admin'],
-  'booking': ['nav', 'footer', 'button', 'buttons', 'common', 'booking', 'admin'],
-  'guides': ['nav', 'footer', 'button', 'buttons', 'common', 'guides', 'admin'],
-  'artisanProducts': ['nav', 'footer', 'button', 'buttons', 'common', 'artisan', 'products', 'admin'],
-  'destinations': ['nav', 'footer', 'button', 'buttons', 'common', 'destinations', 'cities', 'admin'],
-  'privacy': ['nav', 'footer', 'button', 'buttons', 'common', 'admin'],
-  'terms': ['nav', 'footer', 'button', 'buttons', 'common', 'admin'],
-  'auth': ['nav', 'footer', 'button', 'buttons', 'common', 'auth', 'admin'],
-  'admin': ['nav', 'footer', 'button', 'buttons', 'common', 'admin']
+  'index': ['nav', 'footer', 'button', 'buttons', 'common', 'admin', 'settings', 'profile'],
+  'properties': ['nav', 'footer', 'button', 'buttons', 'common', 'properties', 'property', 'admin', 'settings', 'profile'],
+  'property': ['nav', 'footer', 'button', 'buttons', 'common', 'properties', 'property', 'admin', 'settings', 'profile'],
+  'services': ['nav', 'footer', 'button', 'buttons', 'common', 'services', 'admin', 'settings', 'profile'],
+  'about': ['nav', 'footer', 'button', 'buttons', 'common', 'about', 'admin', 'settings', 'profile'],
+  'booking': ['nav', 'footer', 'button', 'buttons', 'common', 'booking', 'admin', 'settings', 'profile'],
+  'guides': ['nav', 'footer', 'button', 'buttons', 'common', 'guides', 'admin', 'settings', 'profile'],
+  'artisanProducts': ['nav', 'footer', 'button', 'buttons', 'common', 'artisan', 'products', 'admin', 'settings', 'profile'],
+  'destinations': ['nav', 'footer', 'button', 'buttons', 'common', 'destinations', 'cities', 'admin', 'settings', 'profile'],
+  'privacy': ['nav', 'footer', 'button', 'buttons', 'common', 'admin', 'settings', 'profile'],
+  'terms': ['nav', 'footer', 'button', 'buttons', 'common', 'admin', 'settings', 'profile'],
+  'auth': ['nav', 'footer', 'button', 'buttons', 'common', 'auth', 'admin', 'settings', 'profile'],
+  'admin': ['nav', 'footer', 'button', 'buttons', 'common', 'admin', 'settings', 'profile']
 };
 
 // Utility function to get all page options for dropdown
