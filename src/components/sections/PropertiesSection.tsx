@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PropertyCard } from '@/components/ui/PropertyCard';
@@ -25,6 +26,14 @@ const properties = [{
   image: 'https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=2670&auto=format&fit=crop',
   rating: 4.8,
   price: 295
+}, {
+  id: 'costa-rica-villa',
+  title: 'Ocean View Estate',
+  location: 'Santa Teresa, Costa Rica',
+  description: 'Luxurious estate overlooking the Pacific Ocean with infinity pool, outdoor yoga deck, and direct beach access. Perfect for surf enthusiasts.',
+  image: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=2670&auto=format&fit=crop',
+  rating: 4.9,
+  price: 420
 }];
 
 export function PropertiesSection() {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -36,32 +35,81 @@ const properties = [
     locationFilter: "bali",
   },
   {
+    id: "bali-beach-house",
+    title: "Beachfront Paradise",
+    location: "Seminyak, Bali",
+    description: "Direct beachfront access with stunning sunset views. Modern luxury villa with infinity pool overlooking the Indian Ocean.",
+    images: [
+      "https://images.unsplash.com/photo-1540541338287-41700207dee6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    ],
+    price: 375,
+    features: ["4 Bedrooms", "Beachfront", "Infinity Pool", "Private Chef", "Beach Cabana"],
+    rating: 4.9,
+    locationFilter: "bali",
+  },
+  {
     id: "tulum-beach",
     title: "Tulum Beach Retreat",
     location: "Tulum, Mexico",
     description: "A stunning beachfront property with breathtaking views of the Caribbean Sea, just steps away from Tulum's pristine beaches.",
     images: [
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1582610116397-edb318620f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1615571022219-eb45cf7faa9d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1596436889106-be35e843f974?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1613553507747-5f8d62ad5904?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     ],
     price: 320,
     features: ["2 Bedrooms", "Oceanfront", "Rooftop Terrace", "Private Chef", "Bicycle Rental"],
     rating: 4.8,
     locationFilter: "tulum",
   },
+  {
+    id: "tulum-jungle",
+    title: "Jungle Eco-Retreat",
+    location: "Tulum, Mexico",
+    description: "Sustainable luxury in the heart of the Mayan jungle. Solar-powered villa with natural cenote and authentic temazcal experience.",
+    images: [
+      "https://images.unsplash.com/photo-1605538032404-d7e005d35b57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    ],
+    price: 290,
+    features: ["2 Bedrooms", "Private Cenote", "Organic Garden", "Mayan Spa Treatments", "Jungle Tours"],
+    rating: 4.7,
+    locationFilter: "tulum",
+  },
+  {
+    id: "costa-rica-villa",
+    title: "Costa Rica Surf Villa",
+    location: "Santa Teresa, Costa Rica",
+    description: "Luxury beachfront villa in the surf paradise of Santa Teresa with panoramic ocean views and direct access to the best waves.",
+    images: [
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    ],
+    price: 420,
+    features: ["4 Bedrooms", "Infinity Pool", "Surf Break Access", "Outdoor Kitchen", "Yoga Deck"],
+    rating: 4.9,
+    locationFilter: "costa-rica",
+  },
+  {
+    id: "costa-rica-treehouse",
+    title: "Luxury Rainforest Treehouse",
+    location: "Monteverde, Costa Rica",
+    description: "Elevated luxury in the cloud forest with panoramic canopy views. Sustainably built treehouse with premium amenities and wildlife encounters.",
+    images: [
+      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1628744424121-c9dfe5285ada?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    ],
+    price: 380,
+    features: ["2 Bedrooms", "Glass Walls", "Canopy Hot Tub", "Birdwatching Deck", "Gourmet Breakfast"],
+    rating: 4.8,
+    locationFilter: "costa-rica",
+  }
 ];
-
-export default function Properties() {
-  const { language } = useApp();
-  const { t, setCurrentPage } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [location, setLocation] = useState<string>(searchParams.get("location") || "all");
-  const [filteredProperties, setFilteredProperties] = useState(properties);
-  const [propertyTranslations, setPropertyTranslations] = useState<Record<string, any>>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const { toast } = useToast();
 
   // Set the current page for translations
   useEffect(() => {
@@ -154,6 +202,7 @@ export default function Properties() {
     );
   }
 
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -183,6 +232,7 @@ export default function Properties() {
                 <SelectItem value="all">{t('properties.allLocations')}</SelectItem>
                 <SelectItem value="bali">Bali</SelectItem>
                 <SelectItem value="tulum">Tulum</SelectItem>
+                <SelectItem value="costa-rica">Costa Rica</SelectItem>
               </SelectContent>
             </Select>
           </div>
