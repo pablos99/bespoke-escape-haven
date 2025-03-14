@@ -1,3 +1,4 @@
+
 {
   "common": {
     "loading": "Cargando...",
@@ -286,6 +287,7 @@
     "confirm_delete": "Confirmar Eliminación",
     "select_page": "Seleccionar página",
     "search_translations": "Buscar traducciones...",
+    "search_properties": "Buscar propiedades...",
     "no_translations": "No se encontraron traducciones",
     "no_translations_found": "Ninguna traducción coincide con su búsqueda",
     "delete_confirmation_generic": "¿Está seguro de que desea eliminar este elemento?",
@@ -297,7 +299,15 @@
     "manage_orders": "Gestionar Pedidos",
     "orders_description": "Ver y gestionar reservas y compras de clientes.",
     "manage_destinations": "Gestionar Destinos",
-    "add_destination": "Añadir Destino"
+    "add_destination": "Añadir Destino",
+    "add_property": "Añadir Propiedad",
+    "property_title": "Título",
+    "location": "Ubicación",
+    "price_per_share": "Precio Por Acción",
+    "available_shares": "Acciones Disponibles",
+    "status": "Estado",
+    "no_properties": "No se encontraron propiedades",
+    "no_properties_found": "Ninguna propiedad coincide con su búsqueda"
   },
   "settings": {
     "title": "Configuración",
