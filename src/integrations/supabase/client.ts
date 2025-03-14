@@ -19,5 +19,11 @@ export const supabase = createClient<Database>(
         'Accept': 'application/json',
       },
     },
+    auth: {
+      persistSession: true
+    },
+    db: {
+      schema: 'public'
+    }
   }
 );
