@@ -3,13 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
-import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/navigation/ThemeToggle';
 import { LanguageSwitcher } from '@/components/navigation/LanguageSwitcher';
 import { Logo } from '@/components/ui/Logo';
 import { navigation } from './navigation-data';
-import { Button } from '@/components/ui/button';
-import { Menu, X, LogIn, LogOut, User } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export function SideNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +15,6 @@ export function SideNav() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
   const { t } = useApp();
-  const { user, signOut, isAdmin } = useAuth();
   
   const toggleMenu = () => setIsOpen(!isOpen);
   
@@ -92,46 +89,6 @@ export function SideNav() {
                 {t(item.name)}
               </Link>
             ))}
-            
-            {user ? (
-              <>
-                <div className="border-t border-border pt-4 mt-4">
-                  <p className="text-sm text-muted-foreground mb-4">Account</p>
-                  {isAdmin && (
-                    <Link 
-                      to="/admin/dashboard" 
-                      className="block text-lg mb-4 hover:text-primary"
-                    >
-                      Admin Dashboard
-                    </Link>
-                  )}
-                  <Link 
-                    to="/account" 
-                    className="flex items-center text-lg mb-4 hover:text-primary"
-                  >
-                    <User size={18} className="mr-2" />
-                    My Account
-                  </Link>
-                  <button 
-                    onClick={signOut}
-                    className="flex items-center text-lg text-destructive"
-                  >
-                    <LogOut size={18} className="mr-2" />
-                    Sign Out
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="border-t border-border pt-4 mt-4">
-                <Link 
-                  to="/auth/login" 
-                  className="flex items-center text-lg hover:text-primary"
-                >
-                  <LogIn size={18} className="mr-2" />
-                  Sign In
-                </Link>
-              </div>
-            )}
           </nav>
           
           <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
