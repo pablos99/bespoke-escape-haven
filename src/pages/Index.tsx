@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { PropertiesSection } from '@/components/sections/PropertiesSection';
@@ -11,6 +12,7 @@ import { CTASection } from '@/components/sections/CTASection';
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Navbar />
       <main className="flex-1">
         <Hero 
           title="Luxury Retreats in Paradise"

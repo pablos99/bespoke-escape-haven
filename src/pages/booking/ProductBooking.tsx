@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { BookingForm, BookingItem } from '@/components/booking/BookingForm';
 import { Button } from '@/components/ui/button';
@@ -35,6 +37,7 @@ export default function ProductBooking() {
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col">
+        <Navbar />
         <main className="flex-1 pt-8 pb-16 px-4">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="heading-lg mb-4">{t('booking.productNotFound')}</h1>
@@ -51,6 +54,7 @@ export default function ProductBooking() {
   
   return (
     <div className="min-h-screen flex flex-col">
+      <Navbar />
       <main className="flex-1 pt-8 pb-16">
         <section className="container max-w-6xl mx-auto px-4 mb-16">
           <Button 
