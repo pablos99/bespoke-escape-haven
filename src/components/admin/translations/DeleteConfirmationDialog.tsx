@@ -36,7 +36,7 @@ export function DeleteConfirmationDialog({
         </DialogDescription>
       </DialogHeader>
       <div className="py-4">
-        <p>{itemType ? t('admin.delete_confirmation_specific', { itemType }) : t('admin.delete_confirmation')}</p>
+        <p>{t(`admin.delete_confirmation_specific`).replace('{itemType}', itemType)}</p>
       </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onCancel}>
