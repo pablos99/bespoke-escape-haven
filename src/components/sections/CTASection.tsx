@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { AnimatedImage } from '@/components/ui/AnimatedImage';
+import { BookingCTA } from '@/components/ui/BookingCTA';
 
 export function CTASection() {
   return (
@@ -17,9 +18,7 @@ export function CTASection() {
                 the perfect blend of luxury, culture, and natural beauty.
               </p>
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                <Button asChild size="lg">
-                  <Link to="/booking">Book Your Stay</Link>
-                </Button>
+                <BookingCTA propertyId="bali-villa" size="lg" />
                 <Button asChild variant="outline" size="lg">
                   <Link to="/contact">Contact Us</Link>
                 </Button>

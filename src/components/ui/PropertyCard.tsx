@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { AnimatedImage } from './AnimatedImage';
 import { MapPin, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useApp } from '@/contexts/AppContext';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { BookingCTA } from './BookingCTA';
 
 interface PropertyCardProps {
   id: string;
@@ -19,7 +19,6 @@ interface PropertyCardProps {
   className?: string;
   style?: React.CSSProperties;
   viewDetailsLink?: string;
-  bookNowLink?: string;
 }
 
 export function PropertyCard({
@@ -32,15 +31,13 @@ export function PropertyCard({
   price,
   className,
   style,
-  viewDetailsLink,
-  bookNowLink
+  viewDetailsLink
 }: PropertyCardProps) {
   const { language } = useApp();
   const { t } = useTranslation();
   
-  // Default links if not provided - ensure we use the correct format for property booking
+  // Default links if not provided
   const detailsLink = viewDetailsLink || `/property/${id}`;
-  const bookingLink = bookNowLink || `/booking/property/${id}`;
   
   return (
     <div 
@@ -85,14 +82,7 @@ export function PropertyCard({
           >
             {t('buttons.viewDetails')}
           </Link>
-          <Link 
-            to={bookingLink} 
-            className="z-10"
-          >
-            <Button>
-              {t('buttons.bookNow')}
-            </Button>
-          </Link>
+          <BookingCTA propertyId={id} />
         </div>
       </div>
     </div>

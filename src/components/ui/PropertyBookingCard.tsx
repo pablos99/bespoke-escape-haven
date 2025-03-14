@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { StarIcon } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { BookingCTA } from './BookingCTA';
 
 type PropertyBookingCardProps = {
   id: string;
@@ -28,15 +29,6 @@ export function PropertyBookingCard({
   locationFilter
 }: PropertyBookingCardProps) {
   const { t } = useTranslation();
-
-  // Generate booking link that preserves location filter
-  const getBookingLink = () => {
-    let link = `/booking/property/${id}`;
-    if (locationFilter) {
-      link += `?location=${locationFilter}`;
-    }
-    return link;
-  };
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -76,9 +68,7 @@ export function PropertyBookingCard({
       </CardContent>
       
       <CardFooter>
-        <Button asChild className="w-full">
-          <Link to={getBookingLink()}>{t('buttons.bookNow')}</Link>
-        </Button>
+        <BookingCTA propertyId={id} className="w-full" />
       </CardFooter>
     </Card>
   );

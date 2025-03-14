@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { AnimatedImage } from './AnimatedImage';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { BookingCTA } from './BookingCTA';
 
 export interface ServiceCardProps {
   id: string;
