@@ -109,7 +109,7 @@ export function PropertiesSection() {
             <h2 className="heading-lg mb-4 font-medium text-zinc-900">
               {t('properties.title')}
             </h2>
-            <p className="paragraph text-foreground font-medium">
+            <p className="paragraph font-medium text-zinc-900">
               {t('properties.subtitle')}
             </p>
           </div>
