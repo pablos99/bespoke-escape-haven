@@ -52,8 +52,13 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
     try {
       setIsTranslationsLoading(true);
       
+      // Check if the current page starts with 'admin/' and use the admin prefix
+      const pageKey = currentPage.startsWith('admin/') ? 'admin' : currentPage;
+      
       // Determine which page prefixes to load
-      const pagesToLoad = pageToKeyPrefixMap[currentPage] || ['common', 'nav', 'footer', 'button', 'buttons'];
+      const pagesToLoad = pageToKeyPrefixMap[pageKey] || ['common', 'nav', 'footer', 'button', 'buttons', 'admin', 'settings', 'profile'];
+      
+      console.log('Loading translations for pages:', pagesToLoad);
       
       const { data, error } = await supabase
         .from('translations')

@@ -1,4 +1,3 @@
-
 {
   "common": {
     "loading": "Cargando...",
@@ -31,7 +30,10 @@
     "tulum": "Tulum", 
     "booking": "Reservas",
     "about": "Sobre Nosotros",
-    "artisanProducts": "Productos Artesanales"
+    "artisanProducts": "Productos Artesanales",
+    "featured": "Destacados",
+    "new": "Nuevos",
+    "popular": "Populares"
   },
   "footer": {
     "quickLinks": "Enlaces Rápidos",
@@ -49,7 +51,9 @@
     "purchase": "Comprar Ahora",
     "book": "Reservar Sesión",
     "bookYourStay": "Reservar su Estancia",
-    "viewAllReviews": "Ver Todas las Reseñas"
+    "viewAllReviews": "Ver Todas las Reseñas",
+    "viewDetails": "Ver Detalles",
+    "viewAllServices": "Ver Todos los Servicios"
   },
   "property": {
     "title": "Nuestras Propiedades",
@@ -256,5 +260,51 @@
     "dontHaveAccount": "¿No tiene una cuenta?",
     "resetPassword": "Restablecer Contraseña",
     "resetPasswordInstructions": "Ingrese su correo electrónico y le enviaremos instrucciones para restablecer su contraseña."
+  },
+  "admin": {
+    "title": "Panel de Administración",
+    "dashboard": "Tablero",
+    "properties": "Propiedades",
+    "services": "Servicios",
+    "destinations": "Destinos",
+    "translations": "Traducciones",
+    "orders": "Pedidos",
+    "manage": "Gestionar",
+    "role": "Administrador",
+    "key": "Clave",
+    "english": "Inglés",
+    "spanish": "Español",
+    "page": "Página",
+    "actions": "Acciones",
+    "add_translation": "Añadir Traducción",
+    "edit": "Editar",
+    "update": "Actualizar",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "deleting": "Eliminando...",
+    "confirm_delete": "Confirmar Eliminación",
+    "select_page": "Seleccionar página",
+    "search_translations": "Buscar traducciones...",
+    "no_translations": "No se encontraron traducciones",
+    "no_translations_found": "Ninguna traducción coincide con su búsqueda",
+    "delete_confirmation_generic": "¿Está seguro de que desea eliminar este elemento?",
+    "delete_confirmation_specific": "Esto eliminará permanentemente el {itemType}. Esta acción no se puede deshacer.",
+    "manage_properties": "Gestionar Propiedades",
+    "properties_description": "Añadir, editar y eliminar listados de propiedades.",
+    "manage_translations": "Gestionar Traducciones",
+    "translations_description": "Editar texto del sitio web en diferentes idiomas.",
+    "manage_orders": "Gestionar Pedidos",
+    "orders_description": "Ver y gestionar reservas y compras de clientes.",
+    "manage_destinations": "Gestionar Destinos",
+    "add_destination": "Añadir Destino"
+  },
+  "settings": {
+    "title": "Configuración",
+    "theme": "Tema",
+    "language": "Idioma"
+  },
+  "profile": {
+    "title": "Perfil"
   }
 }

@@ -10,7 +10,10 @@
     "tulum": "Tulum",
     "booking": "Booking",
     "about": "About Us",
-    "artisanProducts": "Artisan Products"
+    "artisanProducts": "Artisan Products",
+    "featured": "Featured",
+    "new": "New",
+    "popular": "Popular"
   },
   "footer": {
     "quickLinks": "Quick Links",
@@ -149,5 +152,26 @@
   },
   "profile": {
     "title": "Profile"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "page": "Page",
+    "of": "of",
+    "show": "Show",
+    "entries": "entries",
+    "previous": "Previous",
+    "next": "Next",
+    "first": "First",
+    "last": "Last"
   }
 }
