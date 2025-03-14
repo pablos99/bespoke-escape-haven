@@ -55,6 +55,10 @@ export async function adminUpdate(
     // Invalidate queries
     queryKeysToInvalidate.forEach(key => {
       queryClient.invalidateQueries({ queryKey: [key] });
+      // Also invalidate any specific property queries
+      if (tableName === 'properties' && id) {
+        queryClient.invalidateQueries({ queryKey: ['property', id] });
+      }
     });
     
     return { data: result, error: null };
@@ -95,6 +99,11 @@ export async function adminDelete(
       queryClient.invalidateQueries({ queryKey: [key] });
     });
     
+    // Also invalidate any specific property queries
+    if (tableName === 'properties') {
+      queryClient.invalidateQueries({ queryKey: ['property', id] });
+    }
+    
     return { success: true, error: null };
   } catch (error) {
     console.error(`AdminService: Error deleting ${tableName}:`, error);
@@ -125,4 +134,27 @@ export function useAdminService() {
     handleSuccess,
     handleError
   };
+}
+
+/**
+ * Fetch a single property by ID with proper error handling
+ */
+export async function getPropertyById(propertyId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*, property_images(image_url, is_primary)')
+      .eq('id', propertyId)
+      .maybeSingle();
+      
+    if (error) {
+      console.error('Error fetching property by ID:', error);
+      return { data: null, error };
+    }
+    
+    return { data, error: null };
+  } catch (error) {
+    console.error('Exception in getPropertyById:', error);
+    return { data: null, error };
+  }
 }
