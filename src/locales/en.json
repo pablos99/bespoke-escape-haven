@@ -26,7 +26,8 @@
   "buttons": {
     "bookNow": "Book Now",
     "purchase": "Purchase Now",
-    "book": "Book Session"
+    "book": "Book Session",
+    "viewDetails": "View Details"
   },
   "booking": {
     "reservationDetails": "Reservation Details",
@@ -75,5 +76,10 @@
     "purchaseProductDesc": "Complete the form below to purchase this artisan product.",
     "bookGuide": "Book a Guide",
     "bookGuideDesc": "Complete the form below to request a session with this guide."
+  },
+  "properties": {
+    "title": "Luxury Properties",
+    "subtitle": "Explore our exclusive collection of luxury properties in the world's most stunning destinations.",
+    "allLocations": "All Locations"
   }
 }
