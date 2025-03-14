@@ -24,8 +24,8 @@ export const navigation: NavigationItem[] = [
 
 // Admin navigation items - only shown to admin users
 export const adminNavigation: NavigationItem[] = [
-  { name: 'admin.dashboard', href: '/admin' },
-  { name: 'admin.properties', href: '/admin/properties' },
-  { name: 'admin.translations', href: '/admin/translations' },
-  { name: 'admin.orders', href: '/admin/orders' },
+  { name: 'admin.dashboard', href: '/admin', icon: 'LayoutDashboard' },
+  { name: 'admin.properties', href: '/admin/properties', icon: 'Building' },
+  { name: 'admin.translations', href: '/admin/translations', icon: 'Languages' },
+  { name: 'admin.orders', href: '/admin/orders', icon: 'ShoppingCart' },
 ];
