@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     
     initialize();
-  }, [navigate]);
+  }, []);
 
   async function signIn(email: string, password: string) {
     try {
@@ -108,7 +108,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         description: "Please check your email to confirm your account."
       });
       
-      navigate('/auth/login');
+      navigate('/login');
     } catch (error: any) {
       toast({
         variant: "destructive",

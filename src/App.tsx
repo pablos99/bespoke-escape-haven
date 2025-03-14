@@ -32,8 +32,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <AuthProvider>
-          <Router>
+        <Router>
+          <AuthProvider>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/properties" element={<Properties />} />
@@ -55,9 +55,9 @@ function App() {
               <Route path="/booking/product/:id" element={<ProductBooking />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </Router>
-          <Toaster />
-        </AuthProvider>
+            <Toaster />
+          </AuthProvider>
+        </Router>
       </AppProvider>
     </QueryClientProvider>
   );
