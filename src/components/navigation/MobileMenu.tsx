@@ -17,15 +17,15 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   const location = useLocation();
   const { t } = useTranslation();
+  const { user, signOut } = useAuth();
   
-  // Use try/catch to handle case where AuthProvider might not be fully initialized
-  let user = null;
-  try {
-    const auth = useAuth();
-    user = auth?.user;
-  } catch (error) {
-    console.log('Auth context not available yet');
-  }
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
   
   return (
     <div
@@ -97,7 +97,15 @@ export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
                 <Link to="/signup">{t('auth.signup')}</Link>
               </Button>
             </div>
-          ) : null}
+          ) : (
+            <Button 
+              variant="outline" 
+              className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
+              onClick={handleSignOut}
+            >
+              {t('auth.logout')}
+            </Button>
+          )}
         </div>
       </div>
     </div>
