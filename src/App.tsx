@@ -25,6 +25,8 @@ import ProductBooking from './pages/booking/ProductBooking';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminProperties from './pages/admin/Properties';
+import AdminServices from './pages/admin/Services';
+import AdminDestinations from './pages/admin/Destinations';
 import AdminTranslations from './pages/admin/Translations';
 import AdminOrders from './pages/admin/Orders';
 
@@ -62,6 +64,8 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/properties" element={<AdminProperties />} />
+              <Route path="/admin/services" element={<AdminServices />} />
+              <Route path="/admin/destinations" element={<AdminDestinations />} />
               <Route path="/admin/translations" element={<AdminTranslations />} />
               <Route path="/admin/orders" element={<AdminOrders />} />
             </Route>

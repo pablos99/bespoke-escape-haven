@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { adminNavigation } from '../navigation/navigation-data';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/contexts/TranslationContext';
-import { LogOut, LayoutDashboard, Building, Languages, ShoppingCart, User } from 'lucide-react';
+import { LogOut, LayoutDashboard, Building, Languages, ShoppingCart, User, BookOpen, Map } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
@@ -39,6 +39,8 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
       case 'Languages': return <Languages className="h-5 w-5" />;
       case 'ShoppingCart': return <ShoppingCart className="h-5 w-5" />;
       case 'User': return <User className="h-5 w-5" />;
+      case 'BookOpen': return <BookOpen className="h-5 w-5" />;
+      case 'Map': return <Map className="h-5 w-5" />;
       default: return <LayoutDashboard className="h-5 w-5" />;
     }
   };

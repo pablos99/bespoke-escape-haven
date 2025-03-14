@@ -26,6 +26,8 @@ export const navigation: NavigationItem[] = [
 export const adminNavigation: NavigationItem[] = [
   { name: 'admin.dashboard', href: '/admin', icon: 'LayoutDashboard' },
   { name: 'admin.properties', href: '/admin/properties', icon: 'Building' },
+  { name: 'admin.services', href: '/admin/services', icon: 'BookOpen' },
+  { name: 'admin.destinations', href: '/admin/destinations', icon: 'Map' },
   { name: 'admin.translations', href: '/admin/translations', icon: 'Languages' },
   { name: 'admin.orders', href: '/admin/orders', icon: 'ShoppingCart' },
 ];
