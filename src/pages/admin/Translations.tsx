@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { useTranslation } from '@/contexts/TranslationContext';
@@ -285,7 +284,7 @@ export default function AdminTranslations() {
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-4">
                     {searchQuery 
-                      ? t('admin.no_translations_found') 
+                      ? t('admin.no_translations_found')
                       : t('admin.no_translations')}
                   </TableCell>
                 </TableRow>
@@ -372,7 +371,7 @@ export default function AdminTranslations() {
             <DialogTitle>{t('admin.confirm_delete')}</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <p>{t('admin.delete_translation_confirm', { key: currentTranslation?.key })}</p>
+            <p>{t('admin.delete_confirmation')}</p>
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setDeleteDialogOpen(false)}>
