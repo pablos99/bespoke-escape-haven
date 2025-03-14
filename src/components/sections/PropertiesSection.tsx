@@ -8,7 +8,7 @@ import { useApp } from '@/contexts/AppContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-// Temporary mock data - in a real app would come from API/backend
+// Sample properties data - in a real app would come from API/backend
 const properties = [
   {
     id: 'bali-villa',
