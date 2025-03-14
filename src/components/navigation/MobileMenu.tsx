@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { NavigationItem } from './types';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -14,7 +13,7 @@ interface MobileMenuProps {
 
 export function MobileMenu({ isOpen, navigation }: MobileMenuProps) {
   const location = useLocation();
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   // Use try/catch to handle case where AuthProvider might not be fully initialized
   let user = null;

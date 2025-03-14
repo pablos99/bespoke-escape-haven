@@ -2,10 +2,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Twitter, Mail, Map } from 'lucide-react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export function Footer() {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <footer className="bg-sand-light text-primary py-16 px-6 md:px-8 lg:px-12" id="footer">

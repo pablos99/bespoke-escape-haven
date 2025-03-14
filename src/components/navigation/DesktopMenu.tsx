@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { NavigationItem } from './types';
 
 interface DesktopMenuProps {
@@ -17,7 +17,7 @@ interface DesktopMenuProps {
 
 export function DesktopMenu({ navigation }: DesktopMenuProps) {
   const location = useLocation();
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <nav className="hidden md:flex space-x-10">

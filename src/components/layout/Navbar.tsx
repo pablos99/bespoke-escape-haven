@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import { Logo } from '@/components/ui/Logo';
 import { DesktopMenu } from '@/components/navigation/DesktopMenu';
 import { MobileMenu } from '@/components/navigation/MobileMenu';
@@ -14,7 +15,7 @@ import { navigation } from '@/components/navigation/navigation-data';
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   useEffect(() => {
     setIsOpen(false);

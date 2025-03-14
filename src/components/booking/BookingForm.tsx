@@ -11,7 +11,7 @@ import { CalendarIcon, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export type BookingItem = {
   id: string;
@@ -26,7 +26,7 @@ type BookingFormProps = {
 };
 
 export function BookingForm({ item }: BookingFormProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);

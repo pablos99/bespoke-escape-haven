@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StarIcon } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 type PropertyBookingCardProps = {
   id: string;
@@ -28,7 +27,7 @@ export function PropertyBookingCard({
   rating,
   locationFilter
 }: PropertyBookingCardProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
 
   // Generate booking link that preserves location filter
   const getBookingLink = () => {

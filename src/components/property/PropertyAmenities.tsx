@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface PropertyAmenitiesProps {
   amenities: string[];
 }
 
 export function PropertyAmenities({ amenities }: PropertyAmenitiesProps) {
-  const { t } = useApp();
+  const { t } = useTranslation();
   
   return (
     <div className="my-12">
