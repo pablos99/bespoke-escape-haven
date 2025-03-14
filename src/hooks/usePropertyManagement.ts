@@ -59,18 +59,20 @@ export function usePropertyManagement() {
       console.log('Upserting property with data:', property);
       
       try {
+        const { id, ...data } = property;
+        
         // Calculate total_price and minimum_investment if not provided
-        if (!property.total_price && property.price_per_share && property.total_shares) {
-          property.total_price = property.price_per_share * property.total_shares;
+        if (!data.total_price && data.price_per_share && data.total_shares) {
+          data.total_price = data.price_per_share * data.total_shares;
         }
-        if (!property.minimum_investment && property.price_per_share) {
-          property.minimum_investment = property.price_per_share;
+        if (!data.minimum_investment && data.price_per_share) {
+          data.minimum_investment = data.price_per_share;
         }
         
-        const result = await adminUpdate<Partial<Property>>(
+        const result = await adminUpdate(
           'properties',
-          property,
-          property.id,
+          data,
+          id,
           queryClient,
           ['admin-properties']
         );

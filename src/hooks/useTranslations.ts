@@ -42,10 +42,10 @@ export function useTranslations() {
 
   // Create translation mutation
   const createTranslation = useMutation({
-    mutationFn: async (data: Omit<Translation, 'id'>) => {
+    mutationFn: async (data: Omit<Translation, 'id' | 'created_at' | 'updated_at'>) => {
       console.log('Creating translation:', data);
       
-      const result = await adminUpdate<Omit<Translation, 'id'>>(
+      const result = await adminUpdate(
         'translations', 
         data, 
         undefined, 
@@ -69,7 +69,7 @@ export function useTranslations() {
     mutationFn: async ({ id, ...data }: Translation) => {
       console.log('Updating translation:', id, data);
       
-      const result = await adminUpdate<Omit<Translation, 'id'>>(
+      const result = await adminUpdate(
         'translations', 
         data, 
         id, 

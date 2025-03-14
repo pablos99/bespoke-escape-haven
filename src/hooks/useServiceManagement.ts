@@ -59,7 +59,7 @@ export function useServiceManagement() {
       console.log('Creating service with data:', serviceData);
       setIsProcessing(true);
       
-      const result = await adminUpdate<Omit<Service, 'id'>>(
+      const result = await adminUpdate(
         'services', 
         serviceData, 
         undefined, 
@@ -82,13 +82,19 @@ export function useServiceManagement() {
 
   // Update service mutation
   const updateService = useMutation({
-    mutationFn: async ({ id, ...serviceData }: Service) => {
-      console.log('Updating service:', id, serviceData);
+    mutationFn: async (serviceData: Service) => {
+      console.log('Updating service:', serviceData.id, serviceData);
       setIsProcessing(true);
       
-      const result = await adminUpdate<Omit<Service, 'id'>>(
+      const { id, ...data } = serviceData;
+      
+      if (!id) {
+        throw new Error('Service ID is required for update');
+      }
+      
+      const result = await adminUpdate(
         'services', 
-        serviceData, 
+        data, 
         id, 
         queryClient, 
         ['admin-services', 'services']

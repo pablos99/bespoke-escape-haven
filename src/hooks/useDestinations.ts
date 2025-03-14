@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -36,7 +37,7 @@ export function useDestinations() {
   });
 
   const addDestinationMutation = useMutation({
-    mutationFn: async (newDestination: Omit<Destination, 'id' | 'created_at'>) => {
+    mutationFn: async (newDestination: Omit<Destination, 'id' | 'created_at' | 'updated_at'>) => {
       const result = await adminUpdate(
         'destinations', 
         newDestination, 
@@ -59,7 +60,7 @@ export function useDestinations() {
   });
 
   const updateDestinationMutation = useMutation({
-    mutationFn: async ({ id, destination }: { id: string; destination: Omit<Destination, 'id' | 'created_at'> }) => {
+    mutationFn: async ({ id, destination }: { id: string; destination: Omit<Destination, 'id' | 'created_at' | 'updated_at'> }) => {
       const result = await adminUpdate(
         'destinations', 
         destination, 

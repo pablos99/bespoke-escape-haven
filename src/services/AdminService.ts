@@ -2,6 +2,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { QueryClient } from '@tanstack/react-query';
+import { Database } from '@/integrations/supabase/types';
 
 /**
  * Generic update function for admin operations
@@ -13,7 +14,7 @@ import { QueryClient } from '@tanstack/react-query';
  * @returns The result of the operation
  */
 export async function adminUpdate<T extends object>(
-  tableName: string,
+  tableName: keyof Database['public']['Tables'],
   data: T,
   id: string | undefined,
   queryClient: QueryClient,
@@ -27,8 +28,8 @@ export async function adminUpdate<T extends object>(
     if (id) {
       // Update existing record
       const { data: updatedData, error } = await supabase
-        .from(tableName as any)
-        .update({ ...data })
+        .from(tableName)
+        .update(data)
         .eq('id', id)
         .select()
         .single();
@@ -39,8 +40,8 @@ export async function adminUpdate<T extends object>(
     } else {
       // Create new record
       const { data: newData, error } = await supabase
-        .from(tableName as any)
-        .insert({ ...data })
+        .from(tableName)
+        .insert(data)
         .select()
         .single();
         
@@ -70,7 +71,7 @@ export async function adminUpdate<T extends object>(
  * @returns The result of the operation
  */
 export async function adminDelete(
-  tableName: string,
+  tableName: keyof Database['public']['Tables'],
   id: string,
   queryClient: QueryClient,
   queryKeysToInvalidate: string[] = []
@@ -79,7 +80,7 @@ export async function adminDelete(
   
   try {
     const { error } = await supabase
-      .from(tableName as any)
+      .from(tableName)
       .delete()
       .eq('id', id);
       
