@@ -37,7 +37,7 @@ export function MobileMenu({ isOpen, setIsOpen, navigation }: MobileMenuProps) {
 
   return (
     <div
-      className="fixed inset-0 z-40 bg-background/95 backdrop-blur-md md:hidden overflow-y-auto"
+      className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md md:hidden overflow-y-auto"
     >
       <div className="container mx-auto px-4 py-6 h-full flex flex-col">
         <div className="flex items-center justify-between mb-8">
