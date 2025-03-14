@@ -6,7 +6,6 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { Logo } from '@/components/ui/Logo';
 import { DesktopMenu } from '@/components/navigation/DesktopMenu';
 import { MobileMenu } from '@/components/navigation/MobileMenu';
-import { Settings } from 'lucide-react';
 import { navigation } from '@/components/navigation/navigation-data';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProfileMenu } from '@/components/navigation/ProfileMenu';
@@ -17,19 +16,25 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { t } = useTranslation();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   
+  // Close menu when route changes
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error("Error signing out:", error);
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
-  };
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   return (
     <header
@@ -63,7 +68,7 @@ export function Navbar() {
       </div>
 
       {/* Mobile Navigation */}
-      <MobileMenu isOpen={isOpen} navigation={navigation} />
+      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} navigation={navigation} />
     </header>
   );
 }

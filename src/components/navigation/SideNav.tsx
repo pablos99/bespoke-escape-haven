@@ -48,22 +48,22 @@ export function SideNav() {
   
   return (
     <>
-      {/* Mobile Menu Trigger Button - Now visible on all breakpoints */}
+      {/* Mobile Menu Trigger Button - Visible only on mobile */}
       <button
         onClick={toggleMenu}
         className={cn(
-          "fixed top-4 right-4 z-50 bg-primary text-primary-foreground rounded-full p-2 shadow-lg transition-all duration-300",
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-[-100px] opacity-0"
+          "fixed bottom-6 right-6 z-50 bg-primary text-primary-foreground rounded-full p-3 shadow-lg transition-all duration-300 md:hidden",
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
         )}
         aria-label="Toggle navigation menu"
       >
-        {isOpen ? <X size={20} /> : <Menu size={20} />}
+        <Menu size={24} />
       </button>
       
       {/* Mobile Navigation Slide-in Panel */}
       <div
         className={cn(
-          "fixed inset-y-0 right-0 z-40 w-64 bg-background shadow-lg transform transition-transform duration-300 ease-in-out",
+          "fixed inset-y-0 right-0 z-40 w-64 bg-background shadow-lg transform transition-transform duration-300 ease-in-out md:hidden",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
@@ -88,6 +88,7 @@ export function SideNav() {
                     ? 'text-primary font-medium'
                     : 'text-muted-foreground'
                 )}
+                onClick={() => setIsOpen(false)}
               >
                 {t(item.name)}
               </Link>
@@ -97,10 +98,10 @@ export function SideNav() {
           {!user && (
             <div className="flex flex-col space-y-2 mt-auto mb-4 border-t border-border pt-4">
               <Button asChild variant="outline" size="sm">
-                <Link to="/auth/login">{t('auth.login')}</Link>
+                <Link to="/login" onClick={() => setIsOpen(false)}>{t('auth.login')}</Link>
               </Button>
               <Button asChild variant="secondary" size="sm">
-                <Link to="/auth/signup">{t('auth.signup')}</Link>
+                <Link to="/auth/signup" onClick={() => setIsOpen(false)}>{t('auth.signup')}</Link>
               </Button>
             </div>
           )}
