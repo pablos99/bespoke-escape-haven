@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { adminUpdate, adminDelete, useAdminService } from '@/services/AdminService';
 
 export interface Service {
   id?: string;
@@ -21,6 +22,7 @@ export function useServiceManagement() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isProcessing, setIsProcessing] = useState(false);
+  const adminService = useAdminService();
 
   // Fetch all services
   const { 
@@ -57,33 +59,23 @@ export function useServiceManagement() {
       console.log('Creating service with data:', serviceData);
       setIsProcessing(true);
       
-      const { data, error } = await supabase
-        .from('services')
-        .insert([serviceData])
-        .select()
-        .single();
+      const result = await adminUpdate(
+        'services', 
+        serviceData, 
+        undefined, 
+        queryClient, 
+        ['admin-services', 'services']
+      );
       
-      if (error) {
-        console.error('Error creating service:', error);
-        throw error;
-      }
-      
-      console.log('Service created successfully:', data);
-      return data;
+      if (result.error) throw result.error;
+      return result.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-services'] });
-      queryClient.invalidateQueries({ queryKey: ['services'] });
-      toast({ title: 'Service created successfully' });
+      adminService.handleSuccess('created', 'Service');
       setIsProcessing(false);
     },
     onError: (error: any) => {
-      console.error('Error in createService mutation:', error);
-      toast({ 
-        title: 'Error creating service', 
-        description: error.message,
-        variant: 'destructive' 
-      });
+      adminService.handleError('creating', 'Service', error);
       setIsProcessing(false);
     }
   });
@@ -94,34 +86,23 @@ export function useServiceManagement() {
       console.log('Updating service:', id, serviceData);
       setIsProcessing(true);
       
-      const { data, error } = await supabase
-        .from('services')
-        .update(serviceData)
-        .eq('id', id)
-        .select()
-        .single();
+      const result = await adminUpdate(
+        'services', 
+        serviceData, 
+        id, 
+        queryClient, 
+        ['admin-services', 'services']
+      );
       
-      if (error) {
-        console.error('Error updating service:', error);
-        throw error;
-      }
-      
-      console.log('Service updated successfully:', data);
-      return data;
+      if (result.error) throw result.error;
+      return result.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-services'] });
-      queryClient.invalidateQueries({ queryKey: ['services'] });
-      toast({ title: 'Service updated successfully' });
+      adminService.handleSuccess('updated', 'Service');
       setIsProcessing(false);
     },
     onError: (error: any) => {
-      console.error('Error in updateService mutation:', error);
-      toast({ 
-        title: 'Error updating service', 
-        description: error.message,
-        variant: 'destructive' 
-      });
+      adminService.handleError('updating', 'Service', error);
       setIsProcessing(false);
     }
   });
@@ -132,32 +113,22 @@ export function useServiceManagement() {
       console.log('Deleting service:', id);
       setIsProcessing(true);
       
-      const { error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', id);
+      const result = await adminDelete(
+        'services', 
+        id, 
+        queryClient, 
+        ['admin-services', 'services']
+      );
       
-      if (error) {
-        console.error('Error deleting service:', error);
-        throw error;
-      }
-      
-      console.log('Service deleted successfully');
+      if (result.error) throw result.error;
       return id;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-services'] });
-      queryClient.invalidateQueries({ queryKey: ['services'] });
-      toast({ title: 'Service deleted successfully' });
+      adminService.handleSuccess('deleted', 'Service');
       setIsProcessing(false);
     },
     onError: (error: any) => {
-      console.error('Error in deleteService mutation:', error);
-      toast({ 
-        title: 'Error deleting service', 
-        description: error.message,
-        variant: 'destructive' 
-      });
+      adminService.handleError('deleting', 'Service', error);
       setIsProcessing(false);
     }
   });

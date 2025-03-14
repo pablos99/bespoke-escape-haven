@@ -1,9 +1,9 @@
-
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Destination, DestinationFormData } from '@/types/destination';
+import { adminUpdate, adminDelete, useAdminService } from '@/services/AdminService';
 
 export function useDestinations() {
   const { toast } = useToast();
@@ -11,6 +11,7 @@ export function useDestinations() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const adminService = useAdminService();
   const [formData, setFormData] = useState<DestinationFormData>({
     name: '',
     description: '',
@@ -36,85 +37,68 @@ export function useDestinations() {
 
   const addDestinationMutation = useMutation({
     mutationFn: async (newDestination: Omit<Destination, 'id' | 'created_at'>) => {
-      const { data, error } = await supabase
-        .from('destinations')
-        .insert(newDestination)
-        .select();
-        
-      if (error) throw error;
-      return data;
+      const result = await adminUpdate(
+        'destinations', 
+        newDestination, 
+        undefined, 
+        queryClient, 
+        ['admin-destinations']
+      );
+      
+      if (result.error) throw result.error;
+      return result.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-destinations'] });
-      toast({
-        title: "Success",
-        description: "Destination added successfully",
-      });
+      adminService.handleSuccess('created', 'Destination');
       resetForm();
       setIsOpen(false);
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: `Failed to add destination: ${error.message}`,
-        variant: "destructive",
-      });
+      adminService.handleError('creating', 'Destination', error);
     },
   });
 
   const updateDestinationMutation = useMutation({
     mutationFn: async ({ id, destination }: { id: string; destination: Omit<Destination, 'id' | 'created_at'> }) => {
-      const { data, error } = await supabase
-        .from('destinations')
-        .update(destination)
-        .eq('id', id)
-        .select();
-        
-      if (error) throw error;
-      return data;
+      const result = await adminUpdate(
+        'destinations', 
+        destination, 
+        id, 
+        queryClient, 
+        ['admin-destinations']
+      );
+      
+      if (result.error) throw result.error;
+      return result.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-destinations'] });
-      toast({
-        title: "Success",
-        description: "Destination updated successfully",
-      });
+      adminService.handleSuccess('updated', 'Destination');
       resetForm();
       setIsOpen(false);
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: `Failed to update destination: ${error.message}`,
-        variant: "destructive",
-      });
+      adminService.handleError('updating', 'Destination', error);
     },
   });
 
   const deleteDestinationMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('destinations')
-        .delete()
-        .eq('id', id);
-        
-      if (error) throw error;
+      const result = await adminDelete(
+        'destinations', 
+        id, 
+        queryClient, 
+        ['admin-destinations']
+      );
+      
+      if (result.error) throw result.error;
       return id;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-destinations'] });
-      toast({
-        title: "Success",
-        description: "Destination deleted successfully",
-      });
+      adminService.handleSuccess('deleted', 'Destination');
       setIsDeleteDialogOpen(false);
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: `Failed to delete destination: ${error.message}`,
-        variant: "destructive",
-      });
+      adminService.handleError('deleting', 'Destination', error);
     },
   });
 

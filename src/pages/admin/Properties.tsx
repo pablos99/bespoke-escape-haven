@@ -1,9 +1,6 @@
-
 import React, { useState } from 'react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { useTranslation } from '@/contexts/TranslationContext';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,7 +20,6 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
 import { 
   Select, 
   SelectContent, 
@@ -32,36 +28,14 @@ import {
   SelectValue 
 } from '@/components/ui/select';
 import { usePropertyTranslationManagement } from '@/hooks/usePropertyTranslationManagement';
-
-// Define the property status enum type
-type PropertyStatus = 'pending' | 'active' | 'sold_out' | 'closed';
-
-interface Property {
-  id: string;
-  title: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  price_per_share: number;
-  total_shares: number;
-  available_shares: number;
-  status: PropertyStatus;
-  created_at: string;
-  description: string;
-  zip_code: string;
-  minimum_investment: number;
-  total_price: number;
-}
+import { usePropertyManagement, Property } from '@/hooks/usePropertyManagement';
 
 export default function AdminProperties() {
   const { t } = useTranslation();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentProperty, setCurrentProperty] = useState<Property | null>(null);
-  const [isPending, setIsPending] = useState(false);
+  const { properties, isLoading, isPending, upsertProperty, deleteProperty } = usePropertyManagement();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -73,135 +47,7 @@ export default function AdminProperties() {
     price_per_share: '',
     total_shares: '',
     available_shares: '',
-    status: 'pending' as PropertyStatus,
-  });
-
-  // Fetch properties
-  const { data: properties, isLoading, refetch } = useQuery({
-    queryKey: ['admin-properties'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('properties')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error fetching properties:', error);
-        toast({
-          title: 'Error fetching properties',
-          description: error.message,
-          variant: 'destructive'
-        });
-        throw error;
-      }
-      
-      console.log('Fetched properties:', data);
-      return data as Property[];
-    }
-  });
-
-  // Create and update property mutation
-  const upsertProperty = useMutation({
-    mutationFn: async (property: Partial<Property> & { id?: string }) => {
-      setIsPending(true);
-      console.log('Upserting property with data:', property);
-      
-      try {
-        if (property.id) {
-          // Update existing property
-          const { data, error } = await supabase
-            .from('properties')
-            .update(property)
-            .eq('id', property.id)
-            .select()
-            .single();
-            
-          if (error) {
-            console.error('Error updating property:', error);
-            throw error;
-          }
-          
-          console.log('Property updated successfully:', data);
-          return data;
-        } else {
-          // Create new property
-          // Make sure the object has all required fields for a new property
-          const newProperty = {
-            title: property.title || '',
-            description: property.description || '',
-            address: property.address || '',
-            city: property.city || '',
-            state: property.state || '',
-            country: property.country || '',
-            zip_code: property.zip_code || '',
-            price_per_share: Number(property.price_per_share) || 0,
-            total_shares: Number(property.total_shares) || 0,
-            available_shares: Number(property.available_shares) || 0,
-            status: property.status || 'pending',
-            minimum_investment: Number(property.price_per_share) || 0,
-            total_price: (Number(property.price_per_share) || 0) * (Number(property.total_shares) || 0),
-          };
-
-          const { data, error } = await supabase
-            .from('properties')
-            .insert(newProperty)
-            .select()
-            .single();
-            
-          if (error) {
-            console.error('Error creating property:', error);
-            throw error;
-          }
-          
-          console.log('Property created successfully:', data);
-          return data;
-        }
-      } finally {
-        setIsPending(false);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-properties'] });
-      toast({ title: currentProperty ? 'Property updated' : 'Property created' });
-      setDialogOpen(false);
-      resetForm();
-    },
-    onError: (error: any) => {
-      toast({ 
-        title: 'Error', 
-        description: error.message,
-        variant: 'destructive' 
-      });
-    }
-  });
-
-  // Delete property mutation
-  const deleteProperty = useMutation({
-    mutationFn: async (id: string) => {
-      console.log('Deleting property with ID:', id);
-      const { error } = await supabase
-        .from('properties')
-        .delete()
-        .eq('id', id);
-        
-      if (error) {
-        console.error('Error deleting property:', error);
-        throw error;
-      }
-      
-      return id;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-properties'] });
-      toast({ title: 'Property deleted' });
-    },
-    onError: (error: any) => {
-      toast({ 
-        title: 'Error', 
-        description: error.message,
-        variant: 'destructive' 
-      });
-    }
+    status: 'pending' as Property['status'],
   });
 
   const filteredProperties = properties?.filter(property => 
@@ -255,10 +101,10 @@ export default function AdminProperties() {
   };
 
   const handleStatusChange = (value: string) => {
-    setFormData(prev => ({ ...prev, status: value as PropertyStatus }));
+    setFormData(prev => ({ ...prev, status: value as Property['status'] }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.Event) => {
     e.preventDefault();
     
     try {
@@ -273,9 +119,7 @@ export default function AdminProperties() {
         price_per_share: parseFloat(formData.price_per_share),
         total_shares: parseInt(formData.total_shares),
         available_shares: parseInt(formData.available_shares),
-        status: formData.status as PropertyStatus,
-        minimum_investment: parseFloat(formData.price_per_share), // Simplified, might need adjustment
-        total_price: parseFloat(formData.price_per_share) * parseInt(formData.total_shares), // Calculated
+        status: formData.status,
       };
       
       if (currentProperty) {
@@ -289,12 +133,10 @@ export default function AdminProperties() {
         upsertProperty.mutate(propertyData);
       }
       
+      setDialogOpen(false);
+      resetForm();
     } catch (error: any) {
-      toast({ 
-        title: 'Error', 
-        description: error.message,
-        variant: 'destructive' 
-      });
+      console.error("Submit error:", error);
     }
   };
 
@@ -304,7 +146,7 @@ export default function AdminProperties() {
     }
   };
 
-  const statusOptions: PropertyStatus[] = ['pending', 'active', 'sold_out', 'closed'];
+  const statusOptions: Property['status'][] = ['pending', 'active', 'sold_out', 'closed'];
 
   return (
     <AdminLayout title={t('admin.properties')}>
@@ -375,7 +217,7 @@ export default function AdminProperties() {
                       <Button 
                         variant="ghost" 
                         size="icon"
-                        onClick={() => handleDelete(property.id)}
+                        onClick={() => handleDelete(property.id!)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

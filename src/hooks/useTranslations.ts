@@ -4,10 +4,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Translation } from '@/utils/translationUtils';
+import { adminUpdate, adminDelete, useAdminService } from '@/services/AdminService';
 
 export function useTranslations() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const adminService = useAdminService();
   
   // Fetch translations
   const { 
@@ -42,32 +44,23 @@ export function useTranslations() {
   const createTranslation = useMutation({
     mutationFn: async (data: Omit<Translation, 'id'>) => {
       console.log('Creating translation:', data);
-      const { error, data: result } = await supabase
-        .from('translations')
-        .insert([data])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error creating translation:', error);
-        throw error;
-      }
       
-      console.log('Translation created successfully:', result);
-      return result;
+      const result = await adminUpdate(
+        'translations', 
+        data, 
+        undefined, 
+        queryClient, 
+        ['admin-translations', 'translations']
+      );
+      
+      if (result.error) throw result.error;
+      return result.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-translations'] });
-      queryClient.invalidateQueries({ queryKey: ['translations'] });
-      toast({ title: 'Translation created successfully' });
+      adminService.handleSuccess('created', 'Translation');
     },
     onError: (error: any) => {
-      console.error('Error in createTranslation mutation:', error);
-      toast({ 
-        title: 'Error creating translation', 
-        description: error.message,
-        variant: 'destructive' 
-      });
+      adminService.handleError('creating', 'Translation', error);
     }
   });
 
@@ -75,33 +68,23 @@ export function useTranslations() {
   const updateTranslation = useMutation({
     mutationFn: async ({ id, ...data }: Translation) => {
       console.log('Updating translation:', id, data);
-      const { error, data: result } = await supabase
-        .from('translations')
-        .update(data)
-        .eq('id', id)
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error updating translation:', error);
-        throw error;
-      }
       
-      console.log('Translation updated successfully:', result);
-      return result;
+      const result = await adminUpdate(
+        'translations', 
+        data, 
+        id, 
+        queryClient, 
+        ['admin-translations', 'translations']
+      );
+      
+      if (result.error) throw result.error;
+      return result.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-translations'] });
-      queryClient.invalidateQueries({ queryKey: ['translations'] });
-      toast({ title: 'Translation updated successfully' });
+      adminService.handleSuccess('updated', 'Translation');
     },
     onError: (error: any) => {
-      console.error('Error in updateTranslation mutation:', error);
-      toast({ 
-        title: 'Error updating translation', 
-        description: error.message,
-        variant: 'destructive' 
-      });
+      adminService.handleError('updating', 'Translation', error);
     }
   });
 
@@ -109,31 +92,22 @@ export function useTranslations() {
   const deleteTranslation = useMutation({
     mutationFn: async (id: string) => {
       console.log('Deleting translation:', id);
-      const { error } = await supabase
-        .from('translations')
-        .delete()
-        .eq('id', id);
-
-      if (error) {
-        console.error('Error deleting translation:', error);
-        throw error;
-      }
       
-      console.log('Translation deleted successfully');
+      const result = await adminDelete(
+        'translations', 
+        id, 
+        queryClient, 
+        ['admin-translations', 'translations']
+      );
+      
+      if (result.error) throw result.error;
       return id;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-translations'] });
-      queryClient.invalidateQueries({ queryKey: ['translations'] });
-      toast({ title: 'Translation deleted successfully' });
+      adminService.handleSuccess('deleted', 'Translation');
     },
     onError: (error: any) => {
-      console.error('Error in deleteTranslation mutation:', error);
-      toast({ 
-        title: 'Error deleting translation', 
-        description: error.message,
-        variant: 'destructive' 
-      });
+      adminService.handleError('deleting', 'Translation', error);
     }
   });
 
