@@ -18,6 +18,8 @@ interface PropertyCardProps {
   price: number;
   className?: string;
   style?: React.CSSProperties;
+  viewDetailsLink?: string;
+  bookNowLink?: string;
 }
 
 export function PropertyCard({
@@ -29,10 +31,16 @@ export function PropertyCard({
   rating,
   price,
   className,
-  style
+  style,
+  viewDetailsLink,
+  bookNowLink
 }: PropertyCardProps) {
   const { language } = useApp();
   const { t } = useTranslation();
+  
+  // Default links if not provided
+  const detailsLink = viewDetailsLink || `/property/${id}`;
+  const bookingLink = bookNowLink || `/booking?property=${id}`;
   
   return (
     <div 
@@ -71,11 +79,11 @@ export function PropertyCard({
         <p className="text-foreground/80 flex-1 line-clamp-3 mb-4">{description}</p>
         
         <div className="mt-auto flex justify-between items-center">
-          <Link to={`/property/${id}`} className="text-sm font-medium text-primary hover:underline transition-colors">
+          <Link to={detailsLink} className="text-sm font-medium text-primary hover:underline transition-colors">
             {t('buttons.viewDetails')}
           </Link>
           <Button asChild>
-            <Link to={`/booking?property=${id}`}>{t('buttons.bookNow')}</Link>
+            <Link to={bookingLink}>{t('buttons.bookNow')}</Link>
           </Button>
         </div>
       </div>

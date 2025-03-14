@@ -102,6 +102,7 @@ export function PropertiesSection() {
       description: translation ? translation[`description_${language}`] || property.description : property.description
     };
   };
+  
   return <section className="py-20 px-6 md:px-8 lg:px-12 bg-sand-light">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
@@ -125,11 +126,21 @@ export function PropertiesSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {properties.map(property => {
-          const localizedContent = getLocalizedPropertyContent(property);
-          return <PropertyCard key={property.id} {...property} title={localizedContent.title} description={localizedContent.description} className="animate-fade-up opacity-0 [animation-fill-mode:forwards]" style={{
-            animationDelay: `${properties.indexOf(property) * 100}ms`
-          }} />;
-        })}
+            const localizedContent = getLocalizedPropertyContent(property);
+            // Pass direct links to PropertyCard
+            return <PropertyCard 
+              key={property.id} 
+              {...property} 
+              title={localizedContent.title} 
+              description={localizedContent.description} 
+              className="animate-fade-up opacity-0 [animation-fill-mode:forwards]" 
+              style={{
+                animationDelay: `${properties.indexOf(property) * 100}ms`
+              }}
+              viewDetailsLink={`/property/${property.id}`}
+              bookNowLink={`/booking/property/${property.id}`}
+            />;
+          })}
         </div>
       </div>
     </section>;
