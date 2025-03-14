@@ -15,9 +15,9 @@ type TableNames = 'translations' | 'destinations' | 'services' | 'properties' | 
  * @param queryKeysToInvalidate - Array of query keys to invalidate after successful operation
  * @returns The result of the operation
  */
-export async function adminUpdate<T extends Record<string, any>>(
+export async function adminUpdate(
   tableName: TableNames,
-  data: T,
+  data: Record<string, any>,
   id: string | undefined,
   queryClient: QueryClient,
   queryKeysToInvalidate: string[] = []

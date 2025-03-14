@@ -54,7 +54,7 @@ export function usePropertyManagement() {
 
   // Upsert property mutation
   const upsertProperty = useMutation({
-    mutationFn: async (property: Partial<Property> & { id?: string }) => {
+    mutationFn: async (property: Partial<Property>) => {
       setIsPending(true);
       console.log('Upserting property with data:', property);
       

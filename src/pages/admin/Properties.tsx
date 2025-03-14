@@ -77,7 +77,7 @@ export default function AdminProperties() {
     setFormData(prev => ({ ...prev, status: value as Property['status'] }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     try {
