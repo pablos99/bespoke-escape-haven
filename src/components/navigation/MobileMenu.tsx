@@ -5,11 +5,9 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { NavigationItem } from './types';
 import { useAuth } from '@/contexts/AuthContext';
-import { X, Settings } from 'lucide-react';
+import { Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/Logo';
-import { ThemeToggle } from './ThemeToggle';
-import { LanguageSwitcher } from './LanguageSwitcher';
 import { useApp } from '@/contexts/AppContext';
 
 interface MobileMenuProps {
@@ -55,21 +53,48 @@ export function MobileMenu({ isOpen, setIsOpen, navigation }: MobileMenuProps) {
         
         <nav className="flex-1">
           <div className="space-y-6">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={cn(
-                  'block text-lg transition-colors duration-200 hover:text-primary',
-                  location.pathname === item.href
-                    ? 'text-primary font-medium'
-                    : 'text-muted-foreground'
-                )}
-                onClick={() => setIsOpen(false)}
-              >
-                {t(item.name)}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              if (item.submenu) {
+                return (
+                  <div key={item.name} className="space-y-2">
+                    <div className="font-medium text-primary">{t(item.name)}</div>
+                    <div className="pl-4 space-y-2 border-l border-border">
+                      {item.submenu.map((subitem) => (
+                        <Link
+                          key={subitem.name}
+                          to={subitem.href}
+                          className={cn(
+                            'block text-sm transition-colors duration-200 hover:text-primary',
+                            location.pathname === subitem.href
+                              ? 'text-primary font-medium'
+                              : 'text-muted-foreground'
+                          )}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {t(subitem.name)}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={cn(
+                    'block text-lg transition-colors duration-200 hover:text-primary',
+                    location.pathname === item.href
+                      ? 'text-primary font-medium'
+                      : 'text-muted-foreground'
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {t(item.name)}
+                </Link>
+              );
+            })}
             
             {/* Settings section */}
             <div className="border-t border-border pt-6">

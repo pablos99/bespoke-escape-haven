@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTranslation } from '@/contexts/TranslationContext';
 import { NavigationItem } from './types';
+import { ChevronDown } from 'lucide-react';
 
 interface DesktopMenuProps {
   navigation: NavigationItem[];
@@ -26,14 +27,14 @@ export function DesktopMenu({ navigation }: DesktopMenuProps) {
           return (
             <DropdownMenu key={item.name}>
               <DropdownMenuTrigger className={cn(
-                'text-sm transition-all duration-200 hover:text-primary',
-                location.pathname === item.href || location.pathname.startsWith(item.href + '/')
+                'flex items-center text-sm transition-all duration-200 hover:text-primary',
+                (location.pathname === item.href || location.pathname.startsWith(item.href + '/'))
                   ? 'text-primary font-medium'
                   : 'text-muted-foreground'
               )}>
-                {t(item.name)}
+                {t(item.name)} <ChevronDown className="ml-1 h-4 w-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent className="bg-popover/95 backdrop-blur-sm">
                 {item.submenu.map((subitem) => (
                   <DropdownMenuItem key={subitem.name} asChild>
                     <Link 

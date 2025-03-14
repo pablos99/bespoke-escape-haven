@@ -11,12 +11,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { ProfileMenu } from '@/components/navigation/ProfileMenu';
 import { SettingsMenu } from '@/components/navigation/SettingsMenu';
 import { MobileMenuButton } from '@/components/navigation/MobileMenuButton';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { t } = useTranslation();
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   
   // Close menu when route changes
   useEffect(() => {
