@@ -1,8 +1,6 @@
 
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AdminLayout } from '@/components/layout/AdminLayout';
-import { supabase } from '@/integrations/supabase/client';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,30 +10,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
 import { Pencil, Trash2, Plus, ImageIcon } from 'lucide-react';
-
-interface Service {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  duration: string;
-  location: string;
-  category: string;
-  image_url: string;
-  is_featured: boolean;
-  status: string;
-  created_at: string;
-}
+import { useServiceManagement, Service } from '@/hooks/useServiceManagement';
 
 const AdminServices = () => {
   const { t } = useTranslation();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+
+  const {
+    services,
+    isLoading,
+    isProcessing,
+    createService,
+    updateService,
+    deleteService
+  } = useServiceManagement();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -47,94 +38,6 @@ const AdminServices = () => {
     image_url: '',
     is_featured: false,
     status: 'active',
-  });
-
-  // Fetch services
-  const { data: services, isLoading } = useQuery({
-    queryKey: ['admin-services'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return data as Service[];
-    }
-  });
-
-  const addServiceMutation = useMutation({
-    mutationFn: async (newService: any) => {
-      const { data, error } = await supabase.from('services').insert(newService);
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-services'] });
-      toast({
-        title: "Success",
-        description: "Service added successfully",
-      });
-      resetForm();
-      setIsOpen(false);
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: `Failed to add service: ${error.message}`,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const updateServiceMutation = useMutation({
-    mutationFn: async ({ id, service }: { id: string; service: any }) => {
-      const { data, error } = await supabase
-        .from('services')
-        .update(service)
-        .eq('id', id);
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-services'] });
-      toast({
-        title: "Success",
-        description: "Service updated successfully",
-      });
-      resetForm();
-      setIsOpen(false);
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: `Failed to update service: ${error.message}`,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const deleteServiceMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from('services').delete().eq('id', id);
-      if (error) throw error;
-      return id;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-services'] });
-      toast({
-        title: "Success",
-        description: "Service deleted successfully",
-      });
-      setIsDeleteDialogOpen(false);
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: `Failed to delete service: ${error.message}`,
-        variant: "destructive",
-      });
-    },
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -166,12 +69,12 @@ const AdminServices = () => {
     };
 
     if (selectedService) {
-      updateServiceMutation.mutate({
-        id: selectedService.id,
-        service: serviceData
+      updateService.mutate({
+        ...serviceData,
+        id: selectedService.id
       });
     } else {
-      addServiceMutation.mutate(serviceData);
+      createService.mutate(serviceData);
     }
   };
 
@@ -181,7 +84,7 @@ const AdminServices = () => {
       title: service.title,
       description: service.description,
       price: service.price.toString(),
-      duration: service.duration,
+      duration: service.duration || '',
       location: service.location,
       category: service.category,
       image_url: service.image_url,
@@ -197,8 +100,9 @@ const AdminServices = () => {
   };
 
   const confirmDelete = () => {
-    if (selectedService) {
-      deleteServiceMutation.mutate(selectedService.id);
+    if (selectedService?.id) {
+      deleteService.mutate(selectedService.id);
+      setIsDeleteDialogOpen(false);
     }
   };
 
@@ -390,6 +294,7 @@ const AdminServices = () => {
                     <SelectItem value="adventure">Adventure</SelectItem>
                     <SelectItem value="cultural">Cultural</SelectItem>
                     <SelectItem value="products">Products</SelectItem>
+                    <SelectItem value="guides">Guides</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -426,11 +331,16 @@ const AdminServices = () => {
             </div>
             
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+              <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={isProcessing}>
                 Cancel
               </Button>
-              <Button type="submit">
-                {selectedService ? 'Update' : 'Save'}
+              <Button type="submit" disabled={isProcessing}>
+                {isProcessing ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+                    Processing...
+                  </div>
+                ) : selectedService ? 'Update' : 'Save'}
               </Button>
             </DialogFooter>
           </form>
@@ -447,15 +357,21 @@ const AdminServices = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+            <Button type="button" variant="outline" onClick={() => setIsDeleteDialogOpen(false)} disabled={isProcessing}>
               Cancel
             </Button>
             <Button 
               type="button" 
               variant="destructive" 
               onClick={confirmDelete}
+              disabled={isProcessing}
             >
-              Delete
+              {isProcessing ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+                  Deleting...
+                </div>
+              ) : 'Delete'}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { adminUpdate, adminDelete, useAdminService } from '@/services/AdminService';
+import { useAdminService } from '@/services/AdminService';
 
 export interface Service {
   id?: string;
@@ -48,7 +48,7 @@ export function useServiceManagement() {
         throw error;
       }
       
-      console.log('Fetched services:', data);
+      console.log('Fetched services:', data?.length);
       return data;
     }
   });
@@ -74,7 +74,7 @@ export function useServiceManagement() {
     },
     onSuccess: () => {
       adminService.handleSuccess('created', 'Service');
-      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services', 'related-services'] });
     },
     onError: (error: any) => {
       adminService.handleError('creating', 'Service', error);
@@ -109,7 +109,7 @@ export function useServiceManagement() {
     },
     onSuccess: () => {
       adminService.handleSuccess('updated', 'Service');
-      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services', 'related-services'] });
     },
     onError: (error: any) => {
       adminService.handleError('updating', 'Service', error);
@@ -136,7 +136,7 @@ export function useServiceManagement() {
     },
     onSuccess: () => {
       adminService.handleSuccess('deleted', 'Service');
-      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services', 'related-services'] });
     },
     onError: (error: any) => {
       adminService.handleError('deleting', 'Service', error);
