@@ -5,12 +5,13 @@ import { useTranslation } from '@/contexts/TranslationContext';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, FileDown, FileUp } from 'lucide-react';
 import { Translation } from '@/utils/translationUtils';
 import { TranslationList } from '@/components/admin/translations/TranslationList';
 import { TranslationForm } from '@/components/admin/translations/TranslationForm';
 import { DeleteConfirmationDialog } from '@/components/admin/translations/DeleteConfirmationDialog';
 import { useTranslations } from '@/hooks/useTranslations';
+import { Link } from 'react-router-dom';
 
 export default function AdminTranslations() {
   const { t } = useTranslation();
@@ -71,10 +72,22 @@ export default function AdminTranslations() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button onClick={() => openDialog()}>
-          <Plus className="mr-2 h-4 w-4" />
-          {t('admin.add_translation')}
-        </Button>
+        <div className="flex gap-2">
+          <Link to="/admin/translations/import">
+            <Button variant="outline">
+              <FileUp className="mr-2 h-4 w-4" />
+              {t('admin.import_translations')}
+            </Button>
+          </Link>
+          <Button variant="outline">
+            <FileDown className="mr-2 h-4 w-4" />
+            {t('admin.export_translations')}
+          </Button>
+          <Button onClick={() => openDialog()}>
+            <Plus className="mr-2 h-4 w-4" />
+            {t('admin.add_translation')}
+          </Button>
+        </div>
       </div>
 
       <TranslationList

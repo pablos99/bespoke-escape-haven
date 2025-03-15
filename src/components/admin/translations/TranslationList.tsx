@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Edit, Trash } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface TranslationListProps {
   translations: Translation[] | undefined;
@@ -64,7 +65,9 @@ export function TranslationList({
                 <TableCell className="font-medium">{translation.key}</TableCell>
                 <TableCell>{translation.en}</TableCell>
                 <TableCell>{translation.es}</TableCell>
-                <TableCell>{translation.page}</TableCell>
+                <TableCell>
+                  <Badge variant="outline">{translation.page}</Badge>
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end space-x-1">
                     <Button 

@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DialogFooter } from '@/components/ui/dialog';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface TranslationFormProps {
   translation?: Translation | null;
@@ -104,27 +105,34 @@ export function TranslationForm({
           </div>
         </div>
         
-        <div className="space-y-2">
-          <Label htmlFor="en">{t('admin.english')}</Label>
-          <Input
-            id="en"
-            name="en"
-            value={formData.en}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="es">{t('admin.spanish')}</Label>
-          <Input
-            id="es"
-            name="es"
-            value={formData.es}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+        <Tabs defaultValue="en" className="w-full">
+          <TabsList className="grid grid-cols-2">
+            <TabsTrigger value="en">{t('admin.english')}</TabsTrigger>
+            <TabsTrigger value="es">{t('admin.spanish')}</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="en" className="space-y-2 mt-4">
+            <Label htmlFor="en">{t('admin.english')}</Label>
+            <Input
+              id="en"
+              name="en"
+              value={formData.en}
+              onChange={handleInputChange}
+              required
+            />
+          </TabsContent>
+          
+          <TabsContent value="es" className="space-y-2 mt-4">
+            <Label htmlFor="es">{t('admin.spanish')}</Label>
+            <Input
+              id="es"
+              name="es"
+              value={formData.es}
+              onChange={handleInputChange}
+              required
+            />
+          </TabsContent>
+        </Tabs>
       </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>

@@ -58,6 +58,7 @@ export function useTranslations() {
     },
     onSuccess: () => {
       adminService.handleSuccess('created', 'Translation');
+      queryClient.invalidateQueries({ queryKey: ['translations'] });
     },
     onError: (error: any) => {
       adminService.handleError('creating', 'Translation', error);
@@ -82,6 +83,7 @@ export function useTranslations() {
     },
     onSuccess: () => {
       adminService.handleSuccess('updated', 'Translation');
+      queryClient.invalidateQueries({ queryKey: ['translations'] });
     },
     onError: (error: any) => {
       adminService.handleError('updating', 'Translation', error);
@@ -105,6 +107,7 @@ export function useTranslations() {
     },
     onSuccess: () => {
       adminService.handleSuccess('deleted', 'Translation');
+      queryClient.invalidateQueries({ queryKey: ['translations'] });
     },
     onError: (error: any) => {
       adminService.handleError('deleting', 'Translation', error);
