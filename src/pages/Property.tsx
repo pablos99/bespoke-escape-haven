@@ -118,7 +118,7 @@ const reviews = [
     date: "April 2023",
     rating: 4,
     content: "We loved our stay at this beautiful villa. The architecture and design are stunning, and the staff was very attentive. The only minor issue was that the Wi-Fi was a bit unreliable, but that actually helped us disconnect and enjoy our vacation more fully!",
-    image: "https://images.unsplash.com/photo-1499887142886-791eca5918cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+    image: "https://images.unsplash.com/photo-1499887142886-791eca5918cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
   }
 ];
 
@@ -246,8 +246,10 @@ export default function Property() {
           reviewCount={property.reviewCount}
         />
         
-        {/* Related Services */}
-        <PropertyRelatedServices services={relatedServices} />
+        {/* Related Services - pass location instead of services */}
+        <PropertyRelatedServices 
+          location={propertyData?.city || property.location.split(',')[0].trim()}
+        />
       </main>
       
       <Footer />
