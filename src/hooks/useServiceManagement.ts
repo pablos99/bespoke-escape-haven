@@ -59,24 +59,25 @@ export function useServiceManagement() {
       console.log('Creating service with data:', serviceData);
       setIsProcessing(true);
       
-      const result = await adminUpdate(
-        'services', 
-        serviceData, 
-        undefined, 
-        queryClient, 
-        ['admin-services', 'services']
-      );
-      
-      if (result.error) throw result.error;
-      return result.data;
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .insert(serviceData)
+          .select()
+          .maybeSingle();
+        
+        if (error) throw error;
+        return data;
+      } finally {
+        setIsProcessing(false);
+      }
     },
     onSuccess: () => {
       adminService.handleSuccess('created', 'Service');
-      setIsProcessing(false);
+      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services'] });
     },
     onError: (error: any) => {
       adminService.handleError('creating', 'Service', error);
-      setIsProcessing(false);
     }
   });
 
@@ -92,24 +93,26 @@ export function useServiceManagement() {
         throw new Error('Service ID is required for update');
       }
       
-      const result = await adminUpdate(
-        'services', 
-        data, 
-        id, 
-        queryClient, 
-        ['admin-services', 'services']
-      );
-      
-      if (result.error) throw result.error;
-      return result.data;
+      try {
+        const { data: updatedData, error } = await supabase
+          .from('services')
+          .update(data)
+          .eq('id', id)
+          .select()
+          .maybeSingle();
+        
+        if (error) throw error;
+        return updatedData;
+      } finally {
+        setIsProcessing(false);
+      }
     },
     onSuccess: () => {
       adminService.handleSuccess('updated', 'Service');
-      setIsProcessing(false);
+      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services'] });
     },
     onError: (error: any) => {
       adminService.handleError('updating', 'Service', error);
-      setIsProcessing(false);
     }
   });
 
@@ -119,23 +122,24 @@ export function useServiceManagement() {
       console.log('Deleting service:', id);
       setIsProcessing(true);
       
-      const result = await adminDelete(
-        'services', 
-        id, 
-        queryClient, 
-        ['admin-services', 'services']
-      );
-      
-      if (result.error) throw result.error;
-      return id;
+      try {
+        const { error } = await supabase
+          .from('services')
+          .delete()
+          .eq('id', id);
+        
+        if (error) throw error;
+        return id;
+      } finally {
+        setIsProcessing(false);
+      }
     },
     onSuccess: () => {
       adminService.handleSuccess('deleted', 'Service');
-      setIsProcessing(false);
+      queryClient.invalidateQueries({ queryKey: ['admin-services', 'services', 'featured-services'] });
     },
     onError: (error: any) => {
       adminService.handleError('deleting', 'Service', error);
-      setIsProcessing(false);
     }
   });
 

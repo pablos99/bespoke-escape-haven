@@ -20,6 +20,7 @@ interface Service {
   location: string;
   duration: string;
   is_featured: boolean;
+  status: string;
 }
 
 const Services = () => {
@@ -31,6 +32,8 @@ const Services = () => {
   const { data: services = [], isLoading } = useQuery({
     queryKey: ['services', activeTab, location],
     queryFn: async () => {
+      console.log('Fetching services with filters:', { category: activeTab, location });
+      
       let query = supabase
         .from('services')
         .select('*')
@@ -49,9 +52,11 @@ const Services = () => {
       const { data, error } = await query;
       
       if (error) {
+        console.error('Error fetching services:', error);
         throw error;
       }
       
+      console.log('Fetched services count:', data?.length);
       return data as Service[];
     }
   });

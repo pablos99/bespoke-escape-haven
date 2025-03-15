@@ -22,6 +22,7 @@ export function ServicesSection() {
   const { data: featuredServices = [], isLoading } = useQuery({
     queryKey: ['featured-services'],
     queryFn: async () => {
+      console.log('Fetching featured services');
       const { data, error } = await supabase
         .from('services')
         .select('*')
@@ -29,7 +30,12 @@ export function ServicesSection() {
         .eq('status', 'active')
         .limit(3);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching featured services:', error);
+        throw error;
+      }
+      
+      console.log('Fetched featured services count:', data?.length);
       return data as Service[];
     }
   });

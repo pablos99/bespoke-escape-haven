@@ -11,6 +11,7 @@ interface Service {
   price: number;
   category: string;
   location: string;
+  duration: string;
 }
 
 interface ServiceListProps {
